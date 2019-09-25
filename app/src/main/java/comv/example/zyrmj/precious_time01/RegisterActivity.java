@@ -1,8 +1,13 @@
 package comv.example.zyrmj.precious_time01;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 import comv.example.zyrmj.precious_time01.BackendService.RegisterAndLoginBackendService;
 import comv.example.zyrmj.precious_time01.Utils.MD5Util;
+import comv.example.zyrmj.precious_time01.dao.CategoryDao;
+import comv.example.zyrmj.precious_time01.dao.HabitDao;
+import comv.example.zyrmj.precious_time01.database.AppDatabase;
+import comv.example.zyrmj.precious_time01.entity.Category;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -76,7 +81,20 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_register);
         //初始化控件
+       AppDatabase timeDatabase=
+               Room.databaseBuilder(this,AppDatabase.class,"time_database").
+                       allowMainThreadQueries().build();
+        CategoryDao categoryDao=timeDatabase.categoryDao();
+        categoryDao.insert(new Category("test2","test2"));
         init();
+        if (timeDatabase!=null)
+        {
+            Log.d("build database","success");
+        }
+        else
+        {
+            Log.d("build database","failed");
+        }
 
     }
 

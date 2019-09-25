@@ -24,4 +24,54 @@ public class TemplateItem {
     private String endTime;
     @ColumnInfo(name = "start_time")
     private String startTime;
+
+    @NonNull
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(@NonNull String userId) {
+        this.userId = userId;
+    }
+
+    @NonNull
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(@NonNull String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getHabitName() {
+        return habitName;
+    }
+
+    public void setHabitName(String habitName) {
+        this.habitName = habitName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 }
