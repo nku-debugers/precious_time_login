@@ -68,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
 
     Button toLogin;
     Button register;
+    Button weekview;
 
 
 
@@ -85,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
                Room.databaseBuilder(this,AppDatabase.class,"time_database").
                        allowMainThreadQueries().build();
         CategoryDao categoryDao=timeDatabase.categoryDao();
-        categoryDao.insert(new Category("test2","test2"));
+        //categoryDao.insert(new Category("test2","test2"));
         init();
         if (timeDatabase!=null)
         {
@@ -110,6 +111,7 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
         password2=findViewById(R.id.password2);
         toLogin=findViewById(R.id.toRegister);
         register=findViewById(R.id.login);
+        weekview=findViewById(R.id.weekview);
         validator = new Validator(this);
         validator.setValidationListener(this);
 
@@ -170,6 +172,15 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
             @Override
             public void onClick(View view) {
                 toLogin();
+            }
+        });
+        //测试周试图
+        weekview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent (RegisterActivity.this,TestWeekViewActivity.class);
+                startActivity(intent);
+
             }
         });
 

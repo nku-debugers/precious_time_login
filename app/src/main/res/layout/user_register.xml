@@ -172,4 +172,12 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/inputleftline" />
 
+    <Button
+        android:id="@+id/weekview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="weekview"
+        app:layout_constraintStart_toStartOf="@+id/hintrightline"
+        app:layout_constraintTop_toBottomOf="@+id/login" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
