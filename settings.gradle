@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':weekviewlibrary'
 rootProject.name='Precious_time01'

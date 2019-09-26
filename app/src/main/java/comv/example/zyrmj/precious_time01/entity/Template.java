@@ -13,6 +13,25 @@ public class Template {
     @NonNull
     @ColumnInfo(name = "user_id")
     private String userId;
+
+    @NonNull
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(@NonNull String userId) {
+        this.userId = userId;
+    }
+
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
+
     @NonNull
     private  String name;
 
