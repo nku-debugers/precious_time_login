@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav1"
+    app:startDestination="@id/personCenterFragment">
+
+    <fragment
+        android:id="@+id/personCenterFragment"
+        android:name="comv.example.zyrmj.precious_time01.PersonCenterFragment"
+        android:label="fragment_person_center"
+        tools:layout="@layout/fragment_person_center" >
+        <action
+            android:id="@+id/action_personCenterFragment_to_loginFragment3"
+            app:destination="@id/loginFragment3" />
+        <action
+            android:id="@+id/action_personCenterFragment_self"
+            app:destination="@id/personCenterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment2"
+        android:name="comv.example.zyrmj.precious_time01.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment2_to_loginFragment33"
+            app:destination="@id/loginFragment3" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment3"
+        android:name="comv.example.zyrmj.precious_time01.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment3_to_registerFragment2"
+            app:destination="@id/registerFragment2" />
+        <action
+            android:id="@+id/action_loginFragment3_to_personCenterFragment"
+            app:destination="@id/personCenterFragment" />
+    </fragment>
+</navigation>
