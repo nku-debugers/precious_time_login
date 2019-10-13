@@ -14,9 +14,9 @@ public class TemplateItem {
     @NonNull
     @ColumnInfo(name = "item_name")
     private  String itemName;
-    @ColumnInfo(name = "habit_name")
-    @ForeignKey(entity = Habit.class, parentColumns = "name", childColumns = "habit_name")
-    private  String habitName;
+    @ColumnInfo(name = "template_name")
+    @ForeignKey(entity = Template.class, parentColumns = "name", childColumns = "template_name")
+    private  String templateName;
     @ColumnInfo(name = "category_name")
     @ForeignKey(entity = Category.class, parentColumns = "name", childColumns = "category_name")
     private String categoryName;
@@ -43,12 +43,12 @@ public class TemplateItem {
         this.itemName = itemName;
     }
 
-    public String getHabitName() {
-        return habitName;
+    public String getTemplateName() {
+        return templateName;
     }
 
-    public void setHabitName(String habitName) {
-        this.habitName = habitName;
+    public void setTemplateName(String habitName) {
+        this.templateName = habitName;
     }
 
     public String getCategoryName() {

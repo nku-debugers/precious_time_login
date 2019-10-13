@@ -23,6 +23,7 @@ dependencies {
     def room_version = "2.2.0-rc01"
 
     implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // For Kotlin use kapt instead of annotationProcessor
 
@@ -35,4 +36,6 @@ dependencies {
     implementation 'com.mobsandgeeks:android-saripaar:2.0.3'
     implementation("com.squareup.okhttp3:okhttp:4.1.1")
     compile project(path: ':weekviewlibrary')
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
 }

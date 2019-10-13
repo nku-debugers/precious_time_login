@@ -1,22 +1,26 @@
 package comv.example.zyrmj.precious_time01;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.BackendService.RegisterAndLoginBackendService;
 import comv.example.zyrmj.precious_time01.Utils.MD5Util;
-import comv.example.zyrmj.precious_time01.dao.CategoryDao;
-import comv.example.zyrmj.precious_time01.dao.HabitDao;
-import comv.example.zyrmj.precious_time01.database.AppDatabase;
-import comv.example.zyrmj.precious_time01.entity.Category;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +29,6 @@ import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -38,13 +41,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterActivity extends AppCompatActivity implements Validator.ValidationListener  {
-    private Validator validator;//表单验证器
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class LoginFragment extends Fragment implements Validator.ValidationListener{
     //定义界面上的控件,引入表单验证框架
+    private Validator validator;//表单验证器
     Spinner option;
     private String idType;
-    public int spinnerPosition=0;//设定跳转至登录界面时下拉框的默认位置
-    public String userId;//传递给登陆界面的id
     @Order(1)
     @NotEmpty(message = "此项不能为空")
     @Email
@@ -61,59 +66,66 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
     @NotEmpty(message = "密码不能为空")
     @Password(min=6,message = "密码最少为6位")
     EditText password;
-    @Order(5)
-    @NotEmpty(message = "确认密码不能为空")
-    @ConfirmPassword(message = "两次密码输入不一致")
-    EditText password2;
 
-    Button toLogin;
-    Button register;
-    Button weekview;
-
-
-
-
-
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_register);
-        //初始化控件
-       AppDatabase timeDatabase=
-               Room.databaseBuilder(this,AppDatabase.class,"time_database").
-                       allowMainThreadQueries().build();
-        CategoryDao categoryDao=timeDatabase.categoryDao();
-        //categoryDao.insert(new Category("test2","test2"));
-        init();
-        if (timeDatabase!=null)
-        {
-            Log.d("build database","success");
-        }
-        else
-        {
-            Log.d("build database","failed");
-        }
-
+    Button toRegister;
+    Button login;
+    int  spinnerPosition=0;
+    String userId="";
+    String pwd="";
+    public LoginFragment() {
+        // Required empty public constructor
     }
 
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getArguments()!=null)
+        { spinnerPosition=getArguments().getInt("spinnerPosition",0);
+        Log.d("testinf",String.valueOf(spinnerPosition));
+        userId=getArguments().getString("userId","");
+        pwd=getArguments().getString("password","");}
 
-    public void init()//初始化各个控件，并定义按钮,下拉框监听器
+        init();//初始化界面
+
+    }
+    public void init()
     {
-        emailInput=findViewById(R.id.email);
-        phoneInput=findViewById(R.id.phone);
-        usernameInput=findViewById(R.id.username);
-        option=findViewById(R.id.spinner);
-        password=findViewById(R.id.password);
-        password2=findViewById(R.id.password2);
-        toLogin=findViewById(R.id.toRegister);
-        register=findViewById(R.id.login);
-        weekview=findViewById(R.id.weekview);
+        emailInput=getView().findViewById(R.id.email);
+        phoneInput=getView().findViewById(R.id.phone);
+        usernameInput=getView().findViewById(R.id.username);
+        option=getView().findViewById(R.id.spinner);
+        password=getView().findViewById(R.id.password);
+        toRegister=getView().findViewById(R.id.next);
+        login=getView().findViewById(R.id.login);
         validator = new Validator(this);
         validator.setValidationListener(this);
+        //获取注册界面的数据
+        option.setSelection(spinnerPosition);
+        if(spinnerPosition==0)
+        {
+            emailInput.setText(userId);
+        }
+        else if(spinnerPosition==1)
+        {
+            phoneInput.setText(userId);
+        }
+        else
+        {
+            usernameInput.setText(userId);
+        }
+        password.setText(pwd);
+
+
+
+
+
 
         //下拉框监听器
         option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
@@ -128,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
                     emailInput.setVisibility(View.VISIBLE);
                     phoneInput.setVisibility(View.INVISIBLE);
                     idType="email";
-                    spinnerPosition=0;
+
 
                 }
 //                选择手机号
@@ -138,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
                     emailInput.setVisibility(View.INVISIBLE);
                     phoneInput.setVisibility(View.VISIBLE);
                     idType="phone";
-                    spinnerPosition=1;
+
                 }
 //                选择用户昵称
                 else
@@ -147,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
                     emailInput.setVisibility(View.INVISIBLE);
                     phoneInput.setVisibility(View.INVISIBLE);
                     idType="username";
-                    spinnerPosition=2;
+
 
                 }
             }
@@ -158,8 +170,8 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
         });
 
 
-        //注册按钮监听器
-        register.setOnClickListener(new View.OnClickListener() {
+        //登录按钮监听器
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 validator.validate();
@@ -167,25 +179,16 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
             }
         });
 
-        //跳转登录按钮监听器
-        toLogin.setOnClickListener(new View.OnClickListener() {
+        //跳转注册按钮监听器
+        toRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toLogin();
-            }
-        });
-        //测试周试图
-        weekview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent (RegisterActivity.this,TestWeekViewActivity.class);
-                startActivity(intent);
-
+                NavController controller= Navigation.findNavController(view);
+                controller.navigate(R.id.action_loginFragment3_to_registerFragment2);
             }
         });
 
     }
-
     //收集界面填写信息(返回一个String List）
     public List<String> collectData()
     {
@@ -216,11 +219,10 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
 
 
     }
-
     //向后端上传数据
     public String postData(List<String> informations)
     {
-         OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象。
+        OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象。
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");//数据类型为json格式
         JSONObject jsonObject = new JSONObject();
         try {
@@ -233,23 +235,15 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
         }
         RequestBody body = RequestBody.create(JSON, jsonObject.toString());
         System.out.println(jsonObject.toString());
-         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8000/user/register/")
+        Request request = new Request.Builder()
+                .url("http://10.0.2.2:8000/user/login/")
                 .post(body)
                 .build();
-        RegisterAndLoginBackendService registerBackendService=new RegisterAndLoginBackendService(client,request);
+        RegisterAndLoginBackendService loginBackendService=new RegisterAndLoginBackendService(client,request);
 
-        return registerBackendService.registerOrLogin();
+        return loginBackendService.registerOrLogin();
 
 
-    }
-    public void toLogin()
-    {
-        Intent intent=new Intent (RegisterActivity.this,LoginActivity.class);
-        intent.putExtra("spinnerPosition",spinnerPosition);
-        intent.putExtra("userId",userId);
-        intent.putExtra("password",password.getText().toString());
-        startActivity(intent);
     }
 
     @Override
@@ -259,33 +253,34 @@ public class RegisterActivity extends AppCompatActivity implements Validator.Val
         Log.d("collectedData",informations.toString());
         //开始进行后台操作
         String reply=postData(informations);
+        System.out.println("loginreply"+reply);
         if (reply.contains("1"))
         {
-            Toast.makeText(this,"注册成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"登录成功",Toast.LENGTH_LONG).show();
+            Bundle bundle=new Bundle();
+            bundle.putString("userId",userId);
+            NavController controller= Navigation.findNavController(getView());
+            controller.navigate(R.id.action_loginFragment3_to_personCenterFragment,bundle);
+
         }
         else
         {
-            Toast.makeText(this,"注册失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"登录失败",Toast.LENGTH_LONG).show();
         }
-       toLogin();
-        //跳转到登陆界面，并将注册的信息传递过去
-
-
     }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
             View view = error.getView();
-            String message = error.getCollatedErrorMessage(this);
+            String message = error.getCollatedErrorMessage(getActivity());
             // 显示上面注解中添加的错误提示信息
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                // 显示edittext外的提示，如：必须接受服务协议条款的CheckBox
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
             }
         }
-
     }
 }
