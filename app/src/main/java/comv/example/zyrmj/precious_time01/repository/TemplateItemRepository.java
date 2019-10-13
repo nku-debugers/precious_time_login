@@ -4,14 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Update;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import comv.example.zyrmj.precious_time01.dao.TemplateItemDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
-import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 
 public class TemplateItemRepository {
@@ -40,7 +37,7 @@ public class TemplateItemRepository {
     static class InsertAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
         private TemplateItemDao templateItemDao;
 
-        public InsertAsyncTask(TemplateItemDao templateItemDao) {
+        private InsertAsyncTask(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
 
@@ -54,7 +51,7 @@ public class TemplateItemRepository {
     static class DeleteAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
         private TemplateItemDao templateItemDao;
 
-        public DeleteAsyncTask(TemplateItemDao templateItemDao) {
+        private DeleteAsyncTask(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
 
@@ -68,7 +65,7 @@ public class TemplateItemRepository {
     static class UpdateAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
         private TemplateItemDao templateItemDao;
 
-        public UpdateAsyncTask(TemplateItemDao templateItemDao) {
+        private UpdateAsyncTask(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
 

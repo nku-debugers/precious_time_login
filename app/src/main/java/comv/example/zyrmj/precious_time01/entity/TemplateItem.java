@@ -4,22 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 
 @Entity(primaryKeys = {"user_id", "item_name"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
-        @ForeignKey(entity = Template.class, parentColumns = "name", childColumns = "template_name")})
+        },
+        indices = {@Index(value = "template_name")})
 public class TemplateItem {
     @NonNull
     @ColumnInfo(name = "user_id")
-    @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
     private String userId;
     @NonNull
     @ColumnInfo(name = "item_name")
     private  String itemName;
     @ColumnInfo(name = "template_name")
-    @ForeignKey(entity = Template.class, parentColumns = "name", childColumns = "template_name")
     private  String templateName;
     @ColumnInfo(name = "category_name")
-    @ForeignKey(entity = Category.class, parentColumns = "name", childColumns = "category_name")
     private String categoryName;
     @ColumnInfo(name = "end_time")
     private String endTime;

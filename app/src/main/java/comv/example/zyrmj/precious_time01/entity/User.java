@@ -13,7 +13,17 @@ public class User {
     private String phone;
     private String pw;
     private String wx_id;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     private String qq_id;
+    private String avatar;
     //Room不允许有多个constructor,默认选用无参构造函数
 //    public User(String id) {
 //        this.id = id;
