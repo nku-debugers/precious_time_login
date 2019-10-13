@@ -5,7 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-@Entity(primaryKeys = {"user_id", "item_name"})
+@Entity(primaryKeys = {"user_id", "item_name"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
+        @ForeignKey(entity = Template.class, parentColumns = "name", childColumns = "template_name")})
 public class TemplateItem {
     @NonNull
     @ColumnInfo(name = "user_id")
@@ -47,8 +48,18 @@ public class TemplateItem {
         return templateName;
     }
 
-    public void setTemplateName(String habitName) {
-        this.templateName = habitName;
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
+    public TemplateItem(@NonNull String userId, @NonNull String itemName, String templateName,
+                        String categoryName, String endTime, String startTime) {
+        this.userId = userId;
+        this.itemName = itemName;
+        this.templateName = templateName;
+        this.categoryName = categoryName;
+        this.endTime = endTime;
+        this.startTime = startTime;
     }
 
     public String getCategoryName() {

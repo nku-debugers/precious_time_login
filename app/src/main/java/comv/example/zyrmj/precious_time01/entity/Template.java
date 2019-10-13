@@ -14,6 +14,11 @@ public class Template {
     @ColumnInfo(name = "user_id")
     private String userId;
 
+    public Template(@NonNull String userId, @NonNull String name) {
+        this.userId = userId;
+        this.name = name;
+    }
+
     @NonNull
     public String getUserId() {
         return userId;

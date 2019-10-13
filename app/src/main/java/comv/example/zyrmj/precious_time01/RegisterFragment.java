@@ -10,6 +10,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.BackendService.RegisterAndLoginBackendService;
 import comv.example.zyrmj.precious_time01.Utils.MD5Util;
+
+import comv.example.zyrmj.precious_time01.dao.CategoryDao;
+import comv.example.zyrmj.precious_time01.dao.HabitDao;
+import comv.example.zyrmj.precious_time01.database.AppDatabase;
+import comv.example.zyrmj.precious_time01.entity.Category;
+import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.entity.User;
+import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

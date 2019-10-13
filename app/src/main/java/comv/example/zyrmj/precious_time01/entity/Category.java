@@ -7,12 +7,12 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-@Entity(primaryKeys = {"user_id","name"},indices = @Index(value = "name",unique = true))
+@Entity(primaryKeys = {"user_id", "name"}, indices = @Index(value = "name", unique = true))
 public class Category {
     @ColumnInfo(name = "user_id")
     @NonNull
     public String userId;
-   @NonNull
+    @NonNull
     public String name;
 
     public String getUserId() {
