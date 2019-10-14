@@ -2,8 +2,6 @@ package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -29,12 +27,11 @@ public class UserRepository {
 
     static class InsertAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
-        public InsertAsyncTask(UserDao userDao) {
+        InsertAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
         @Override
         protected Void doInBackground(User... users) {
-            Log.d("user",users[0].getId());
             userDao.insertUser(users);
             return null;
         }
@@ -42,7 +39,7 @@ public class UserRepository {
 
     static class UpdateAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
-        public UpdateAsyncTask(UserDao userDao) {
+        UpdateAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
         @Override
@@ -54,7 +51,7 @@ public class UserRepository {
 
     static class DeleteAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
-        public DeleteAsyncTask(UserDao userDao) {
+        DeleteAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
         @Override

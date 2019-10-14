@@ -9,16 +9,16 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import comv.example.zyrmj.precious_time01.entity.Category;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 
 @Dao
-public interface CategoryDao {
+public interface QuoteDao {
     @Insert
-    void insert(Category... categories);
+    void insertQuote(Quote... quotes);
     @Update
-    void update(Category... categories);
+    void updateQuote(Quote... quotes);
     @Delete
-    void delete(Category... categories);
-    @Query("select * from Category")
-    LiveData<List<Category>>getAllCategories();
+    void deleteQuote(Quote... quotes);
+    @Query("select * from Quote")
+    LiveData<List<Quote>>getAllQuotes();
 }

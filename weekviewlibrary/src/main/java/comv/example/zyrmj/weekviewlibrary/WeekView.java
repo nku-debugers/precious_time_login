@@ -264,7 +264,7 @@ public class WeekView extends View {
     }
 
     private void init() {
-        // Get the date today.
+        // Get the date today.  找到当天日期，并把当前事件设为 0
         mToday = Calendar.getInstance();
         mToday.set(Calendar.HOUR_OF_DAY, 0);
         mToday.set(Calendar.MINUTE, 0);
