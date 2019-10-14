@@ -23,13 +23,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this,controller);
 
 
-        User user = new User();
-        User user2 = new User();
-        user2.setId("2");
-        new UserRepository(this).insertUsers(user, user2);
-        Template t = new Template("offline", "study");
-        Template t2 = new Template("2", "study");
-        new TemplateRepository(this).insertTemplates(t, t2);
+//        User user = new User();
+//        User user2 = new User();
+//        user2.setId("2");
+//        new UserRepository(this).insertUsers(user, user2);
+//        Template t = new Template("offline", "study");
+//        Template t2 = new Template("2", "study");
+//        new TemplateRepository(this).insertTemplates(t, t2);
     }
 
     @Override
