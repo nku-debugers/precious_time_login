@@ -45,6 +45,14 @@ String userId="未登录";
         Button tologin=getView().findViewById(R.id.next);
         Button logout=getView().findViewById(R.id.logout);
         TextView user=getView().findViewById(R.id.userId);
+        View toTemplate=getView().findViewById(R.id.toTemplate);
+        toTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller=Navigation.findNavController(view);
+                controller.navigate(R.id.action_personCenterFragment_to_templateShowFragment);
+            }
+        });
         tologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +67,7 @@ String userId="未登录";
                 controller.navigate(R.id.action_personCenterFragment_self);
             }
         });
+
 
         if(userId.equals("未登录"))
         {

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_personCenterFragment_self"
             app:destination="@id/personCenterFragment" />
+        <action
+            android:id="@+id/action_personCenterFragment_to_templateShowFragment"
+            app:destination="@id/templateShowFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
@@ -38,4 +41,21 @@
             android:id="@+id/action_loginFragment3_to_personCenterFragment"
             app:destination="@id/personCenterFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/templateShowFragment"
+        android:name="comv.example.zyrmj.precious_time01.TemplateShowFragment"
+        android:label="fragment_template_show"
+        tools:layout="@layout/fragment_template_show" >
+        <action
+            android:id="@+id/action_templateShowFragment_to_personCenterFragment"
+            app:destination="@id/personCenterFragment" />
+        <action
+            android:id="@+id/action_templateShowFragment_to_testFragment"
+            app:destination="@id/testFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="comv.example.zyrmj.precious_time01.TestFragment"
+        android:label="fragment_test"
+        tools:layout="@layout/fragment_test" />
 </navigation>

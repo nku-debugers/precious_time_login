@@ -235,12 +235,13 @@
         app:layout_constraintGuide_percent="0.61" />
 
     <View
-        android:id="@+id/view3"
+        android:id="@+id/toTemplate"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="#77FF9800"
+        android:clickable="true"
         android:hapticFeedbackEnabled="false"
         app:layout_constraintBottom_toTopOf="@+id/guideline45"
         app:layout_constraintEnd_toEndOf="parent"
@@ -299,5 +300,15 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline19"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="82dp"
+        android:layout_height="33dp"
+        android:text="个人模板"
+        app:layout_constraintBottom_toTopOf="@+id/view4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/toTemplate"
+        app:layout_constraintTop_toTopOf="@+id/toTemplate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

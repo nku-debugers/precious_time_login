@@ -10,6 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.entity.User;
 
 @Dao
 public interface TemplateDao {
@@ -21,4 +22,8 @@ public interface TemplateDao {
     void updateTemplate(Template... templateItems);
     @Query("Select * from Template")
     LiveData<List<Template>> getAllTemplates();
+    //根据字段查询
+    @Query("SELECT * FROM Template WHERE name= :name AND user_id= :userId")
+    Template getSpecificTemplate(String name,String userId);
+
 }

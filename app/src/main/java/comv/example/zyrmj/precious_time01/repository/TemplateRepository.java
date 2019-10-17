@@ -25,7 +25,48 @@ public class TemplateRepository {
         templateDao =  appDatabase.templateDao();
         allTemplates = templateDao.getAllTemplates();
     }
+  static class SelectAsyncTask extends AsyncTask<String,Void ,Template>
+  {
+      private TemplateDao templateDao;
 
+      OnDataFinishedListener onDataFinishedListener;
+
+
+      private SelectAsyncTask(TemplateDao templateDao) {
+          this.templateDao = templateDao;
+      }
+
+      public void setOnDataFinishedListener(
+              OnDataFinishedListener onDataFinishedListener) {
+          this.onDataFinishedListener = onDataFinishedListener;
+      }
+      //回调接口：
+      public interface OnDataFinishedListener {
+
+          public void onDataSuccessfully(Template template);
+
+          public void onDataFailed();
+
+      }
+          @Override
+      protected Template doInBackground(String... strings) {
+          String name=strings[0];
+          String userId=strings[1];
+          Template template=templateDao.getSpecificTemplate(name,userId);
+         return template;
+      }
+
+      @Override
+      protected void onPostExecute(Template template) {
+          super.onPostExecute(template);
+          if(template!=null){
+              onDataFinishedListener.onDataSuccessfully(template);
+          }else{
+              onDataFinishedListener.onDataFailed();
+          }
+
+      }
+  }
     static class InsertAsyncTask extends AsyncTask<Template, Void, Void> {
         private TemplateDao templateDao;
 
@@ -50,6 +91,8 @@ public class TemplateRepository {
             templateDao.updateTemplate(templates);
             return null;
         }
+
+
     }
 
     static class DeleteAsyncTask extends AsyncTask<Template, Void, Void> {
