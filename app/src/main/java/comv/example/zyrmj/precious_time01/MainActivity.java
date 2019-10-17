@@ -24,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
         NavController controller= Navigation.findNavController(this,R.id.fragment);
         NavigationUI.setupActionBarWithNavController(this,controller);
 
+
 //以下均为测试数据库的代码
+
 //        User user = new User();
 //        User user2 = new User();
 //        user2.setId("2");
@@ -32,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
 //        Template t = new Template("offline", "study");
 //        Template t2 = new Template("2", "study");
 //        new TemplateRepository(this).insertTemplates(t, t2);
+
 //        TemplateItem ti=new TemplateItem("offline","test","study"
 //        ,"test","1:00","2:00");
 //        new TemplateItemRepository(this).insertTemplateItems(ti);
+
     }
 
     @Override
