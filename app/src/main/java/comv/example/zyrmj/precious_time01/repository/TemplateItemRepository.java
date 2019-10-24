@@ -3,7 +3,9 @@ package comv.example.zyrmj.precious_time01.repository;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import android.view.View;
+
 
 import androidx.lifecycle.LiveData;
 
@@ -30,15 +32,7 @@ public class TemplateItemRepository {
     public LiveData<List<TemplateItem>> getAllTemplateItems() {
         return allTemplateItems;
     }
-    public List<TemplateItem> getAllTemplateItems2() {
 
-        try {
-            return new findAllAsyncTask(templateItemDao).execute().get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-return null;
-    }
     public void insertTemplateItems(TemplateItem... templateItems) {
         new InsertAsyncTask(templateItemDao).execute(templateItems);
     }
@@ -48,28 +42,27 @@ return null;
     public void deleteTemplateItems(TemplateItem... templateItems) {
         new DeleteAsyncTask(templateItemDao).execute(templateItems);
     }
-
-
-    static class findAllAsyncTask extends AsyncTask<Void,Void,List<TemplateItem>>
-    {
-    private TemplateItemDao templateItemDao;
-
-        public findAllAsyncTask(TemplateItemDao templateItemDao) {
+    public List<TemplateItem> getAll() {
+        try {
+            return new GetList(templateItemDao).execute().get();
+        } catch (Exception e) {
+            Log.d("here", "problem while getlist");
+        }
+        Log.d("here", "err while return list");
+        return null;
+    }
+    static class GetList extends  AsyncTask<Void, Void, List<TemplateItem>> {
+        private TemplateItemDao templateItemDao;
+        private GetList(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
 
 
         @Override
         protected List<TemplateItem> doInBackground(Void... voids) {
-          return templateItemDao.getAllTemplateItems2();
+            return templateItemDao.getAll();
         }
     }
-
-
-
-
-
-
     static class InsertAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
         private TemplateItemDao templateItemDao;
 

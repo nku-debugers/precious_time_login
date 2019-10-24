@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+
 import androidx.lifecycle.Observer;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Template;
@@ -11,6 +12,11 @@ import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 import comv.example.zyrmj.precious_time01.repository.UserRepository;
+
+
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
+
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekDayView;
 import comv.example.zyrmj.weekviewlibrary.WeekHeaderView;
@@ -22,6 +28,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +51,7 @@ public class TestWeekViewActivity extends AppCompatActivity implements WeekView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weekview);
         assignViews();
+
         User user=new User();
        // new UserRepository(this).insertUsers(user);
            Template template=new Template("offline","study");
@@ -59,6 +68,53 @@ public class TestWeekViewActivity extends AppCompatActivity implements WeekView.
        TemplateItem t4 = new TemplateItem("offline", "test4", "study"
                 , "test", "3-8:00", "3-7:00");
       //  new TemplateItemRepository(this).insertTemplateItems(t4);
+
+
+        List<TemplateItem> datas = new TemplateItemRepository(this).getAll();
+        int i = 1;
+        for (TemplateItem ti : datas) {
+            Log.d("列表2", ti.getItemName());
+            String weekday = ti.getStartTime().split("-")[0];
+            int diff = Integer.valueOf(weekday);//与周一的距离
+            String starttime = ti.getStartTime().split("-")[1];
+            Log.d("列表2", starttime);
+            String starthour = starttime.split(":")[0];
+            String endtime = ti.getEndTime().split("-")[1];
+            Log.d("列表2", starthour);
+            String endhour = endtime.split(":")[0];
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(Calendar.DATE, startTime.get(Calendar.DATE) + diff);
+            startTime.set(Calendar.MONTH, 9);
+            startTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(starthour));
+            startTime.set(Calendar.MINUTE, 0);
+            Calendar endTime = (Calendar) startTime.clone();
+            startTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
+            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime);
+            event.setColor(getResources().getColor(R.color.event_color_01));
+            Log.d("event", event.getName());
+            mNewEvent.add(event);
+            i++;
+        }
+//        mDialogAll = new TimePickerDialog.Builder()
+//                .setCallBack(this)
+//                .setCancelStringId("Cancel")
+//                .setSureStringId("Sure")
+//                .setTitleStringId("TimePicker")
+//                .setYearText("Year")
+//                .setMonthText("Month")
+//                .setDayText("Day")
+//                .setHourText("Hour")
+//                .setMinuteText("Minute")
+//                .setCyclic(false)
+//                .setMinMillseconds(System.currentTimeMillis())
+//                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
+//                .setCurrentMillseconds(System.currentTimeMillis())
+//                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
+//                .setType(Type.ALL)
+//                .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
+//                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
+//                .setWheelItemTextSize(12)
+//                .build();
 
     }
 
@@ -121,8 +177,9 @@ public class TestWeekViewActivity extends AppCompatActivity implements WeekView.
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
+
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
-        List<TemplateItem> datas = new TemplateItemRepository(this).getAllTemplateItems2();
+        List<TemplateItem> datas = new TemplateItemRepository(this).getAll();
         int i = 1;
         for (TemplateItem ti : datas) {
             Log.d("列表2", ti.getItemName());
@@ -247,6 +304,9 @@ public class TestWeekViewActivity extends AppCompatActivity implements WeekView.
 //        events.add(event);
 //        events.addAll(mNewEvent);
         return events;
+
+
+
     }
 
     private String getEventTitle(Calendar time) {
