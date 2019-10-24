@@ -1,11 +1,4 @@
 <resources>
-    <string name="app_name">Sample</string>
-
-    <string name="all">ALL</string>
-    <string name="year_month_day">YEAR-MONTH-DAY</string>
-    <string name="year_month">YEAR-MONTH</string>
-    <string name="month_day_hour_minute">MONTH-DAY-HOUR-MINUTE</string>
-    <string name="hour_minute">HOUR-MINUTE</string>
     <string name="cancel">取消</string>
     <string name="title">请选择时间</string>
     <string name="confirm">确定</string>
@@ -15,6 +8,7 @@
     <string name="hour">时</string>
     <string name="minute">分</string>
 
+    <string name="app_name">日期选择控件</string>
     <string name="select_date">选择日期</string>
     <string name="current_date">当前日期</string>
     <string name="select_time">选择时间</string>

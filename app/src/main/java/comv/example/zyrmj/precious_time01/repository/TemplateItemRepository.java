@@ -2,11 +2,13 @@ package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import comv.example.zyrmj.precious_time01.dao.TemplateDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateItemDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
@@ -33,7 +35,26 @@ public class TemplateItemRepository {
     public void deleteTemplateItems(TemplateItem... templateItems) {
         new DeleteAsyncTask(templateItemDao).execute(templateItems);
     }
+    public List<TemplateItem> getAll() {
+        try {
+            return new GetList(templateItemDao).execute().get();
+        } catch (Exception e) {
+            Log.d("here", "problem while getlist");
+        }
+        Log.d("here", "err while return list");
+        return null;
+    }
+    static class GetList extends  AsyncTask<Void, Void, List<TemplateItem>> {
+        private TemplateItemDao templateItemDao;
+        private GetList(TemplateItemDao templateItemDao) {
+            this.templateItemDao = templateItemDao;
+        }
 
+        @Override
+        protected List<TemplateItem> doInBackground(Void... voids) {
+            return templateItemDao.getAll();
+        }
+    }
     static class InsertAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
         private TemplateItemDao templateItemDao;
 
