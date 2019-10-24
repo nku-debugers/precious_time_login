@@ -35,9 +35,17 @@ public class MainActivity extends AppCompatActivity {
 //        Template t2 = new Template("2", "study");
 //        new TemplateRepository(this).insertTemplates(t, t2);
 
-//        TemplateItem ti=new TemplateItem("offline","test","study"
+//      TemplateItem ti=new TemplateItem("offline","test","study"
 //        ,"test","1:00","2:00");
-//        new TemplateItemRepository(this).insertTemplateItems(ti);
+//      TemplateItem t1=new TemplateItem("offline","test1","study"
+//              ,"test","1-1:00","1-2:00");
+//      TemplateItem t2=new TemplateItem("offline","test2","study"
+//              ,"test","2-15:00","2-17:00");
+//        TemplateItem t3=new TemplateItem("offline","test3","study"
+//                ,"test","0-15:00","0-17:00");
+//        new TemplateItemRepository(this).deleteTemplateItems(ti);
+//        new TemplateItemRepository(this).insertTemplateItems(t1,t2,t3);
+
 
     }
 

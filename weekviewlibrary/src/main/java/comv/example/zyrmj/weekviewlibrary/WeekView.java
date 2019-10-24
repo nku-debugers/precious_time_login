@@ -489,6 +489,7 @@ public class WeekView extends View {
 
         // Draw the header row texts.
         startPixel = startFromPixel;
+        int daycount=0;
         for (int dayNumber=leftDaysWithGaps+1; dayNumber <= leftDaysWithGaps + mNumberOfVisibleDays + 1; dayNumber++) {
             // Check if the day is today.
             day = (Calendar) mToday.clone();
@@ -499,9 +500,15 @@ public class WeekView extends View {
             String dayLabel = getDateTimeInterpreter().interpretDate(day);
 
             if (dayLabel == null)
-                throw new IllegalStateException("A DateTimeInterpreter must not return null date");
+                //throw new IllegalStateException("A DateTimeInterpreter must not return null date");
+            {   dayLabel = getDateTimeInterpreter().interpretWeek(daycount);
+            daycount++;
+                canvas.drawText(dayLabel, startPixel + mWidthPerDay / 2, mHeaderTextHeight + mHeaderRowPadding, sameDay ? mTodayHeaderTextPaint : mHeaderTextPaint);
+                startPixel += mWidthPerDay + mColumnGap;
+            }
+            else{
             canvas.drawText(dayLabel, startPixel + mWidthPerDay / 2, mHeaderTextHeight + mHeaderRowPadding, sameDay ? mTodayHeaderTextPaint : mHeaderTextPaint);
-            startPixel += mWidthPerDay + mColumnGap;
+            startPixel += mWidthPerDay + mColumnGap;}
         }
 
     }
