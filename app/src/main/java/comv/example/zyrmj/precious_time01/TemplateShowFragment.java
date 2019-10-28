@@ -3,6 +3,7 @@ package comv.example.zyrmj.precious_time01;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -17,11 +18,16 @@ import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
 import comv.example.zyrmj.precious_time01.ViewModel.TemplateViewModel;
 import comv.example.zyrmj.precious_time01.entity.Template;
 
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
@@ -68,5 +74,44 @@ public class TemplateShowFragment extends Fragment {
                 controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
             }
         });
+        new MaterialDialog.Builder(getContext())
+                .title("输入窗")
+                .content("包含输入框的diaolog")
+//                                .widgetColor(Color.BLUE)//输入框光标的颜色
+                .inputType(InputType.TYPE_CLASS_TEXT)//可以输入的类型-电话号码
+                //前2个一个是hint一个是预输入的文字
+                .input("hint", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                        Log.i("yqy", "输入的是：" + input);
+
+                            Bundle bundle=new Bundle();
+                            bundle.putString("userId","offline");
+                            bundle.putString("templateName",input.toString());
+                            NavController controller= Navigation.findNavController(getView());
+                            controller.navigate(R.id.action_templateShowFragment_to_testFragment,bundle);
+//               获取template完整的数据库中的信息 用Bundle传递数据，跳转到update和delete fragment
+
+
+                    }
+                })
+
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                      //  输入不合法未彻底解决，如何解决不失焦，实时监测输入内容？
+                        if (dialog.getInputEditText().length() <=10) {
+
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                        }else {
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                        }
+
+                    }
+                })
+                .show();
+
+
     }
 }
