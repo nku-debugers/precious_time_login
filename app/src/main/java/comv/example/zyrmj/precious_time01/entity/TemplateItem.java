@@ -1,12 +1,14 @@
 package comv.example.zyrmj.precious_time01.entity;
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-@Entity(primaryKeys = {"user_id", "item_name"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
+@Entity(primaryKeys = {"user_id","template_name","start_time"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
         },
         indices = {@Index(value = "template_name")})
 public class TemplateItem {
@@ -16,12 +18,14 @@ public class TemplateItem {
     @NonNull
     @ColumnInfo(name = "item_name")
     private  String itemName;
+    @NotNull
     @ColumnInfo(name = "template_name")
     private  String templateName;
     @ColumnInfo(name = "category_name")
     private String categoryName;
     @ColumnInfo(name = "end_time")
     private String endTime;
+    @NotNull
     @ColumnInfo(name = "start_time")
     private String startTime;
 

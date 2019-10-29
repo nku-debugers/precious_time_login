@@ -53,7 +53,7 @@ public void setAllTemplates(List<Template> allTemplates)
                 bundle.putString("userId",holder.userId);
                 bundle.putString("templateName",holder.name.getText().toString());
                 NavController controller= Navigation.findNavController(view);
-                controller.navigate(R.id.action_templateShowFragment_to_testFragment,bundle);
+                controller.navigate(R.id.action_templateShowFragment_to_testWeekView,bundle);
 //               获取template完整的数据库中的信息 用Bundle传递数据，跳转到update和delete fragment
             }
         });

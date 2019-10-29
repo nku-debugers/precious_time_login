@@ -51,6 +51,29 @@ public class TemplateItemRepository {
         Log.d("here", "err while return list");
         return null;
     }
+    public List<TemplateItem> getSpecificList(String templateName,String userId)
+    {
+        try {
+            return new GetSpecificList(templateItemDao).execute(templateName,userId).get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+return null;
+    }
+    static class GetSpecificList extends AsyncTask<String,Void,List<TemplateItem>>
+    { private TemplateItemDao templateItemDao;
+        private GetSpecificList(TemplateItemDao templateItemDao) {
+            this.templateItemDao = templateItemDao;
+        }
+
+        @Override
+        protected List<TemplateItem> doInBackground(String... strings) {
+            return templateItemDao.getSpecificTemplateItems(strings[0],strings[1]);
+            //string[0] templateName string[1] userId
+        }
+    }
+
     static class GetList extends  AsyncTask<Void, Void, List<TemplateItem>> {
         private TemplateItemDao templateItemDao;
         private GetList(TemplateItemDao templateItemDao) {

@@ -22,8 +22,8 @@ public interface TemplateItemDao {
     void updateTemplateItem(TemplateItem... templateItems);
     @Query("Select * from TemplateItem")
     LiveData<List<TemplateItem>>getAllTemplateItems();
-
-
+@Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId" )
+List<TemplateItem>getSpecificTemplateItems(String templateName,String userId);
 
     @Query("Select * from TemplateItem")
     List<TemplateItem>getAll();
