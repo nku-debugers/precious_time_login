@@ -1,31 +1,51 @@
 package comv.example.zyrmj.precious_time01.viewModels;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import comv.example.zyrmj.precious_time01.R;
-
 import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
 import comv.example.zyrmj.precious_time01.datepicker.DateFormatUtils;
-import comv.example.zyrmj.precious_time01.entity.TemplateItem;
-import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 
-public class TestDatePicker extends Activity implements View.OnClickListener {
-
+public class AddTemplateItem extends Fragment implements View.OnClickListener {
     private TextView mTvSelectedTime1, mTvSelectedTime2;
     private CustomDatePicker mTimePicker1, mTimePicker2;
     private Button save, delete;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_template_item);
 
-        save = findViewById(R.id.save_button);
+    public AddTemplateItem() {
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.add_template_item, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+    private void init() {
+        save = getView().findViewById(R.id.save_button);
+
+        //取消删除按钮，重写返回键，提醒用户是否返回，“您的数据将不会被保存”
+
+        getView().findViewById(R.id.start_time).setOnClickListener(this);
+
+        getView().findViewById(R.id.end_time).setOnClickListener(this);
+        mTvSelectedTime1 = getView().findViewById(R.id.tv_selected_start_time);
+        mTvSelectedTime2 = getView().findViewById(R.id.tv_selected_end_time);
+        initTimerPicker1();
+        initTimerPicker2();
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,22 +55,11 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
 //                将数据插入数据库
             }
         });
-
-        //取消删除按钮，重写返回键，提醒用户是否返回，“您的数据将不会被保存”
-
-        findViewById(R.id.start_time).setOnClickListener(this);
-
-        findViewById(R.id.end_time).setOnClickListener(this);
-        mTvSelectedTime1 = findViewById(R.id.tv_selected_start_time);
-        mTvSelectedTime2 = findViewById(R.id.tv_selected_end_time);
-        initTimerPicker1();
-        initTimerPicker2();
-
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.start_time:
                 // 日期格式为yyyy-MM-dd
                 mTimePicker1.show(mTvSelectedTime1.getText().toString());
@@ -63,13 +72,6 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mTimePicker1.onDestroy();
-    }
-
-
     private void initTimerPicker1() {
         String beginTime = "2018-10-17 18:00";
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), true);
@@ -77,7 +79,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         mTvSelectedTime1.setText(endTime);
 
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
-        mTimePicker1 = new CustomDatePicker(this, new CustomDatePicker.Callback() {
+        mTimePicker1 = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
                 mTvSelectedTime1.setText(DateFormatUtils.long2Str(timestamp, true));
@@ -102,7 +104,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         mTvSelectedTime2.setText(endTime);
 
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
-        mTimePicker2 = new CustomDatePicker(this, new CustomDatePicker.Callback() {
+        mTimePicker2 = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
                 mTvSelectedTime2.setText(DateFormatUtils.long2Str(timestamp, true));
