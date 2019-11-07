@@ -83,6 +83,7 @@ private TemplateDao templateDao;
     }
 
     public void insertTemplates(Template... templates) {
+
         new InsertAsyncTask(templateDao).execute(templates);
     }
     public void updateTemplates(Template... templates) {

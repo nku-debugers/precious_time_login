@@ -60,7 +60,10 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
             @Override
             public void onClick(View view) {
                 NavController controller= Navigation.findNavController(getView());
-                controller.navigate(R.id.action_testWeekView_to_addTemplateItem);
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", userId);
+                bundle.putString("templateName", templateName);
+                controller.navigate(R.id.action_testWeekView_to_addTemplateItem, bundle);
             }
         });
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
