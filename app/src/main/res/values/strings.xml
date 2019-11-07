@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">Sample</string>
     <string name="end_time_exceed_warning">结束时间应晚于开始时间</string>
     <string name="all">ALL</string>
