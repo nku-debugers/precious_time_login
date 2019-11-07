@@ -72,7 +72,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
 
     private void initTimerPicker1() {
         String beginTime = "2018-10-17 18:00";
-        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), true);
+        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
 
         mTvSelectedTime1.setText(endTime);
 
@@ -80,7 +80,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         mTimePicker1 = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
-                mTvSelectedTime1.setText(DateFormatUtils.long2Str(timestamp, true));
+                mTvSelectedTime1.setText(DateFormatUtils.long2Str(timestamp, 3));
             }
         }, beginTime, endTime);
         // 允许点击屏幕或物理返回键关闭
@@ -97,7 +97,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
 
     private void initTimerPicker2() {
         String beginTime = "2018-10-17 18:00";
-        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), true);
+        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
 
         mTvSelectedTime2.setText(endTime);
 
@@ -105,7 +105,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         mTimePicker2 = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
-                mTvSelectedTime2.setText(DateFormatUtils.long2Str(timestamp, true));
+                mTvSelectedTime2.setText(DateFormatUtils.long2Str(timestamp, 3));
             }
         }, beginTime, endTime);
         // 允许点击屏幕或物理返回键关闭

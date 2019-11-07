@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -109,6 +110,7 @@ public class TemplateRepository {
     }
 
     public void insertTemplates(Template... templates) {
+
         new InsertAsyncTask(templateDao).execute(templates);
     }
     public void updateTemplates(Template... templates) {

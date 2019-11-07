@@ -11,7 +11,7 @@ import java.util.Locale;
  * 修改时间：2018/12/18
  */
 public class DateFormatUtils {
-
+    private static final String DATE_FORMAT_PATTERN_HM = "HH:mm";
     private static final String DATE_FORMAT_PATTERN_YMD = "yyyy-MM-dd";
     private static final String DATE_FORMAT_PATTERN_YMD_HM = "yyyy-MM-dd HH:mm";
 
@@ -22,7 +22,7 @@ public class DateFormatUtils {
      * @param isPreciseTime 是否包含时分
      * @return 格式化的日期字符串
      */
-    public static String long2Str(long timestamp, boolean isPreciseTime) {
+    public static String long2Str(long timestamp, int isPreciseTime) {
         return long2Str(timestamp, getFormatPattern(isPreciseTime));
     }
 
@@ -37,7 +37,7 @@ public class DateFormatUtils {
      * @param isPreciseTime 是否包含时分
      * @return 时间戳
      */
-    public static long str2Long(String dateStr, boolean isPreciseTime) {
+    public static long str2Long(String dateStr, int isPreciseTime) {
         return str2Long(dateStr, getFormatPattern(isPreciseTime));
     }
 
@@ -49,11 +49,13 @@ public class DateFormatUtils {
         return 0;
     }
 
-    private static String getFormatPattern(boolean showSpecificTime) {
-        if (showSpecificTime) {
+    private static String getFormatPattern(int format) {
+        if (format == 1) {
             return DATE_FORMAT_PATTERN_YMD_HM;
-        } else {
+        } else if (format ==2) {
             return DATE_FORMAT_PATTERN_YMD;
+        } else {
+            return DATE_FORMAT_PATTERN_HM;
         }
     }
 
