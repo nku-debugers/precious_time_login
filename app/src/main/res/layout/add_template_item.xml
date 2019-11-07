@@ -14,7 +14,8 @@
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintBaseline_toBaselineOf="parent">
+        app:layout_constraintBaseline_toBaselineOf="parent"
+        android:focusable="true">
 
         <TextView
             android:layout_width="wrap_content"

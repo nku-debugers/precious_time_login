@@ -27,6 +27,7 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.add_template_item, container, false);
+        init();
     }
 
     @Override

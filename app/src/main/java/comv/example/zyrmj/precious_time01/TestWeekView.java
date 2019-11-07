@@ -32,7 +32,8 @@ import java.util.List;
 public class TestWeekView extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewClickListener, WeekView.EmptyViewLongPressListener, WeekView.ScrollListener  {
     private WeekView mWeekView;
-    String userId,templateName;
+    private Button addItem;
+    private String userId,templateName;
     public TestWeekView() {
         // Required empty public constructor
     }
@@ -54,6 +55,14 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
         assignViews();
     }
     private void assignViews() {
+        addItem = (Button)getActivity().findViewById(R.id.button4);
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller= Navigation.findNavController(getView());
+                controller.navigate(R.id.action_testWeekView_to_addTemplateItem);
+            }
+        });
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
         // mWeekHeaderView= (WeekHeaderView) findViewById(R.id.weekheaderview);
         //mTv_date =(TextView)findViewById(R.id.tv_date);
