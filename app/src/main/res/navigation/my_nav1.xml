@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_testWeekView_to_testAddEvent"
             app:destination="@id/testAddEvent" />
+        <action
+            android:id="@+id/action_testWeekView_to_addTemplateItem"
+            app:destination="@id/addTemplateItem" />
     </fragment>
     <fragment
         android:id="@+id/testAddEvent"
@@ -75,4 +78,9 @@
         android:name="comv.example.zyrmj.precious_time01.TestFragment"
         android:label="fragment_test"
         tools:layout="@layout/fragment_test" />
+    <fragment
+        android:id="@+id/addTemplateItem"
+        android:name="comv.example.zyrmj.precious_time01.viewModels.AddTemplateItem"
+        android:label="add_template_item"
+        tools:layout="@layout/add_template_item" />
 </navigation>
