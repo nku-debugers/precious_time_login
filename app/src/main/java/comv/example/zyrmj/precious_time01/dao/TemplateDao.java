@@ -23,7 +23,7 @@ public interface TemplateDao {
     @Query("Select * from Template")
     LiveData<List<Template>> getAllTemplates();
     //根据字段查询
-    @Query("SELECT * FROM Template WHERE name= :name AND user_id= :userId")
-    Template getSpecificTemplate(String name,String userId);
+    @Query("SELECT * FROM Template WHERE user_id=:userId AND name= :name")
+    Template getSpecificTemplate(String userId,String name);
 
 }

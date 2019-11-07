@@ -55,6 +55,7 @@ public class TemplateShowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        final TemplateRepository templateRepository=new TemplateRepository(getContext());
         RecyclerView recyclerView=getView().findViewById(R.id.recycleView);
         final TemplateAdapter templateAdapter=new TemplateAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -81,47 +82,64 @@ public class TemplateShowFragment extends Fragment {
         addTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(getContext())
-                        .title("添加新模板")
-                        .content("请输入模板名称")
-//                                .widgetColor(Color.BLUE)//输入框光标的颜色
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        //前2个一个是hint一个是预输入的文字
-                        .input("", "", new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-
-                                Log.i("yqy", "输入的是：" + input);
-                                new TemplateRepository(getContext()).insertTemplates(new Template("offline",input.toString()));
-                                Bundle bundle=new Bundle();
-                                bundle.putString("userId","offline");
-                                bundle.putString("templateName",input.toString());
-                                NavController controller= Navigation.findNavController(getView());
-                                controller.navigate(R.id.action_templateShowFragment_to_testWeekView,bundle);
-//               获取template完整的数据库中的信息 用Bundle传递数据，跳转到update和delete fragment
-
-
-                            }
-                        })
-
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                //  输入不合法未彻底解决，如何解决不失焦，实时监测输入内容？
-                                if (dialog.getInputEditText().length() <=10) {
-
-                                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                                }else {
-                                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                                }
-
-                            }
-                        })
-                        .show();
+              showDialog("请输入模板名称",templateRepository);
 
             }
         });
 
 
     }
-}
+    public void showDialog(String info, final TemplateRepository templateRepository)
+    {
+        new MaterialDialog.Builder(getContext())
+                .title("添加新模板")
+                .content(info)
+//                                .widgetColor(Color.BLUE)//输入框光标的颜色
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                //前2个一个是hint一个是预输入的文字
+                .input("", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                //判断模板名是否为空
+                        if(input.toString().equals(""))
+                        {
+                            dialog.setContent("模板名不能为空，请重新输入！");
+                        }
+                        else {
+                             String userId="offline",templateName=input.toString();
+                            Log.i("yqy", "输入的是：" + input);
+                            //查找是否有同名Template存在
+                            if(templateRepository.getSpecificTemplate(userId,templateName)!=null)
+                            {
+                                Log.i("dialog","存在同名模板");
+                                dialog.setContent("存在同名模板，请重新输入！");
+                            }
+                            else {
+                                Log.i("dialog","add template");
+                                dialog.dismiss();
+                               templateRepository.insertTemplates(new Template(userId,templateName));
+                                Bundle bundle = new Bundle();
+                                bundle.putString("userId", "offline");
+                                bundle.putString("templateName", input.toString());
+                                NavController controller = Navigation.findNavController(getView());
+                                controller.navigate(R.id.action_templateShowFragment_to_testWeekView, bundle);
+//               获取template完整的数据库中的信息 用Bundle传递数据，跳转到update和delete fragment
+                            }
+                        }
+                    }
+                })
+
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
+               .autoDismiss(false) .show();
+
+    }
+
+
+    }
+
+

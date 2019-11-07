@@ -2,10 +2,12 @@ package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import comv.example.zyrmj.precious_time01.dao.TemplateDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateItemDao;
@@ -25,48 +27,20 @@ public class TemplateRepository {
         templateDao =  appDatabase.templateDao();
         allTemplates = templateDao.getAllTemplates();
     }
-  static class SelectAsyncTask extends AsyncTask<String,Void ,Template>
-  {
-      private TemplateDao templateDao;
 
-      OnDataFinishedListener onDataFinishedListener;
+static class getSpecificTemplateTask extends AsyncTask<String,Void,Template>
+{
+private TemplateDao templateDao;
+    public getSpecificTemplateTask(TemplateDao templateDao) {
+        this.templateDao=templateDao;
+    }
 
+    @Override
+    protected Template doInBackground(String... strings) {
+        return templateDao.getSpecificTemplate(strings[0],strings[1]);
+    }
+}
 
-      private SelectAsyncTask(TemplateDao templateDao) {
-          this.templateDao = templateDao;
-      }
-
-      public void setOnDataFinishedListener(
-              OnDataFinishedListener onDataFinishedListener) {
-          this.onDataFinishedListener = onDataFinishedListener;
-      }
-      //回调接口：
-      public interface OnDataFinishedListener {
-
-          public void onDataSuccessfully(Template template);
-
-          public void onDataFailed();
-
-      }
-          @Override
-      protected Template doInBackground(String... strings) {
-          String name=strings[0];
-          String userId=strings[1];
-          Template template=templateDao.getSpecificTemplate(name,userId);
-         return template;
-      }
-
-      @Override
-      protected void onPostExecute(Template template) {
-          super.onPostExecute(template);
-          if(template!=null){
-              onDataFinishedListener.onDataSuccessfully(template);
-          }else{
-              onDataFinishedListener.onDataFailed();
-          }
-
-      }
-  }
     static class InsertAsyncTask extends AsyncTask<Template, Void, Void> {
         private TemplateDao templateDao;
 
@@ -116,5 +90,9 @@ public class TemplateRepository {
     }
     public void deleteTemplates(Template... templates) {
         new DeleteAsyncTask(templateDao).execute(templates);
+    }
+    public Template getSpecificTemplate(String... strings)
+    {
+        return templateDao.getSpecificTemplate(strings[0],strings[1]);
     }
 }

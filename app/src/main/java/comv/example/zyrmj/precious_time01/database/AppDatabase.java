@@ -28,7 +28,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
     public static synchronized AppDatabase getDatabase(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "time_db")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "time_db").allowMainThreadQueries()
                     .build();
         }
         return INSTANCE;
