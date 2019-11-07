@@ -31,6 +31,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
     private Dialog mPickerDialog;
     private PickerView mDpvYear, mDpvMonth, mDpvDay, mDpvHour, mDpvMinute;
+    private TextView yearString, monthString, dateString;
     private TextView mTvHourUnit, mTvMinuteUnit;
 
     private int mBeginYear, mBeginMonth, mBeginDay, mBeginHour, mBeginMinute,
@@ -128,10 +129,13 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 //        text_year = mPickerDialog.findViewById(R.id.test_year);
 
         mDpvYear = mPickerDialog.findViewById(R.id.dpv_year);
+        yearString = mPickerDialog.findViewById(R.id.test_year);
         mDpvYear.setOnSelectListener(this);
         mDpvMonth = mPickerDialog.findViewById(R.id.dpv_month);
+        monthString = mPickerDialog.findViewById(R.id.test_month);
         mDpvMonth.setOnSelectListener(this);
         mDpvDay = mPickerDialog.findViewById(R.id.dpv_day);
+        dateString = mPickerDialog.findViewById(R.id.test_day);
         mDpvDay.setOnSelectListener(this);
         mDpvHour = mPickerDialog.findViewById(R.id.dpv_hour);
         mDpvHour.setOnSelectListener(this);
@@ -592,11 +596,15 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         } else {
             initScrollUnit(SCROLL_UNIT_HOUR, SCROLL_UNIT_MINUTE);
             mDpvYear.setVisibility(View.GONE);
+            mDpvMonth.setVisibility(View.GONE);
             mDpvDay.setVisibility(View.GONE);
             mDpvHour.setVisibility(View.GONE);
             mTvHourUnit.setVisibility(View.GONE);
             mDpvMinute.setVisibility(View.GONE);
             mTvMinuteUnit.setVisibility(View.GONE);
+            yearString.setVisibility(View.GONE);
+            monthString.setVisibility(View.GONE);
+            dateString.setVisibility(View.GONE);
         }
         //mCanShowPreciseTime = canShowPreciseTime;
     }
