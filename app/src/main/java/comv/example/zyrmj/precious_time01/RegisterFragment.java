@@ -94,7 +94,7 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false);
+        return inflater.inflate(R.layout.register, container, false);
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -32,17 +33,19 @@ String userId="未登录";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_person_center, container, false);
+        return inflater.inflate(R.layout.personcenter, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
         if(getArguments()!=null) {
             userId = getArguments().getString("userId", "未登录");
         }
-        Button tologin=getView().findViewById(R.id.next);
+        Button tologin=getView().findViewById(R.id.tologin);
         Button logout=getView().findViewById(R.id.logout);
         TextView user=getView().findViewById(R.id.userId);
         View toTemplate=getView().findViewById(R.id.toTemplate);

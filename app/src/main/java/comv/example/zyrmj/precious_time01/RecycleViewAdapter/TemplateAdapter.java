@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.TestWeekViewActivity;
 import comv.example.zyrmj.precious_time01.entity.Template;
 
 public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.MyViewHolder> {

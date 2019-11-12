@@ -25,7 +25,7 @@
         android:layout_width="174dp"
         android:layout_height="67dp"
         android:gravity="center_vertical"
-        android:text="模板名称"
+        android:text="事件名称"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/editText"
         app:layout_constraintEnd_toStartOf="@+id/guideline61"

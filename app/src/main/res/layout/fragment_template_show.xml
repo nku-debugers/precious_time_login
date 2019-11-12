@@ -14,7 +14,6 @@
         app:backgroundTint="#FFEB3B"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/guideline50"
-        app:layout_constraintStart_toStartOf="@+id/guideline49"
         app:srcCompat="@drawable/ic_add_black_96dp" />
 
     <ImageView
@@ -76,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.79" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -89,6 +88,8 @@
         android:id="@+id/recycleView"
         android:layout_width="411dp"
         android:layout_height="658dp"
-        tools:layout_editor_absoluteY="73dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
