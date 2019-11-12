@@ -35,7 +35,7 @@ String userId="未登录";
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_person_center, container, false);
+        return inflater.inflate(R.layout.personcenter, container, false);
     }
 
     @Override
@@ -45,7 +45,7 @@ String userId="未登录";
         if(getArguments()!=null) {
             userId = getArguments().getString("userId", "未登录");
         }
-        Button tologin=getView().findViewById(R.id.next);
+        Button tologin=getView().findViewById(R.id.tologin);
         Button logout=getView().findViewById(R.id.logout);
         TextView user=getView().findViewById(R.id.userId);
         View toTemplate=getView().findViewById(R.id.toTemplate);

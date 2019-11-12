@@ -208,25 +208,17 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         // Calendar.MONTH 值为 0-11
         mBeginMonth = mBeginTime.get(Calendar.MONTH) + 1;
         mBeginDay = mBeginTime.get(Calendar.DAY_OF_MONTH);
-<<<<<<< HEAD
-       mBeginHour = 0;
 
-=======
         //mBeginHour = mBeginTime.get(Calendar.HOUR_OF_DAY);
         mBeginHour=0;
->>>>>>> 75c60780330e4b2c380d493d154fa524f6c565ac
         mBeginMinute = mBeginTime.get(Calendar.MINUTE);
 
         mEndYear = mEndTime.get(Calendar.YEAR);
         mEndMonth = mEndTime.get(Calendar.MONTH) + 1;
         mEndDay = mEndTime.get(Calendar.DAY_OF_MONTH);
-<<<<<<< HEAD
-        mEndHour = 23;
 
-=======
         //mEndHour = mEndTime.get(Calendar.HOUR_OF_DAY);
         mEndHour=23;
->>>>>>> 75c60780330e4b2c380d493d154fa524f6c565ac
         mEndMinute = mEndTime.get(Calendar.MINUTE);
 
         boolean canSpanYear = mBeginYear != mEndYear;
