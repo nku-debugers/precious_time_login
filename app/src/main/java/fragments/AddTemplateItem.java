@@ -1,6 +1,7 @@
-package comv.example.zyrmj.precious_time01.viewModels;
+package fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,12 +49,13 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "");
             templateName = getArguments().getString("templateName", "");
+            Log.d("mytag", templateName);
         }
         init();
     }
 
     private void init() {
-        save = getView().findViewById(R.id.save_button);
+        save = getView().findViewById(R.id.button2);
         name = getView().findViewById(R.id.editText);
         //取消删除按钮，重写返回键，提醒用户是否返回，“您的数据将不会被保存”
 
@@ -77,6 +79,7 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
                 }
                 String startTIme = mTvSelectedTime1.getText().toString();
                 String endTime = mTvSelectedTime2.getText().toString();
+
                 TemplateItem item = new TemplateItem("offline", name.getText().toString(),
                         templateName, "study", endTime, startTIme);
                 TemplateItemRepository t = new TemplateItemRepository(getActivity());

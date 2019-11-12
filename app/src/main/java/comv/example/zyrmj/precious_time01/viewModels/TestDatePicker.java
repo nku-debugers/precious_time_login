@@ -25,7 +25,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_template_item);
 
-        save = findViewById(R.id.save_button);
+        save = findViewById(R.id.button2);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

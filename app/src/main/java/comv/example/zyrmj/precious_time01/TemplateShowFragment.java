@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class TemplateShowFragment extends Fragment {
             }
         });
 
-        Button addTemplate=getView().findViewById(R.id.addTemplate);
+        FloatingActionButton addTemplate=getView().findViewById(R.id.addTemplate);
         addTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

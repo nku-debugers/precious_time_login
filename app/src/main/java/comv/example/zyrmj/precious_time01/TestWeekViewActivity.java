@@ -1,9 +1,7 @@
 package comv.example.zyrmj.precious_time01;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 
-import androidx.lifecycle.Observer;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
@@ -14,28 +12,19 @@ import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 import comv.example.zyrmj.precious_time01.repository.UserRepository;
 
 
-import comv.example.zyrmj.precious_time01.entity.TemplateItem;
-import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
-
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
-import comv.example.zyrmj.weekviewlibrary.WeekDayView;
-import comv.example.zyrmj.weekviewlibrary.WeekHeaderView;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
 
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class TestWeekViewActivity extends AppCompatActivity implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewClickListener, WeekView.EmptyViewLongPressListener, WeekView.ScrollListener {

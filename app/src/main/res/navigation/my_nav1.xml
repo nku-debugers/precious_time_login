@@ -80,7 +80,7 @@
         tools:layout="@layout/fragment_test" />
     <fragment
         android:id="@+id/addTemplateItem"
-        android:name="comv.example.zyrmj.precious_time01.viewModels.AddTemplateItem"
+        android:name="fragments.AddTemplateItem"
         android:label="add_template_item"
         tools:layout="@layout/add_template_item" />
 </navigation>
