@@ -77,8 +77,8 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      * @param endDateStr   日期字符串，格式为 yyyy-MM-dd HH:mm
      */
     public CustomDatePicker(Context context, Callback callback, String beginDateStr, String endDateStr) {
-        this(context, callback, DateFormatUtils.str2Long(beginDateStr, true),
-                DateFormatUtils.str2Long(endDateStr, true));
+        this(context, callback, DateFormatUtils.str2Long(beginDateStr, 1),
+                DateFormatUtils.str2Long(endDateStr, 1));
     }
 
     /**
@@ -208,13 +208,15 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         // Calendar.MONTH 值为 0-11
         mBeginMonth = mBeginTime.get(Calendar.MONTH) + 1;
         mBeginDay = mBeginTime.get(Calendar.DAY_OF_MONTH);
-        mBeginHour = mBeginTime.get(Calendar.HOUR_OF_DAY);
+        //mBeginHour = mBeginTime.get(Calendar.HOUR_OF_DAY);
+        mBeginHour=0;
         mBeginMinute = mBeginTime.get(Calendar.MINUTE);
 
         mEndYear = mEndTime.get(Calendar.YEAR);
         mEndMonth = mEndTime.get(Calendar.MONTH) + 1;
         mEndDay = mEndTime.get(Calendar.DAY_OF_MONTH);
-        mEndHour = mEndTime.get(Calendar.HOUR_OF_DAY);
+        //mEndHour = mEndTime.get(Calendar.HOUR_OF_DAY);
+        mEndHour=23;
         mEndMinute = mEndTime.get(Calendar.MINUTE);
 
         boolean canSpanYear = mBeginYear != mEndYear;
@@ -510,7 +512,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      */
     public boolean setSelectedTime(String dateStr, boolean showAnim) {
         return canShow() && !TextUtils.isEmpty(dateStr)
-                && setSelectedTime(DateFormatUtils.str2Long(dateStr, mCanShowPreciseTime), showAnim);
+                && setSelectedTime(DateFormatUtils.str2Long(dateStr, 1), showAnim);
     }
 
     /**

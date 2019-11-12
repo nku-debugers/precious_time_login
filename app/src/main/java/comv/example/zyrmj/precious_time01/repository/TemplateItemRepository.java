@@ -34,6 +34,8 @@ public class TemplateItemRepository {
     }
 
     public void insertTemplateItems(TemplateItem... templateItems) {
+        Log.d("mytag", "inside insert fuc");
+
         new InsertAsyncTask(templateItemDao).execute(templateItems);
     }
     public void updateTemplateItems(TemplateItem... templateItems) {

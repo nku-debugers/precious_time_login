@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
 import comv.example.zyrmj.precious_time01.R;
 
 import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
@@ -22,10 +25,11 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_template_item);
 
-        save = findViewById(R.id.save_button);
+        save = findViewById(R.id.button2);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 //                判断数据是否存在
 //                判断数据是否正确
 //                将数据插入数据库
@@ -68,7 +72,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
 
     private void initTimerPicker1() {
         String beginTime = "2018-10-17 18:00";
-        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), true);
+        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
 
         mTvSelectedTime1.setText(endTime);
 
@@ -76,7 +80,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         mTimePicker1 = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
-                mTvSelectedTime1.setText(DateFormatUtils.long2Str(timestamp, true));
+                mTvSelectedTime1.setText(DateFormatUtils.long2Str(timestamp, 3));
             }
         }, beginTime, endTime);
         // 允许点击屏幕或物理返回键关闭
@@ -93,7 +97,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
 
     private void initTimerPicker2() {
         String beginTime = "2018-10-17 18:00";
-        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), true);
+        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
 
         mTvSelectedTime2.setText(endTime);
 
@@ -101,7 +105,7 @@ public class TestDatePicker extends Activity implements View.OnClickListener {
         mTimePicker2 = new CustomDatePicker(this, new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
-                mTvSelectedTime2.setText(DateFormatUtils.long2Str(timestamp, true));
+                mTvSelectedTime2.setText(DateFormatUtils.long2Str(timestamp, 3));
             }
         }, beginTime, endTime);
         // 允许点击屏幕或物理返回键关闭
