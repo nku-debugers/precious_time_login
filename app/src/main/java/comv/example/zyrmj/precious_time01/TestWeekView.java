@@ -42,7 +42,7 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_test_week_view, container, false);
+        return inflater.inflate(R.layout.weekview, container, false);
     }
 
     @Override
