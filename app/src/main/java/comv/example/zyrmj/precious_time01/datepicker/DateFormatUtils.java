@@ -1,5 +1,6 @@
 package comv.example.zyrmj.precious_time01.datepicker;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,6 +28,17 @@ public class DateFormatUtils {
     }
 
     private static String long2Str(long timestamp, String pattern) {
+        String[] weeks = {"周日","周一","周二","周三","周四","周五","周六"};
+        if(pattern.equals("week")) {
+            Date date = new Date(timestamp);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
+            if(week_index<0){
+                week_index = 0;
+            }
+            return weeks[week_index];
+        }
         return new SimpleDateFormat(pattern, Locale.CHINA).format(new Date(timestamp));
     }
 
@@ -54,8 +66,10 @@ public class DateFormatUtils {
             return DATE_FORMAT_PATTERN_YMD_HM;
         } else if (format ==2) {
             return DATE_FORMAT_PATTERN_YMD;
-        } else {
+        } else if (format == 3) {
             return DATE_FORMAT_PATTERN_HM;
+        } else {
+            return "week";
         }
     }
 

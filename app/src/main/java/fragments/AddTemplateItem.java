@@ -11,22 +11,26 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
 import comv.example.zyrmj.precious_time01.datepicker.DateFormatUtils;
+import comv.example.zyrmj.precious_time01.datepicker.PickerView;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 public class AddTemplateItem extends Fragment implements View.OnClickListener {
-    private TextView mTvSelectedTime1, mTvSelectedTime2;
-    private CustomDatePicker mTimePicker1, mTimePicker2;
+    private TextView mTvSelectedTime1, mTvSelectedTime2, mTvSelectedTimeWeek;
+    private CustomDatePicker mTimePicker1, mTimePicker2, mTimePickerWeek;
     private Button save, delete;
     private Date startText, endText;
     private EditText name;
@@ -49,7 +53,6 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "");
             templateName = getArguments().getString("templateName", "");
-            Log.d("mytag", templateName);
         }
         init();
     }
@@ -62,10 +65,14 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.start_time).setOnClickListener(this);
 
         getView().findViewById(R.id.end_time).setOnClickListener(this);
+        getView().findViewById(R.id.week_time).setOnClickListener(this);
         mTvSelectedTime1 = getView().findViewById(R.id.tv_selected_start_time);
         mTvSelectedTime2 = getView().findViewById(R.id.tv_selected_end_time);
+        mTvSelectedTimeWeek = getView().findViewById(R.id.tv_selected_week);
+
         initTimerPicker1();
         initTimerPicker2();
+        initTimerPicker3();
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,18 +84,56 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
                     //提示没有写名字
                     return;
                 }
-                String startTIme = mTvSelectedTime1.getText().toString();
+
+                String startTime = mTvSelectedTime1.getText().toString();
                 String endTime = mTvSelectedTime2.getText().toString();
 
+                String week = getWeek(mTvSelectedTimeWeek.getText().toString());
+                String startFinal = week + "-" + startTime;
+                String endFinal = week + "-" + endTime;
                 TemplateItem item = new TemplateItem("offline", name.getText().toString(),
-                        templateName, "study", endTime, startTIme);
+                        templateName, "study", endFinal, startFinal);
                 TemplateItemRepository t = new TemplateItemRepository(getActivity());
-                t.insertTemplateItems(item);
-
+                int k = t.insertTemplateItems(item);
+                if( k ==1 ) {
+                    NavController controller = Navigation.findNavController(getView());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", templateName);
+                    controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                } else {
+                    Log.d("mytag", "onClick: can't insert");
+                }
             }
         });
     }
-
+    public String getWeek(String selected) {
+        String week = "";
+        if(selected.equals("周日")) {
+            week = "6";
+        }
+        else if (selected.equals("周一")) {
+            week = "0";
+        }
+        else if (selected.equals("周二")) {
+            week = "1";
+        }
+        else if (selected.equals("周三")) {
+            week = "2";
+        }
+        else if (selected.equals("周四")) {
+            week = "3";
+        }
+        else if (selected.equals("周五")) {
+            week = "4";
+        }
+        else if (selected.equals("周六")) {
+            week = "5";
+        } else {
+            return "0";
+        }
+        return week;
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -101,6 +146,8 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
                 // 日期格式为yyyy-MM-dd HH:mm
                 mTimePicker2.show(mTvSelectedTime2.getText().toString());
                 break;
+            case R.id.week_time:
+                mTimePickerWeek.show(mTvSelectedTimeWeek.getText().toString());
         }
     }
 
@@ -159,6 +206,7 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
                     }
                 }
             }
+
         }, beginTime, endTime);
         // 允许点击屏幕或物理返回键关闭
         mTimePicker2.setCancelable(true);
@@ -170,5 +218,37 @@ public class AddTemplateItem extends Fragment implements View.OnClickListener {
         mTimePicker2.setScrollLoop(true);
         // 允许滚动动画
         mTimePicker2.setCanShowAnim(true);
+    }
+    private void initTimerPicker3() {
+        String beginTime = "2018-10-17 18:00";
+        String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
+        String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
+
+        mTvSelectedTimeWeek.setText("周一");
+
+        // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
+        mTimePickerWeek = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
+            @Override
+            public void onTimeSelected(long timestamp) {
+                mTvSelectedTimeWeek.setText(DateFormatUtils.long2Str(timestamp, 4));
+                try {
+                    startText = new SimpleDateFormat("HH:mm", Locale.CHINA)
+                            .parse(DateFormatUtils.long2Str(timestamp, 3));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, beginTime, endTime);
+        // 允许点击屏幕或物理返回键关闭
+
+        mTimePickerWeek.setCancelable(true);
+        // 显示时和分
+        mTimePickerWeek.setCanShowYearAndDay(false);
+        mTimePickerWeek.setCanShowPreciseTime(false);
+
+        // 允许循环滚动
+        mTimePickerWeek.setScrollLoop(true);
+        // 允许滚动动画
+        mTimePickerWeek.setCanShowAnim(true);
     }
 }
