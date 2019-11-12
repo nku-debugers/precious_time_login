@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
@@ -21,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -33,6 +36,7 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
         WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewClickListener, WeekView.EmptyViewLongPressListener, WeekView.ScrollListener  {
     private WeekView mWeekView;
     String userId,templateName;
+    private FloatingActionButton add;
     public TestWeekView() {
         // Required empty public constructor
     }
@@ -55,6 +59,17 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
     }
     private void assignViews() {
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
+        add = (FloatingActionButton)getView().findViewById(R.id.floatingActionButton2);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(getView());
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", userId);
+                bundle.putString("templateName", templateName);
+                controller.navigate(R.id.action_testWeekView_to_addTemplateItem, bundle);
+            }
+        });
         // mWeekHeaderView= (WeekHeaderView) findViewById(R.id.weekheaderview);
         //mTv_date =(TextView)findViewById(R.id.tv_date);
         //init WeekView
