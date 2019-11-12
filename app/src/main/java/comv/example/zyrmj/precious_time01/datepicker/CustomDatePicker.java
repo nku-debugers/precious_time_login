@@ -249,6 +249,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         //mBeginHour = mBeginTime.get(Calendar.HOUR_OF_DAY);
         mBeginHour=0;
+
         mBeginMinute = mBeginTime.get(Calendar.MINUTE);
 
         mEndYear = mEndTime.get(Calendar.YEAR);
@@ -257,6 +258,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         //mEndHour = mEndTime.get(Calendar.HOUR_OF_DAY);
         mEndHour=23;
+
         mEndMinute = mEndTime.get(Calendar.MINUTE);
 
         boolean canSpanYear = mBeginYear != mEndYear;
