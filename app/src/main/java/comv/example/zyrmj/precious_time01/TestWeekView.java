@@ -138,7 +138,9 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
             String starttime = ti.getStartTime().split("-")[1];
             Log.d("列表2", starttime);
             String starthour = starttime.split(":")[0];
+            String startminute=starttime.split(":")[1];
             String endtime = ti.getEndTime().split("-")[1];
+            String endminute=endtime.split(":")[1];
             Log.d("列表2", starthour);
             String endhour = endtime.split(":")[0];
             Calendar startTime = Calendar.getInstance();
@@ -149,10 +151,11 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
             startTime.set(Calendar.MONTH, newMonth - 1);
             startTime.set(Calendar.YEAR, newYear);
             startTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(starthour));
-            startTime.set(Calendar.MINUTE, 0);
+            startTime.set(Calendar.MINUTE, Integer.valueOf(startminute));
             Calendar endTime = (Calendar) startTime.clone();
-            startTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
-            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), endTime, startTime);
+            endTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
+            endTime.set(Calendar.MINUTE, Integer.valueOf(endminute));
+            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime);
             if(i%4==0)
                 event.setColor(getResources().getColor(R.color.event_color_01));
             else if(i%4==1)
@@ -161,7 +164,6 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
                 event.setColor(getResources().getColor(R.color.event_color_03));
             else
                 event.setColor(getResources().getColor(R.color.event_color_04));
-            Log.d("event", event.getName());
             events.add(event);
             i++;
         }

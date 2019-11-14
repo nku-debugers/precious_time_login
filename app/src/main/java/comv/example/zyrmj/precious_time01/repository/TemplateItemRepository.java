@@ -33,10 +33,15 @@ public class TemplateItemRepository {
         return allTemplateItems;
     }
 
-    public void insertTemplateItems(TemplateItem... templateItems) {
+    public Integer insertTemplateItems(TemplateItem... templateItems) {
         Log.d("mytag", "inside insert fuc");
 
-        new InsertAsyncTask(templateItemDao).execute(templateItems);
+        try {
+            return new InsertAsyncTask(templateItemDao).execute(templateItems).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
     public void updateTemplateItems(TemplateItem... templateItems) {
         new UpdateAsyncTask(templateItemDao).execute(templateItems);
@@ -88,7 +93,7 @@ return null;
             return templateItemDao.getAll();
         }
     }
-    static class InsertAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
+    static class InsertAsyncTask extends AsyncTask<TemplateItem, Void, Integer> {
         private TemplateItemDao templateItemDao;
 
         private InsertAsyncTask(TemplateItemDao templateItemDao) {
@@ -96,9 +101,9 @@ return null;
         }
 
         @Override
-        protected Void doInBackground(TemplateItem... templateItems) {
+        protected Integer doInBackground(TemplateItem... templateItems) {
             templateItemDao.insertTemplateItem(templateItems);
-            return null;
+            return 1;
         }
     }
 

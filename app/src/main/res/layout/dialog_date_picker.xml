@@ -78,6 +78,22 @@
             android:textColor="@color/date_picker_text_dark"
             android:textSize="@dimen/date_unit_text_size" />
 
+        <TextView
+            android:id="@+id/test_week"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/week"
+            android:textColor="@color/date_picker_text_dark"
+            android:textSize="@dimen/date_unit_text_size" />
+
+        <comv.example.zyrmj.precious_time01.datepicker.PickerView
+            android:id="@+id/dpv_week"
+            android:layout_width="24dp"
+            android:layout_height="@dimen/picker_view_height"
+            android:layout_weight="1" />
+
         <comv.example.zyrmj.precious_time01.datepicker.PickerView
             android:id="@+id/dpv_month"
             android:layout_width="0dp"

@@ -3,6 +3,7 @@ package comv.example.zyrmj.precious_time01.datepicker;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,7 @@ import comv.example.zyrmj.precious_time01.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -30,14 +32,14 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
     private boolean mCanDialogShow;
 
     private Dialog mPickerDialog;
-    private PickerView mDpvYear, mDpvMonth, mDpvDay, mDpvHour, mDpvMinute;
-    private TextView yearString, monthString, dateString;
+    private PickerView mDpvYear, mDpvMonth, mDpvDay, mDpvHour, mDpvMinute, mDpvWeek;
+    private TextView yearString, monthString, dateString, weekString;
     private TextView mTvHourUnit, mTvMinuteUnit;
 
     private int mBeginYear, mBeginMonth, mBeginDay, mBeginHour, mBeginMinute,
             mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
     private List<String> mYearUnits = new ArrayList<>(), mMonthUnits = new ArrayList<>(), mDayUnits = new ArrayList<>(),
-            mHourUnits = new ArrayList<>(), mMinuteUnits = new ArrayList<>();
+            mHourUnits = new ArrayList<>(), mMinuteUnits = new ArrayList<>(), mWeekUnits = new ArrayList<>();
     private DecimalFormat mDecimalFormat = new DecimalFormat("00");
 
     private boolean mCanShowPreciseTime;
@@ -66,6 +68,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      */
     public interface Callback {
         void onTimeSelected(long timestamp);
+        //void onWeekSelected(int day);
     }
 
     /**
@@ -128,8 +131,15 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mTvMinuteUnit = mPickerDialog.findViewById(R.id.tv_minute_unit);
 //        text_year = mPickerDialog.findViewById(R.id.test_year);
 
+
+        mDpvWeek = mPickerDialog.findViewById(R.id.dpv_week);
+        weekString = mPickerDialog.findViewById(R.id.test_week);
+        mDpvWeek.setOnSelectListener(this);
+
+
         mDpvYear = mPickerDialog.findViewById(R.id.dpv_year);
         yearString = mPickerDialog.findViewById(R.id.test_year);
+
         mDpvYear.setOnSelectListener(this);
         mDpvMonth = mPickerDialog.findViewById(R.id.dpv_month);
         monthString = mPickerDialog.findViewById(R.id.test_month);
@@ -151,6 +161,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
             case R.id.tv_confirm:
                 if (mCallback != null) {
+                    //mCallback.onWeekSelected(mSelectedTime.get(Calendar.DAY_OF_WEEK));
                     mCallback.onTimeSelected(mSelectedTime.getTimeInMillis());
                 }
                 break;
@@ -167,12 +178,39 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         int timeUnit;
         try {
-            timeUnit = Integer.parseInt(selected);
+            Log.d("mytag", "this is selected String:" + selected);
+            if(selected.equals("周日")) {
+                timeUnit = 1;
+            }
+            else if (selected.equals("周一")) {
+                timeUnit = 2;
+            }
+            else if (selected.equals("周二")) {
+                timeUnit = 3;
+            }
+            else if (selected.equals("周三")) {
+                timeUnit = 4;
+            }
+            else if (selected.equals("周四")) {
+                timeUnit = 5;
+            }
+            else if (selected.equals("周五")) {
+                timeUnit = 6;
+            }
+            else if (selected.equals("周六")) {
+                timeUnit = 7;
+            } else {
+                timeUnit = Integer.parseInt(selected);
+            }
         } catch (Throwable ignored) {
             return;
         }
 
         switch (view.getId()) {
+            case R.id.dpv_week:
+
+                mSelectedTime.set(Calendar.DAY_OF_WEEK, timeUnit);
+                break;
             case R.id.dpv_year:
                 mSelectedTime.set(Calendar.YEAR, timeUnit);
                 linkageMonthUnit(true, LINKAGE_DELAY_DEFAULT);
@@ -208,7 +246,6 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         // Calendar.MONTH 值为 0-11
         mBeginMonth = mBeginTime.get(Calendar.MONTH) + 1;
         mBeginDay = mBeginTime.get(Calendar.DAY_OF_MONTH);
-
         //mBeginHour = mBeginTime.get(Calendar.HOUR_OF_DAY);
         mBeginHour=0;
         mBeginMinute = mBeginTime.get(Calendar.MINUTE);
@@ -216,7 +253,6 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mEndYear = mEndTime.get(Calendar.YEAR);
         mEndMonth = mEndTime.get(Calendar.MONTH) + 1;
         mEndDay = mEndTime.get(Calendar.DAY_OF_MONTH);
-
         //mEndHour = mEndTime.get(Calendar.HOUR_OF_DAY);
         mEndHour=23;
         mEndMinute = mEndTime.get(Calendar.MINUTE);
@@ -237,9 +273,14 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         } else if (canSpanMinute) {
             initDateUnits(mEndMonth, mEndDay, mEndHour, mEndMinute);
         }
+        List list = Arrays.asList("周日","周一","周二","周三","周四","周五","周六");
+        mWeekUnits.addAll(list);
+        mDpvWeek.setDataList(mWeekUnits);
+        mDpvWeek.setSelected(0);
     }
 
     private void initDateUnits(int endMonth, int endDay, int endHour, int endMinute) {
+
         for (int i = mBeginYear; i <= mEndYear; i++) {
             mYearUnits.add(String.valueOf(i));
         }
@@ -283,6 +324,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
     }
 
     private void setCanScroll() {
+        mDpvWeek.setCanScroll(mWeekUnits.size() > 1);
         mDpvYear.setCanScroll(mYearUnits.size() > 1);
         mDpvMonth.setCanScroll(mMonthUnits.size() > 1);
         mDpvDay.setCanScroll(mDayUnits.size() > 1);
@@ -497,7 +539,9 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         // 弹窗时，考虑用户体验，不展示滚动动画
         if (setSelectedTime(dateStr, false)) {
+
             mPickerDialog.show();
+            Log.d("mytag", "inside final show, the argument is:" + dateStr);
         }
     }
 
@@ -578,12 +622,15 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
             mTvHourUnit.setVisibility(View.VISIBLE);
             mDpvMinute.setVisibility(View.VISIBLE);
             mTvMinuteUnit.setVisibility(View.VISIBLE);
+
         } else {
             initScrollUnit(SCROLL_UNIT_HOUR, SCROLL_UNIT_MINUTE);
             mDpvHour.setVisibility(View.GONE);
             mTvHourUnit.setVisibility(View.GONE);
             mDpvMinute.setVisibility(View.GONE);
             mTvMinuteUnit.setVisibility(View.GONE);
+            mDpvWeek.setVisibility(View.VISIBLE);
+
         }
         mCanShowPreciseTime = canShowPreciseTime;
     }
@@ -628,7 +675,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      */
     public void setScrollLoop(boolean canLoop) {
         if (!canShow()) return;
-
+        mDpvWeek.setCanScrollLoop(canLoop);
         mDpvYear.setCanScrollLoop(canLoop);
         mDpvMonth.setCanScrollLoop(canLoop);
         mDpvDay.setCanScrollLoop(canLoop);
@@ -641,7 +688,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      */
     public void setCanShowAnim(boolean canShowAnim) {
         if (!canShow()) return;
-
+        mDpvWeek.setCanShowAnim(canShowAnim);
         mDpvYear.setCanShowAnim(canShowAnim);
         mDpvMonth.setCanShowAnim(canShowAnim);
         mDpvDay.setCanShowAnim(canShowAnim);
@@ -656,7 +703,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         if (mPickerDialog != null) {
             mPickerDialog.dismiss();
             mPickerDialog = null;
-
+            mDpvWeek.onDestroy();
             mDpvYear.onDestroy();
             mDpvMonth.onDestroy();
             mDpvDay.onDestroy();

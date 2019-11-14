@@ -159,23 +159,4 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.7" />
 
-    <!--    <comv.example.zyrmj.weekviewlibrary.WeekHeaderView-->
-    <!--        android:id="@+id/weekheaderview"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_below="@+id/tv_date"-->
-    <!--        app:firstDayOfWeek2="sunday"-->
-    <!--        app:headerBackgroundColor="#455964"-->
-    <!--        app:headerDayLabelNormalTextColor="#ffffff"-->
-    <!--        app:headerDayLabelTextSize="20sp"-->
-    <!--        app:headerDayLabelTodayTextColor="@android:color/holo_red_dark"-->
-    <!--        app:headerFocusBackgroundColor="#ffffff"-->
-    <!--        app:headerFocusSameDayBackgroundColor="#ffffff"-->
-    <!--        app:headerFocusSameDayTextColor="#000000"-->
-    <!--        app:headerFocusTextColor="#000000"-->
-    <!--        app:headerPaddingTop="20dp"-->
-    <!--        app:headerRowGap="40dp"-->
-    <!--        app:headerWeekLabelTextColor="#ffffff"-->
-    <!--        app:headerWeekLabelTextSize="16sp" />-->
->>>>>>> 75c60780330e4b2c380d493d154fa524f6c565ac
 </androidx.constraintlayout.widget.ConstraintLayout>
