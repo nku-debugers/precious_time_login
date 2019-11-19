@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
     String userId,templateName;
     private FloatingActionButton add;
     TextView title;
+    ImageView returnImge;
     public WeekViewFragment() {
         // Required empty public constructor
     }
@@ -63,6 +65,15 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
         title=getView().findViewById(R.id.title);
         title.setText(templateName);
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
+        returnImge=getView().findViewById(R.id.toTemplateView);
+        returnImge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_testWeekView_to_templateShowFragment);
+
+            }
+        });
         add = (FloatingActionButton)getView().findViewById(R.id.floatingActionButton2);
         add.setOnClickListener(new View.OnClickListener() {
             @Override

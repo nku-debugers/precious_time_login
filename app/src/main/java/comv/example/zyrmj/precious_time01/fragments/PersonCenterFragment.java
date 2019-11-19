@@ -9,6 +9,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 import android.view.LayoutInflater;
@@ -39,20 +41,6 @@ String userId="未登录";
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Template t1=new Template("offline","study14");
-        Template t2=new Template("offline","study13");
-        Template t3=new Template("offline","study12");
-        Template t4=new Template("offline","study11");
-
-
-
-
-
-        TemplateRepository templateRepository=new TemplateRepository(getContext());
-        templateRepository.deleteTemplates(t1,t2,t3,t4);
-
-
-
         super.onActivityCreated(savedInstanceState);
         if(getArguments()!=null) {
             userId = getArguments().getString("userId", "未登录");
