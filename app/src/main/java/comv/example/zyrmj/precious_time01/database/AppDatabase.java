@@ -19,8 +19,6 @@ import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;
 
-import static android.net.wifi.rtt.CivicLocationKeys.ROOM;
-
 //Singleton
 @Database(entities = {Category.class, Habit.class, Quote.class, Template.class, TemplateItem.class,
         Todo.class, User.class}, version = 1,exportSchema = false)

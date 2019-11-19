@@ -89,7 +89,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:text="周"
+                android:text="星期"
                 android:textSize="15sp" />
 
             <Space

@@ -3,15 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!--        app:srcCompat="@drawable/logo" --><![CDATA[
-    />
-
-
-
-    ]]>
-
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
     <Button
         android:id="@+id/login"
         android:layout_width="111dp"
@@ -36,9 +29,13 @@
         android:id="@+id/username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#EBEBEB"
         android:ems="10"
         android:hint="请输入用户名"
         android:inputType="textPersonName"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
         android:textSize="24sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -50,9 +47,13 @@
         android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#EBEBEB"
         android:ems="10"
         android:hint="请输入邮箱"
         android:inputType="textPersonName"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
         android:textSize="24sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -64,9 +65,13 @@
         android:id="@+id/phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#EBEBEB"
         android:ems="10"
         android:hint="请输入手机号"
         android:inputType="textPersonName"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
         android:textSize="24sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -78,9 +83,13 @@
         android:id="@+id/password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#EBEBEB"
         android:ems="10"
         android:hint="请输入密码"
         android:inputType="textPassword"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
@@ -114,6 +123,7 @@
         android:id="@+id/spinner"
         android:layout_width="104dp"
         android:layout_height="38dp"
+        android:background="#EBEBEB"
         android:entries="@array/loginway"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
@@ -127,6 +137,8 @@
         android:gravity="center"
         android:text="寸光"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -139,7 +151,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="登录遇到问题？"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/next"
         app:layout_constraintStart_toStartOf="@+id/guideline12"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
@@ -149,6 +161,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="———使用第三方软件登录———"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

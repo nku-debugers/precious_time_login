@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
-import androidx.room.PrimaryKey;
 
 
 @Entity(primaryKeys = {"user_id", "name"}, indices = @Index(value = "name", unique = true))
