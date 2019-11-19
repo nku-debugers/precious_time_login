@@ -179,25 +179,25 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         int timeUnit;
         try {
             Log.d("mytag", "this is selected String:" + selected);
-            if(selected.equals("周日")) {
+            if(selected.equals("日")) {
                 timeUnit = 1;
             }
-            else if (selected.equals("周一")) {
+            else if (selected.equals("一")) {
                 timeUnit = 2;
             }
-            else if (selected.equals("周二")) {
+            else if (selected.equals("二")) {
                 timeUnit = 3;
             }
-            else if (selected.equals("周三")) {
+            else if (selected.equals("三")) {
                 timeUnit = 4;
             }
-            else if (selected.equals("周四")) {
+            else if (selected.equals("四")) {
                 timeUnit = 5;
             }
-            else if (selected.equals("周五")) {
+            else if (selected.equals("五")) {
                 timeUnit = 6;
             }
-            else if (selected.equals("周六")) {
+            else if (selected.equals("六")) {
                 timeUnit = 7;
             } else {
                 timeUnit = Integer.parseInt(selected);
@@ -273,7 +273,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         } else if (canSpanMinute) {
             initDateUnits(mEndMonth, mEndDay, mEndHour, mEndMinute);
         }
-        List list = Arrays.asList("周日","周一","周二","周三","周四","周五","周六");
+        List list = Arrays.asList("日","一","二","三","四","五","六");
         mWeekUnits.addAll(list);
         mDpvWeek.setDataList(mWeekUnits);
         mDpvWeek.setSelected(0);
@@ -622,6 +622,8 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
             mTvHourUnit.setVisibility(View.VISIBLE);
             mDpvMinute.setVisibility(View.VISIBLE);
             mTvMinuteUnit.setVisibility(View.VISIBLE);
+            mDpvWeek.setVisibility(View.GONE);
+            weekString.setVisibility(View.GONE);
 
         } else {
             initScrollUnit(SCROLL_UNIT_HOUR, SCROLL_UNIT_MINUTE);

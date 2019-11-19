@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/personCenterFragment"
-        android:name="comv.example.zyrmj.precious_time01.PersonCenterFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.PersonCenterFragment"
         android:label="fragment_person_center"
         tools:layout="@layout/fragment_person_center" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
-        android:name="comv.example.zyrmj.precious_time01.RegisterFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment3"
-        android:name="comv.example.zyrmj.precious_time01.LoginFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/templateShowFragment"
-        android:name="comv.example.zyrmj.precious_time01.TemplateShowFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.TemplateShowFragment"
         android:label="fragment_template_show"
         tools:layout="@layout/fragment_template_show" >
         <action
@@ -58,21 +58,13 @@
     </fragment>
     <fragment
         android:id="@+id/testWeekView"
-        android:name="comv.example.zyrmj.precious_time01.TestWeekView"
+        android:name="comv.example.zyrmj.precious_time01.fragments.WeekViewFragment"
         android:label="fragment_test_week_view"
         tools:layout="@layout/fragment_test_week_view" >
-        <action
-            android:id="@+id/action_testWeekView_to_testAddEvent"
-            app:destination="@id/testAddEvent" />
         <action
             android:id="@+id/action_testWeekView_to_addTemplateItem"
             app:destination="@id/addTemplateItem" />
     </fragment>
-    <fragment
-        android:id="@+id/testAddEvent"
-        android:name="comv.example.zyrmj.precious_time01.TestAddEvent"
-        android:label="fragment_test_add_event"
-        tools:layout="@layout/fragment_test_add_event" />
     <fragment
         android:id="@+id/testFragment"
         android:name="comv.example.zyrmj.precious_time01.TestFragment"
@@ -80,7 +72,7 @@
         tools:layout="@layout/fragment_test" />
     <fragment
         android:id="@+id/addTemplateItem"
-        android:name="fragments.AddTemplateItem"
+        android:name="comv.example.zyrmj.precious_time01.fragments.AddTemplateItemFragment"
         android:label="add_template_item"
         tools:layout="@layout/add_template_item" >
         <action

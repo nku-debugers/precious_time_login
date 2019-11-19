@@ -1,7 +1,6 @@
-package comv.example.zyrmj.precious_time01;
+package comv.example.zyrmj.precious_time01.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -9,16 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.BackendService.RegisterAndLoginBackendService;
+import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.MD5Util;
-
-import comv.example.zyrmj.precious_time01.dao.CategoryDao;
-import comv.example.zyrmj.precious_time01.dao.HabitDao;
-import comv.example.zyrmj.precious_time01.database.AppDatabase;
-import comv.example.zyrmj.precious_time01.entity.Category;
-import comv.example.zyrmj.precious_time01.entity.Template;
-import comv.example.zyrmj.precious_time01.entity.TemplateItem;
-import comv.example.zyrmj.precious_time01.entity.User;
-import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,7 +27,6 @@ import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -53,13 +43,11 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RegisterFragment extends Fragment implements Validator.ValidationListener {
-    private Validator validator;//表单验证器
+public class LoginFragment extends Fragment implements Validator.ValidationListener{
     //定义界面上的控件,引入表单验证框架
+    private Validator validator;//表单验证器
     Spinner option;
     private String idType;
-    public int spinnerPosition=0;//设定跳转至登录界面时下拉框的默认位置
-    public String userId;//传递给登陆界面的id
     @Order(1)
     @NotEmpty(message = "此项不能为空")
     @Email
@@ -76,16 +64,13 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
     @NotEmpty(message = "密码不能为空")
     @Password(min=6,message = "密码最少为6位")
     EditText password;
-    @Order(5)
-    @NotEmpty(message = "确认密码不能为空")
-    @ConfirmPassword(message = "两次密码输入不一致")
-    EditText password2;
 
-    Button toLogin;
-    Button register;
-
-
-    public RegisterFragment() {
+    Button toRegister;
+    Button login;
+    int  spinnerPosition=0;
+    String userId="";
+    String pwd="";
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -94,26 +79,51 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.register, container, false);
+        return inflater.inflate(R.layout.login, container, false);
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if(getArguments()!=null)
+        { spinnerPosition=getArguments().getInt("spinnerPosition",0);
+        Log.d("testinf",String.valueOf(spinnerPosition));
+        userId=getArguments().getString("userId","");
+        pwd=getArguments().getString("password","");}
+
         init();//初始化界面
 
     }
-    public void init()//初始化各个控件，并定义按钮,下拉框监听器
+    public void init()
     {
         emailInput=getView().findViewById(R.id.email);
         phoneInput=getView().findViewById(R.id.phone);
         usernameInput=getView().findViewById(R.id.username);
         option=getView().findViewById(R.id.spinner);
         password=getView().findViewById(R.id.password);
-        password2=getView().findViewById(R.id.password2);
-        toLogin=getView().findViewById(R.id.next);
-        register=getView().findViewById(R.id.register);
+        toRegister=getView().findViewById(R.id.next);
+        login=getView().findViewById(R.id.login);
         validator = new Validator(this);
         validator.setValidationListener(this);
+        //获取注册界面的数据
+        option.setSelection(spinnerPosition);
+        if(spinnerPosition==0)
+        {
+            emailInput.setText(userId);
+        }
+        else if(spinnerPosition==1)
+        {
+            phoneInput.setText(userId);
+        }
+        else
+        {
+            usernameInput.setText(userId);
+        }
+        password.setText(pwd);
+
+
+
+
+
 
         //下拉框监听器
         option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
@@ -128,7 +138,7 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
                     emailInput.setVisibility(View.VISIBLE);
                     phoneInput.setVisibility(View.INVISIBLE);
                     idType="email";
-                    spinnerPosition=0;
+
 
                 }
 //                选择手机号
@@ -138,7 +148,7 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
                     emailInput.setVisibility(View.INVISIBLE);
                     phoneInput.setVisibility(View.VISIBLE);
                     idType="phone";
-                    spinnerPosition=1;
+
                 }
 //                选择用户昵称
                 else
@@ -147,7 +157,7 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
                     emailInput.setVisibility(View.INVISIBLE);
                     phoneInput.setVisibility(View.INVISIBLE);
                     idType="username";
-                    spinnerPosition=2;
+
 
                 }
             }
@@ -158,8 +168,8 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
         });
 
 
-        //注册按钮监听器
-        register.setOnClickListener(new View.OnClickListener() {
+        //登录按钮监听器
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 validator.validate();
@@ -167,19 +177,16 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
             }
         });
 
-        //跳转登录按钮监听器
-      toLogin.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              NavController controller= Navigation.findNavController(getView());
-              controller.navigate(R.id.action_registerFragment2_to_loginFragment33);
-          }
-      });
-        //测试周试图
-
+        //跳转注册按钮监听器
+        toRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller= Navigation.findNavController(view);
+                controller.navigate(R.id.action_loginFragment3_to_registerFragment2);
+            }
+        });
 
     }
-
     //收集界面填写信息(返回一个String List）
     public List<String> collectData()
     {
@@ -210,7 +217,6 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
 
 
     }
-
     //向后端上传数据
     public String postData(List<String> informations)
     {
@@ -228,15 +234,16 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
         RequestBody body = RequestBody.create(JSON, jsonObject.toString());
         System.out.println(jsonObject.toString());
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:8000/user/register/")
+                .url("http://10.0.2.2:8000/user/login/")
                 .post(body)
                 .build();
-        RegisterAndLoginBackendService registerBackendService=new RegisterAndLoginBackendService(client,request);
+        RegisterAndLoginBackendService loginBackendService=new RegisterAndLoginBackendService(client,request);
 
-        return registerBackendService.registerOrLogin();
+        return loginBackendService.registerOrLogin();
 
 
     }
+
     @Override
     public void onValidationSucceeded() {
         //收集界面填写信息
@@ -244,23 +251,20 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
         Log.d("collectedData",informations.toString());
         //开始进行后台操作
         String reply=postData(informations);
+        System.out.println("loginreply"+reply);
         if (reply.contains("1"))
         {
-            Toast.makeText(getActivity(),"注册成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"登录成功",Toast.LENGTH_LONG).show();
             Bundle bundle=new Bundle();
-            bundle.putInt("spinnerPosition",spinnerPosition);
             bundle.putString("userId",userId);
-            bundle.putString("password",password.getText().toString());
             NavController controller= Navigation.findNavController(getView());
-            controller.navigate(R.id.action_registerFragment2_to_loginFragment33,bundle);
-            //跳转到登陆界面，并将注册的信息传递过去
+            controller.navigate(R.id.action_loginFragment3_to_personCenterFragment,bundle);
+
         }
         else
         {
-            Toast.makeText(getActivity(),"注册失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"登录失败",Toast.LENGTH_LONG).show();
         }
-
-
     }
 
     @Override
@@ -272,7 +276,7 @@ public class RegisterFragment extends Fragment implements Validator.ValidationLi
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                // 显示edittext外的提示，如：必须接受服务协议条款的CheckBox
+
                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
             }
         }

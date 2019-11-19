@@ -28,7 +28,7 @@ public class DateFormatUtils {
     }
 
     private static String long2Str(long timestamp, String pattern) {
-        String[] weeks = {"周日","周一","周二","周三","周四","周五","周六"};
+        String[] weeks = {"日","一","二","三","四","五","六"};
         if(pattern.equals("week")) {
             Date date = new Date(timestamp);
             Calendar cal = Calendar.getInstance();

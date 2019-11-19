@@ -7,9 +7,6 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-
 @Entity(foreignKeys = @ForeignKey(entity = Category.class,
         parentColumns = "name",
         childColumns = "category_name"),indices=@Index(value = "category_name"))

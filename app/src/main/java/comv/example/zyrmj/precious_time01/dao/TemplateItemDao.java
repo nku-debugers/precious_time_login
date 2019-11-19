@@ -9,7 +9,6 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 
 @Dao

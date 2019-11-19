@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01;
+package comv.example.zyrmj.precious_time01.fragments;
 
 
 import android.graphics.RectF;
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
@@ -19,7 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,12 +33,13 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TestWeekView extends Fragment implements WeekView.MonthChangeListener,
+public class WeekViewFragment extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewClickListener, WeekView.EmptyViewLongPressListener, WeekView.ScrollListener  {
     private WeekView mWeekView;
     String userId,templateName;
     private FloatingActionButton add;
-    public TestWeekView() {
+    TextView title;
+    public WeekViewFragment() {
         // Required empty public constructor
     }
 
@@ -58,6 +60,8 @@ public class TestWeekView extends Fragment implements WeekView.MonthChangeListen
         assignViews();
     }
     private void assignViews() {
+        title=getView().findViewById(R.id.title);
+        title.setText(templateName);
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
         add = (FloatingActionButton)getView().findViewById(R.id.floatingActionButton2);
         add.setOnClickListener(new View.OnClickListener() {
