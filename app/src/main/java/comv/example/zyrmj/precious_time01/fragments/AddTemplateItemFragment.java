@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,34 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             templateName = getArguments().getString("templateName", "");
         }
         init();
+        enableBackButton();
+    }
+
+    private void enableBackButton() {
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    //显示提示框，显示：“您的数据将不会被保存，是否退出？”
+                    //确定按钮：执行下面的代码
+
+                    //Log.d("mytag", "onKey: Back button successfully enabled!");
+                    //NavController controller = Navigation.findNavController(getView());
+                    //Bundle bundle = new Bundle();
+                    //bundle.putString("userId", userId);
+                    //bundle.putString("templateName", templateName);
+                    //controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                    //取消按钮：回到当前页面
+                    return true;
+                }
+                return false;
+            }
+        } );
     }
 
     private void init() {
@@ -73,11 +102,11 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 if (startText == null || endText == null) {
-                    //提示查找
+                    //用户输入起止时间
                     return;
                 }
                 if (name.getText().toString().equals("")) {
-                    //提示没有写名字
+                    //提示用户指定用户名字
                     return;
                 }
 
@@ -90,16 +119,16 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                 TemplateItem item = new TemplateItem("offline", name.getText().toString(),
                         templateName, "study", endFinal, startFinal);
                 TemplateItemRepository t = new TemplateItemRepository(getActivity());
-                int k = t.insertTemplateItems(item);
-                if( k ==1 ) {
+                t.insertTemplateItems(item);
+
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
                     bundle.putString("templateName", templateName);
                     controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
-                } else {
-                    Log.d("mytag", "onClick: can't insert");
-                }
+
+                    //Log.d("mytag", "onClick: can't insert");
+
             }
         });
     }
