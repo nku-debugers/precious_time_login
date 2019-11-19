@@ -41,10 +41,6 @@ String userId="未登录";
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        TemplateItem templateItem1=new TemplateItem("offline","test1","study13","study","19:00","18:00");
-        TemplateItem templateItem2=new TemplateItem("offline","test1","work","study","2-09:00","2-08:20");
-            new TemplateItemRepository(getContext()).deleteTemplateItems(templateItem1,templateItem2);
-
         super.onActivityCreated(savedInstanceState);
         if(getArguments()!=null) {
             userId = getArguments().getString("userId", "未登录");
