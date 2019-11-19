@@ -17,6 +17,7 @@ public class TemplateItemRepository {
 
     private LiveData<List<TemplateItem>>allTemplateItems;
     private TemplateItemDao templateItemDao;
+    private static String TAG = "newjk";
 
     public TemplateItemRepository(Context context) {
         AppDatabase appDatabase = AppDatabase.getDatabase(context.getApplicationContext());
@@ -37,6 +38,16 @@ public class TemplateItemRepository {
             e.printStackTrace();
         }
     }
+
+    public Integer ifTimeConfilict(String week, String start) {
+        try {
+            return new FindByTime(week,start, templateItemDao).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public void updateTemplateItems(TemplateItem... templateItems) {
         new UpdateAsyncTask(templateItemDao).execute(templateItems);
     }
@@ -47,9 +58,8 @@ public class TemplateItemRepository {
         try {
             return new GetList(templateItemDao).execute().get();
         } catch (Exception e) {
-            Log.d("here", "problem while getlist");
+            e.printStackTrace();
         }
-        Log.d("here", "err while return list");
         return null;
     }
     public List<TemplateItem> getSpecificList(String templateName,String userId)
@@ -75,7 +85,31 @@ return null;
         }
     }
 
-    static class FindByTime extends AsyncTask<>
+    static class FindByTime extends AsyncTask<Void, Void, Integer> {
+        String week;
+        String startTime;
+        private TemplateItemDao templateItemDao;
+        FindByTime(String k, String start, TemplateItemDao templateItemDao){
+            super();
+            week = k;
+            this.startTime = start;
+            this.templateItemDao = templateItemDao;
+        }
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            List<TemplateItem> items = templateItemDao.getSameWeek(week);
+            if (items.size() == 0) {
+                return 1;
+            }
+            for (int i = 0; i < items.size(); i++) {
+                if (startTime.compareTo(items.get(i).getStartTime()) > 0
+                        && startTime.compareTo(items.get(i).getEndTime()) < 0) {
+                    return 0;
+                }
+            }
+            return 1;
+        }
+    }
 
     static class GetList extends  AsyncTask<Void, Void, List<TemplateItem>> {
         private TemplateItemDao templateItemDao;
