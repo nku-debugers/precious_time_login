@@ -68,7 +68,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             @Override
             public boolean onKey( View v, int keyCode, KeyEvent event )
             {
-                if( keyCode == KeyEvent.KEYCODE_BACK )
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
                 {
                     PromptDialog promptDialog = new PromptDialog (getActivity ());
                     PromptButton confirm = new PromptButton("确定", new PromptButtonListener () {
@@ -145,7 +145,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     bundle.putString("templateName", templateName);
                     controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
                 } else {
-                    Log.d(TAG, "onClick: Duplicated item please reender");
+                    Log.d("newjk", "onClick: Duplicated item please reender");
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
