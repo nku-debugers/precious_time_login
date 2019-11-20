@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
 
 import java.util.List;
@@ -26,4 +27,10 @@ public interface TemplateItemDao {
 
     @Query("Select * from TemplateItem")
     List<TemplateItem>getAll();
+
+    @Query("Select * from TemplateItem WHERE start_time like '%' || :week")
+    List<TemplateItem>getSameWeek(String week);
+
+//    @RawQuery("Select * from TemplateItem WHERE start_time like *")
+//    List<TemplateItem>getSameWeek(String week);
 }

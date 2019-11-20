@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_testWeekView_to_addTemplateItem"
             app:destination="@id/addTemplateItem" />
+        <action
+            android:id="@+id/action_testWeekView_to_templateShowFragment"
+            app:destination="@id/templateShowFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"

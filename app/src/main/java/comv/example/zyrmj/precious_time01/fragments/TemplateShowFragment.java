@@ -1,21 +1,29 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
 import comv.example.zyrmj.precious_time01.ViewModel.TemplateViewModel;
 import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 import android.text.InputType;
@@ -28,6 +36,9 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -36,7 +47,9 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class TemplateShowFragment extends Fragment {
-
+    private List<Template> allTemplates;
+    private TemplateRepository templateRepository;
+    private RecyclerView recyclerView;
 
     public TemplateShowFragment() {
         // Required empty public constructor
@@ -53,8 +66,8 @@ public class TemplateShowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final TemplateRepository templateRepository=new TemplateRepository(getContext());
-        RecyclerView recyclerView=getView().findViewById(R.id.recycleView);
+       templateRepository=new TemplateRepository(getContext());
+        recyclerView=getView().findViewById(R.id.recycleView);
         final TemplateAdapter templateAdapter=new TemplateAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(templateAdapter);
@@ -64,6 +77,7 @@ public class TemplateShowFragment extends Fragment {
             public void onChanged(List<Template> templates) {
                 templateAdapter.setAllTemplates(templates);
                 templateAdapter.notifyDataSetChanged();
+                allTemplates=templates;
             }
         });
 
@@ -86,6 +100,82 @@ public class TemplateShowFragment extends Fragment {
         });
 
         ImageView returnImage=getView().findViewById(R.id.returnimage);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.START | ItemTouchHelper.END)
+        {
+
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final Template templateToDelete =allTemplates.get(viewHolder.getAdapterPosition());
+                String templateName=templateToDelete.getName();
+                String useId=templateToDelete.getUserId();
+                TemplateItemRepository templateItemRepository=new TemplateItemRepository(getContext());
+               List<TemplateItem> templateItems= templateItemRepository.getSpecificList(templateName,useId);
+               for(int i=0;i<templateItems.size();i++)
+               {
+                   templateItemRepository.deleteTemplateItems(templateItems.get(i));
+
+               }
+                templateRepository.deleteTemplates(templateToDelete);
+                Snackbar.make(getView(),"删除了一个模板",Snackbar.LENGTH_SHORT).
+                        setAction("撤销",new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View view) {
+                                        templateRepository.insertTemplates(templateToDelete);
+                                    }
+                                }
+                        ).show();
+
+            }
+            //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
+
+            Drawable icon = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_delete_black_24dp);
+            Drawable background = new ColorDrawable(Color.LTGRAY);
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                View itemView = viewHolder.itemView;
+                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+
+                int iconLeft,iconRight,iconTop,iconBottom;
+                int backTop,backBottom,backLeft,backRight;
+                backTop = itemView.getTop();
+                backBottom = itemView.getBottom();
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) /2;
+                iconBottom = iconTop + icon.getIntrinsicHeight();
+                if (dX > 0) {
+                    backLeft = itemView.getLeft();
+                    backRight = itemView.getLeft() + (int)dX;
+                    background.setBounds(backLeft,backTop,backRight,backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin ;
+                    iconRight = iconLeft + icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                } else if (dX < 0){
+                    backRight = itemView.getRight();
+                    backLeft = itemView.getRight() + (int)dX;
+                    background.setBounds(backLeft,backTop,backRight,backBottom);
+                    iconRight = itemView.getRight()  - iconMargin;
+                    iconLeft = iconRight - icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                } else {
+                    background.setBounds(0,0,0,0);
+                    icon.setBounds(0,0,0,0);
+                }
+                background.draw(c);
+                icon.draw(c);
+
+
+
+            }
+        }).attachToRecyclerView(recyclerView);
 
 
     }
@@ -140,6 +230,11 @@ public class TemplateShowFragment extends Fragment {
     }
 
 
+
     }
+
+
+
+
 
 
