@@ -32,7 +32,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     private Date startText, endText;
     private EditText name;
     private String userId, templateName;
-
+    static String TAG = "newjk";
     public AddTemplateItemFragment() {
 
     }
@@ -116,21 +116,38 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                 String week = getWeek(mTvSelectedTimeWeek.getText().toString());
                 String startFinal = week + "-" + startTime;
                 String endFinal = week + "-" + endTime;
-                TemplateItem item = new TemplateItem("offline", name.getText().toString(),
-                        templateName, "study", endFinal, startFinal);
-                TemplateItemRepository t = new TemplateItemRepository(getActivity());
-                t.insertTemplateItems(item);
 
+                boolean canInsert = checkAndInsert(week, startFinal, endFinal);
+                if (canInsert) {
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
                     bundle.putString("templateName", templateName);
                     controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
-
-                    //Log.d("mytag", "onClick: can't insert");
-
+                } else {
+                    Log.d(TAG, "onClick: Duplicated item please reender");
+                    NavController controller = Navigation.findNavController(getView());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", templateName);
+                    controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                }
             }
         });
+    }
+    boolean checkAndInsert(String week, String start, String end) {
+        TemplateItem item = new TemplateItem("offline", name.getText().toString(),
+                templateName, "study", end, start);
+        TemplateItemRepository t = new TemplateItemRepository(getActivity());
+        int s = t.ifTimeConfilict(week, start);
+        int e = t.ifTimeConfilict(week, end);
+        if (s == 0 || e == 0) {
+            return false;
+        }
+        else{
+            t.insertTemplateItems(item);
+            return true;
+        }
     }
     public String getWeek(String selected) {
         String week = "";
