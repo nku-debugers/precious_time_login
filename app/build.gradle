@@ -53,6 +53,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'jp.wasabeef:glide-transformations:2.0.1'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
-
+    implementation 'com.github.limxing:Android-PromptDialog:1.1.3'
 
 }
