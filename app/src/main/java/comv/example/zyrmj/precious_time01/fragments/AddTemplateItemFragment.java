@@ -1,6 +1,5 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -35,9 +34,14 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     private TextView mTvSelectedTime1, mTvSelectedTime2, mTvSelectedTimeWeek;
     private CustomDatePicker mTimePicker1, mTimePicker2, mTimePickerWeek;
     private Button save, delete;
-    private Date startText, endText;
+    private Date startDate, endDate;
+    private boolean startDateModified, endDateModified;
     private EditText name;
     private String userId, templateName,viewOption;
+    private Date today;
+    private boolean timeReverse;
+    private String[] weekString = {"日","一","二","三","四","五","六"};
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
     public AddTemplateItemFragment() {
 
     }
@@ -57,6 +61,12 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             templateName = getArguments().getString("templateName", "");
             viewOption=getArguments().getString("viewOption","0");
         }
+        startDateModified = false;
+        endDateModified = false;
+        timeReverse = false;
+        today = new Date();
+        startDate = today;
+        endDate = today;
         init();
         enableBackButton();
     }
@@ -121,7 +131,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startText == null || endText == null) {
+                if (startDate == null || endDate == null) {
                     //用户输入起止时间
                     PromptDialog promptDialog = new PromptDialog (getActivity ());
                     promptDialog.showWarn ( "未填写开始或终止时间！" );
@@ -131,6 +141,12 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     //提示用户指定用户名字
                     PromptDialog promptDialog = new PromptDialog (getActivity ());
                     promptDialog.showWarn ( "未填写名称！" );
+                    return;
+                }
+
+                if (timeReverse) {
+                    PromptDialog promptDialog = new PromptDialog (getActivity ());
+                    promptDialog.showWarn ( "结束时间应晚于开始时间！" );
                     return;
                 }
 
@@ -157,7 +173,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             }
         });
     }
-    boolean checkAndInsert(String week, String start, String end) {
+    private boolean checkAndInsert(String week, String start, String end) {
         TemplateItem item = new TemplateItem("offline", name.getText().toString(),
                 templateName, "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
@@ -171,30 +187,32 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             return true;
         }
     }
-    public String getWeek(String selected) {
+    private String getWeek(String selected) {
         String week = "";
-        if(selected.equals("日")) {
-            week = "6";
-        }
-        else if (selected.equals("一")) {
-            week = "0";
-        }
-        else if (selected.equals("二")) {
-            week = "1";
-        }
-        else if (selected.equals("三")) {
-            week = "2";
-        }
-        else if (selected.equals("四")) {
-            week = "3";
-        }
-        else if (selected.equals("五")) {
-            week = "4";
-        }
-        else if (selected.equals("六")) {
-            week = "5";
-        } else {
-            return "0";
+        switch (selected) {
+            case "日":
+                week = "6";
+                break;
+            case "一":
+                week = "0";
+                break;
+            case "二":
+                week = "1";
+                break;
+            case "三":
+                week = "2";
+                break;
+            case "四":
+                week = "3";
+                break;
+            case "五":
+                week = "4";
+                break;
+            case "六":
+                week = "5";
+                break;
+            default:
+                return "0";
         }
         return week;
     }
@@ -216,10 +234,10 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     }
 
     private void initTimerPicker1() {
-        String beginTime = "2018-10-17 18:00";
+        String beginTime = df.format(new Date());
+        //String beginTime = DateFormatUtils.long2Str(System.currentTimeMillis()-1, 1);
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
-
         mTvSelectedTime1.setText(endTimeShow);
 
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
@@ -227,8 +245,9 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             @Override
             public void onTimeSelected(long timestamp) {
                 mTvSelectedTime1.setText(DateFormatUtils.long2Str(timestamp, 3));
+                startDateModified = true;
                 try {
-                    startText = new SimpleDateFormat("HH:mm", Locale.CHINA)
+                    startDate = new SimpleDateFormat("HH:mm", Locale.CHINA)
                             .parse(DateFormatUtils.long2Str(timestamp, 3));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -248,8 +267,8 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     }
 
     private void initTimerPicker2() {
-        String beginTime = "2018-10-17 00:00";
-        final String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
+        String beginTime = df.format(new Date());
+        final String endTime = DateFormatUtils.long2Str(System.currentTimeMillis() + 1, 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
         mTvSelectedTime2.setText(endTimeShow);
 
@@ -258,15 +277,17 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             @Override
             public void onTimeSelected(long timestamp) {
                 mTvSelectedTime2.setText(DateFormatUtils.long2Str(timestamp, 3));
+                endDateModified = true;
                 try {
-                    endText = new SimpleDateFormat("HH:mm", Locale.CHINA)
+                    endDate = new SimpleDateFormat("HH:mm", Locale.CHINA)
                             .parse(DateFormatUtils.long2Str(timestamp, 3));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (startText != null && endText != null) {
-                    if (endText.before(startText)) {
+                if (startDate != null && endDate != null && startDateModified) {
+                    if (endDate.before(startDate)) {
                         mTvSelectedTime2.setText(R.string.end_time_exceed_warning);
+                        timeReverse = true;
                     }
                 }
             }
@@ -284,11 +305,12 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         mTimePicker2.setCanShowAnim(true);
     }
     private void initTimerPicker3() {
-        String beginTime = "2018-10-17 18:00";
+        String beginTime = df.format(today);
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
-
-        mTvSelectedTimeWeek.setText("一");
+        Calendar calendar = Calendar.getInstance();
+        int k = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        mTvSelectedTimeWeek.setText(weekString[k]);
 
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
         mTimePickerWeek = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
@@ -296,7 +318,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             public void onTimeSelected(long timestamp) {
                 mTvSelectedTimeWeek.setText(DateFormatUtils.long2Str(timestamp, 4));
                 try {
-                    startText = new SimpleDateFormat("HH:mm", Locale.CHINA)
+                    startDate = new SimpleDateFormat("HH:mm", Locale.CHINA)
                             .parse(DateFormatUtils.long2Str(timestamp, 3));
                 } catch (Exception e) {
                     e.printStackTrace();
