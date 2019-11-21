@@ -1,3 +1,4 @@
+
 package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
@@ -72,6 +73,12 @@ public class TemplateItemRepository {
         }
 return null;
     }
+    public LiveData<List<TemplateItem>> getSpecificList2(String templateName,String userId)
+    {
+
+        return templateItemDao.getSpecificTemplateItems2(templateName,userId);
+    }
+
     static class GetSpecificList extends AsyncTask<String,Void,List<TemplateItem>>
     { private TemplateItemDao templateItemDao;
         private GetSpecificList(TemplateItemDao templateItemDao) {
@@ -84,6 +91,7 @@ return null;
             //string[0] templateName string[1] userId
         }
     }
+
 
 
     static class FindByTime extends AsyncTask<Void, Void, Integer> {

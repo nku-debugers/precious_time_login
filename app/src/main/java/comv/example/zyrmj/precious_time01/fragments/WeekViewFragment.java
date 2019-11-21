@@ -20,7 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +41,10 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
     private WeekView mWeekView;
     String userId,templateName;
     private FloatingActionButton add;
-    TextView title;
-    ImageView returnImge;
+    private TextView title;
+    private ImageView returnImge;
+    private Switch changeView;
+
     public WeekViewFragment() {
         // Required empty public constructor
     }
@@ -101,6 +105,24 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
         };
         mWeekView.setEmptyViewClickListener(emptyViewClickListener);
         setupDateTimeInterpreter();
+        changeView=getView().findViewById(R.id.switch1);
+        changeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked)
+                {}
+                else
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName",templateName);
+                    bundle.putString("viewOption","0");
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_testWeekView_to_tmpItemListFragment, bundle);
+
+                }
+            }
+        });
 
     }
 

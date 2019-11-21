@@ -37,7 +37,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     private Button save, delete;
     private Date startText, endText;
     private EditText name;
-    private String userId, templateName;
+    private String userId, templateName,viewOption;
     public AddTemplateItemFragment() {
 
     }
@@ -55,6 +55,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "");
             templateName = getArguments().getString("templateName", "");
+            viewOption=getArguments().getString("viewOption","0");
         }
         init();
         enableBackButton();
@@ -79,7 +80,10 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                             Bundle bundle = new Bundle();
                             bundle.putString("userId", userId);
                             bundle.putString("templateName", templateName);
+                            if(viewOption.equals("0"))
                             controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                            else
+                                controller.navigate(R.id.action_addTemplateItem_to_tmpItemListFragment,bundle);
                         }
                     });
                     PromptButton cancel = new PromptButton("取消", new PromptButtonListener () {
@@ -143,14 +147,12 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
                     bundle.putString("templateName", templateName);
+                    if(viewOption.equals("0"))
                     controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                    else
+                        controller.navigate(R.id.action_addTemplateItem_to_tmpItemListFragment, bundle);
                 } else {
-                    Log.d("newjk", "onClick: Duplicated item please reender");
-                    NavController controller = Navigation.findNavController(getView());
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userId", userId);
-                    bundle.putString("templateName", templateName);
-                    controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                   //提示有重复项
                 }
             }
         });
