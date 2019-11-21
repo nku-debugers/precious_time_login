@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_templateShowFragment_to_testFragment"
             app:destination="@id/testFragment" />
+        <action
+            android:id="@+id/action_templateShowFragment_to_tmpItemListFragment"
+            app:destination="@id/tmpItemListFragment" />
     </fragment>
     <fragment
         android:id="@+id/testWeekView"
@@ -67,6 +70,9 @@
         <action
             android:id="@+id/action_testWeekView_to_templateShowFragment"
             app:destination="@id/templateShowFragment" />
+        <action
+            android:id="@+id/action_testWeekView_to_tmpItemListFragment"
+            app:destination="@id/tmpItemListFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -80,6 +86,15 @@
         tools:layout="@layout/add_template_item" >
         <action
             android:id="@+id/action_addTemplateItem_to_testWeekView"
+            app:destination="@id/testWeekView" />
+    </fragment>
+    <fragment
+        android:id="@+id/tmpItemListFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.TmpItemListFragment"
+        android:label="tmpitemlistview"
+        tools:layout="@layout/tmpitemlistview" >
+        <action
+            android:id="@+id/action_tmpItemListFragment_to_testWeekView"
             app:destination="@id/testWeekView" />
     </fragment>
 </navigation>

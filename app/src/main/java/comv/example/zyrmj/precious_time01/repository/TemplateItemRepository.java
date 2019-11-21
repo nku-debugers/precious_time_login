@@ -75,7 +75,6 @@ return null;
         }
     }
 
-    static class FindByTime extends AsyncTask<>
 
     static class GetList extends  AsyncTask<Void, Void, List<TemplateItem>> {
         private TemplateItemDao templateItemDao;

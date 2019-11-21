@@ -70,7 +70,7 @@
                 app:layout_constraintGuide_percent="0.76" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/startTime"
                 android:layout_width="68dp"
                 android:layout_height="25dp"
                 android:text="开始时间"
@@ -80,7 +80,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/endTime"
                 android:layout_width="62dp"
                 android:layout_height="26dp"
                 android:text="起始时间"
