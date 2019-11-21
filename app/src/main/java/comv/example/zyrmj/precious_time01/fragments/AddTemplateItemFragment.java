@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,6 +27,9 @@ import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
 import comv.example.zyrmj.precious_time01.datepicker.DateFormatUtils;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 public class AddTemplateItemFragment extends Fragment implements View.OnClickListener {
     private TextView mTvSelectedTime1, mTvSelectedTime2, mTvSelectedTimeWeek;
@@ -32,7 +38,6 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     private Date startText, endText;
     private EditText name;
     private String userId, templateName;
-
     public AddTemplateItemFragment() {
 
     }
@@ -63,18 +68,29 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             @Override
             public boolean onKey( View v, int keyCode, KeyEvent event )
             {
-                if( keyCode == KeyEvent.KEYCODE_BACK )
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
                 {
-                    //显示提示框，显示：“您的数据将不会被保存，是否退出？”
-                    //确定按钮：执行下面的代码
-
-                    //Log.d("mytag", "onKey: Back button successfully enabled!");
-                    //NavController controller = Navigation.findNavController(getView());
-                    //Bundle bundle = new Bundle();
-                    //bundle.putString("userId", userId);
-                    //bundle.putString("templateName", templateName);
-                    //controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
-                    //取消按钮：回到当前页面
+                    PromptDialog promptDialog = new PromptDialog (getActivity ());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener () {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            Log.d("mytag", "onKey: Back button successfully enabled!");
+                            NavController controller = Navigation.findNavController(getView());
+                            Bundle bundle = new Bundle();
+                            bundle.putString("userId", userId);
+                            bundle.putString("templateName", templateName);
+                            controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener () {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor( Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
                     return true;
                 }
                 return false;
@@ -103,10 +119,14 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             public void onClick(View view) {
                 if (startText == null || endText == null) {
                     //用户输入起止时间
+                    PromptDialog promptDialog = new PromptDialog (getActivity ());
+                    promptDialog.showWarn ( "未填写开始或终止时间！" );
                     return;
                 }
                 if (name.getText().toString().equals("")) {
                     //提示用户指定用户名字
+                    PromptDialog promptDialog = new PromptDialog (getActivity ());
+                    promptDialog.showWarn ( "未填写名称！" );
                     return;
                 }
 
@@ -116,21 +136,38 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                 String week = getWeek(mTvSelectedTimeWeek.getText().toString());
                 String startFinal = week + "-" + startTime;
                 String endFinal = week + "-" + endTime;
-                TemplateItem item = new TemplateItem("offline", name.getText().toString(),
-                        templateName, "study", endFinal, startFinal);
-                TemplateItemRepository t = new TemplateItemRepository(getActivity());
-                t.insertTemplateItems(item);
 
+                boolean canInsert = checkAndInsert(week, startFinal, endFinal);
+                if (canInsert) {
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
                     bundle.putString("templateName", templateName);
                     controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
-
-                    //Log.d("mytag", "onClick: can't insert");
-
+                } else {
+                    Log.d("newjk", "onClick: Duplicated item please reender");
+                    NavController controller = Navigation.findNavController(getView());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", templateName);
+                    controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                }
             }
         });
+    }
+    boolean checkAndInsert(String week, String start, String end) {
+        TemplateItem item = new TemplateItem("offline", name.getText().toString(),
+                templateName, "study", end, start);
+        TemplateItemRepository t = new TemplateItemRepository(getActivity());
+        int s = t.ifTimeConfilict(week, start);
+        int e = t.ifTimeConfilict(week, end);
+        if (s == 0 || e == 0) {
+            return false;
+        }
+        else{
+            t.insertTemplateItems(item);
+            return true;
+        }
     }
     public String getWeek(String selected) {
         String week = "";
