@@ -176,7 +176,6 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         int timeUnit;
         try {
-            Log.d("mytag", "this is selected String:" + selected);
             switch (selected) {
                 case "日":
                     timeUnit = 1;
@@ -542,7 +541,6 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         if (setSelectedTime(dateStr, false)) {
 
             mPickerDialog.show();
-            Log.d("mytag", "inside final show, the argument is:" + dateStr);
         }
     }
 

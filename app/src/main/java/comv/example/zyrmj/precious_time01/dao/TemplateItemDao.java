@@ -29,8 +29,8 @@ public interface TemplateItemDao {
     @Query("Select * from TemplateItem")
     List<TemplateItem>getAll();
 
-    @Query("Select * from TemplateItem WHERE start_time like  :week || '%'")
-    List<TemplateItem>getSameWeek(String week);
+    @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId AND start_time like  :week || '%'")
+    List<TemplateItem>getSameWeek(String week, String templateName, String userId);
 
 //    @RawQuery("Select * from TemplateItem WHERE start_time like *")
 //    List<TemplateItem>getSameWeek(String week);
