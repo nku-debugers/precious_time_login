@@ -85,7 +85,6 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     PromptButton confirm = new PromptButton("确定", new PromptButtonListener () {
                         @Override
                         public void onClick(PromptButton button) {
-                            Log.d("mytag", "onKey: Back button successfully enabled!");
                             NavController controller = Navigation.findNavController(getView());
                             Bundle bundle = new Bundle();
                             bundle.putString("userId", userId);
@@ -235,7 +234,6 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
 
     private void initTimerPicker1() {
         String beginTime = df.format(new Date());
-        //String beginTime = DateFormatUtils.long2Str(System.currentTimeMillis()-1, 1);
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
         mTvSelectedTime1.setText(endTimeShow);
