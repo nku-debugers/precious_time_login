@@ -172,12 +172,13 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             }
         });
     }
+
     private boolean checkAndInsert(String week, String start, String end) {
         TemplateItem item = new TemplateItem("offline", name.getText().toString(),
                 templateName, "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
-        int s = t.ifTimeConfilict(week, start);
-        int e = t.ifTimeConfilict(week, end);
+        int s = t.ifTimeConfilict(week, start, templateName, userId);
+        int e = t.ifTimeConfilict(week, end, templateName, userId);
         if (s == 0 || e == 0) {
             return false;
         }

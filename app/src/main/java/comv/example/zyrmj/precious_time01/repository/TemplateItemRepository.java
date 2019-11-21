@@ -40,9 +40,9 @@ public class TemplateItemRepository {
         }
     }
 
-    public Integer ifTimeConfilict(String week, String start) {
+    public Integer ifTimeConfilict(String week, String start, String templateName, String userID) {
         try {
-            return new FindByTime(week, start, templateItemDao).execute().get();
+            return new FindByTime(templateItemDao).execute(week, start, templateName, userID).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,35 +94,25 @@ return null;
 
 
 
-    static class FindByTime extends AsyncTask<Void, Void, Integer> {
-        String week;
-        String startTime;
+    static class FindByTime extends AsyncTask<String, Void, Integer> {
         private TemplateItemDao templateItemDao;
-        FindByTime(String k, String start, TemplateItemDao templateItemDao){
+        FindByTime(TemplateItemDao templateItemDao){
             super();
-            week = k;
-            this.startTime = start;
             this.templateItemDao = templateItemDao;
         }
         @Override
-        protected Integer doInBackground(Void... voids) {
-            List<TemplateItem> items = templateItemDao.getSameWeek(week);
-            Log.d("ddf", "doInBackground: the week is: "+week);
+        protected Integer doInBackground(String... strings) {
+            //String 1 week 2 startTime 3 templateName 4 userID,
+            List<TemplateItem> items = templateItemDao.getSameWeek(strings[0], strings[2], strings[3]);
             if (items.size() == 0) {
-                Log.d("ddf", "nothing found");
                 return 1;
             }
             for (int i = 0; i < items.size(); i++) {
-                Log.d("ddf", "mytime is : " + startTime);
-                Log.d("ddf", "the comp is : " + items.get(i).getStartTime());
-                Log.d("ddf", "the ecomp is : " + items.get(i).getEndTime());
-                if (startTime.compareTo(items.get(i).getStartTime()) > 0
-                        && startTime.compareTo(items.get(i).getEndTime()) < 0) {
-                    Log.d("ddf", "thre is a confilit");
+                if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                        && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
                     return 0;
                 }
             }
-            Log.d("ddf", "is , but no blank");
             return 1;
         }
     }
