@@ -24,11 +24,12 @@ public interface TemplateItemDao {
     LiveData<List<TemplateItem>>getAllTemplateItems();
     @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId" )
     List<TemplateItem>getSpecificTemplateItems(String templateName,String userId);
-
+    @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId" )
+    LiveData<List<TemplateItem>>getSpecificTemplateItems2(String templateName,String userId);
     @Query("Select * from TemplateItem")
     List<TemplateItem>getAll();
 
-    @Query("Select * from TemplateItem WHERE start_time like '%' || :week")
+    @Query("Select * from TemplateItem WHERE start_time like  :week || '%'")
     List<TemplateItem>getSameWeek(String week);
 
 //    @RawQuery("Select * from TemplateItem WHERE start_time like *")

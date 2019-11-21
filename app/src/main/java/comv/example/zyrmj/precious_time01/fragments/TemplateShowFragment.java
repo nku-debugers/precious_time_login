@@ -99,8 +99,6 @@ public class TemplateShowFragment extends Fragment {
             }
         });
 
-        ImageView returnImage=getView().findViewById(R.id.returnimage);
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.START | ItemTouchHelper.END)
         {
 
@@ -171,8 +169,6 @@ public class TemplateShowFragment extends Fragment {
                 }
                 background.draw(c);
                 icon.draw(c);
-
-
 
             }
         }).attachToRecyclerView(recyclerView);

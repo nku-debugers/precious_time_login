@@ -73,6 +73,9 @@
         <action
             android:id="@+id/action_testWeekView_to_tmpItemListFragment"
             app:destination="@id/tmpItemListFragment" />
+        <action
+            android:id="@+id/action_testWeekView_to_tmpItemListFragment2"
+            app:destination="@id/tmpItemListFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -87,6 +90,9 @@
         <action
             android:id="@+id/action_addTemplateItem_to_testWeekView"
             app:destination="@id/testWeekView" />
+        <action
+            android:id="@+id/action_addTemplateItem_to_tmpItemListFragment"
+            app:destination="@id/tmpItemListFragment" />
     </fragment>
     <fragment
         android:id="@+id/tmpItemListFragment"
@@ -96,5 +102,11 @@
         <action
             android:id="@+id/action_tmpItemListFragment_to_testWeekView"
             app:destination="@id/testWeekView" />
+        <action
+            android:id="@+id/action_tmpItemListFragment_to_addTemplateItem"
+            app:destination="@id/addTemplateItem" />
+        <action
+            android:id="@+id/action_tmpItemListFragment_to_templateShowFragment"
+            app:destination="@id/templateShowFragment" />
     </fragment>
 </navigation>
