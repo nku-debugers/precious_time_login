@@ -42,7 +42,7 @@ public class TemplateItemRepository {
 
     public Integer ifTimeConfilict(String week, String start) {
         try {
-            return new FindByTime(week,start, templateItemDao).execute().get();
+            return new FindByTime(week, start, templateItemDao).execute().get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,15 +107,22 @@ return null;
         @Override
         protected Integer doInBackground(Void... voids) {
             List<TemplateItem> items = templateItemDao.getSameWeek(week);
+            Log.d("ddf", "doInBackground: the week is: "+week);
             if (items.size() == 0) {
+                Log.d("ddf", "nothing found");
                 return 1;
             }
             for (int i = 0; i < items.size(); i++) {
+                Log.d("ddf", "mytime is : " + startTime);
+                Log.d("ddf", "the comp is : " + items.get(i).getStartTime());
+                Log.d("ddf", "the ecomp is : " + items.get(i).getEndTime());
                 if (startTime.compareTo(items.get(i).getStartTime()) > 0
                         && startTime.compareTo(items.get(i).getEndTime()) < 0) {
+                    Log.d("ddf", "thre is a confilit");
                     return 0;
                 }
             }
+            Log.d("ddf", "is , but no blank");
             return 1;
         }
     }

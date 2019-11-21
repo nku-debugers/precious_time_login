@@ -93,11 +93,10 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      * @param endTimestamp   毫秒级时间戳
      */
     public CustomDatePicker(Context context, Callback callback, long beginTimestamp, long endTimestamp) {
-        if (context == null || callback == null || beginTimestamp <= 0 || beginTimestamp >= endTimestamp) {
+        if (context == null || callback == null || beginTimestamp <= 0 || beginTimestamp > endTimestamp) {
             mCanDialogShow = false;
             return;
         }
-
         mContext = context;
         mCallback = callback;
         mBeginTime = Calendar.getInstance();
@@ -105,7 +104,6 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mEndTime = Calendar.getInstance();
         mEndTime.setTimeInMillis(endTimestamp);
         mSelectedTime = Calendar.getInstance();
-
         initView();
         initData();
         mCanDialogShow = true;
@@ -179,28 +177,31 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         int timeUnit;
         try {
             Log.d("mytag", "this is selected String:" + selected);
-            if(selected.equals("日")) {
-                timeUnit = 1;
-            }
-            else if (selected.equals("一")) {
-                timeUnit = 2;
-            }
-            else if (selected.equals("二")) {
-                timeUnit = 3;
-            }
-            else if (selected.equals("三")) {
-                timeUnit = 4;
-            }
-            else if (selected.equals("四")) {
-                timeUnit = 5;
-            }
-            else if (selected.equals("五")) {
-                timeUnit = 6;
-            }
-            else if (selected.equals("六")) {
-                timeUnit = 7;
-            } else {
-                timeUnit = Integer.parseInt(selected);
+            switch (selected) {
+                case "日":
+                    timeUnit = 1;
+                    break;
+                case "一":
+                    timeUnit = 2;
+                    break;
+                case "二":
+                    timeUnit = 3;
+                    break;
+                case "三":
+                    timeUnit = 4;
+                    break;
+                case "四":
+                    timeUnit = 5;
+                    break;
+                case "五":
+                    timeUnit = 6;
+                    break;
+                case "六":
+                    timeUnit = 7;
+                    break;
+                default:
+                    timeUnit = Integer.parseInt(selected);
+                    break;
             }
         } catch (Throwable ignored) {
             return;
@@ -276,7 +277,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         List list = Arrays.asList("日","一","二","三","四","五","六");
         mWeekUnits.addAll(list);
         mDpvWeek.setDataList(mWeekUnits);
-        mDpvWeek.setSelected(0);
+        mDpvWeek.setSelected(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1);
     }
 
     private void initDateUnits(int endMonth, int endDay, int endHour, int endMinute) {
