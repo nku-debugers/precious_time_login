@@ -13,23 +13,53 @@ import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Objects;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PersonCenterFragment extends Fragment {
-String userId="未登录";
-
+    String userId="未登录";
+    private long mExitTime = 0;
     public PersonCenterFragment() {
         // Required empty public constructor
     }
 
+    private void enableBackButton() {
+        Objects.requireNonNull(getView()).setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
+                {
+                    if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                        //大于2000ms则认为是误操作，使用Toast进行提示
+                        Toast.makeText(getContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                        //并记录下本次点击“返回键”的时刻，以便下次进行判断
+                        mExitTime = System.currentTimeMillis();
+                    } else {
+                        //小于2000ms则认为是用户确实希望退出程序-调用System.exit()方法进行退出
+                        System.exit(0);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        } );
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +72,7 @@ String userId="未登录";
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        enableBackButton();
         if(getArguments()!=null) {
             userId = getArguments().getString("userId", "未登录");
         }

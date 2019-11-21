@@ -12,7 +12,7 @@ import java.util.Locale;
  * 修改时间：2018/12/18
  */
 public class DateFormatUtils {
-    private static final String DATE_FORMAT_PATTERN_HM = "HH:mm";
+        private static final String DATE_FORMAT_PATTERN_HM = "HH:mm";
     private static final String DATE_FORMAT_PATTERN_YMD = "yyyy-MM-dd";
     private static final String DATE_FORMAT_PATTERN_YMD_HM = "yyyy-MM-dd HH:mm";
 

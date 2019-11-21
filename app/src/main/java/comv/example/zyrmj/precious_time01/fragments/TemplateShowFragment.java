@@ -28,6 +28,7 @@ import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -66,7 +68,8 @@ public class TemplateShowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       templateRepository=new TemplateRepository(getContext());
+        enableBackButton();
+        templateRepository=new TemplateRepository(getContext());
         recyclerView=getView().findViewById(R.id.recycleView);
         final TemplateAdapter templateAdapter=new TemplateAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -175,6 +178,26 @@ public class TemplateShowFragment extends Fragment {
 
 
     }
+
+    private void enableBackButton() {
+        Objects.requireNonNull(getView()).setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
+                {
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
+                    return true;
+                }
+                return false;
+            }
+        } );
+    }
+
     public void showDialog(String info, final TemplateRepository templateRepository)
     {
         new MaterialDialog.Builder(getContext())
