@@ -46,7 +46,6 @@ public void setAllTemplates(List<Template> allTemplates)
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("click","点击");
                 Bundle bundle=new Bundle();
                 bundle.putString("userId",holder.userId);
                 bundle.putString("templateName",holder.name.getText().toString());

@@ -18,8 +18,11 @@ public interface TemplateItemDao {
     void insertTemplateItem(TemplateItem... templateItems);
     @Delete
     void deleteTemplateItem(TemplateItem... templateItems);
-    @Update
-    void updateTemplateItem(TemplateItem... templateItems);
+
+    @Query("UPDATE TemplateItem SET item_name = :itemName ,start_time=:newStartTime," +
+            "end_time=:newEndTime WHERE template_name=:templateName AND user_id=:userId AND start_time=:oldStartTime" )
+    int updateTemplateItem(String templateName,String userId,String oldStartTime,String itemName,String newStartTime,
+                   String newEndTime );
     @Query("Select * from TemplateItem")
     LiveData<List<TemplateItem>>getAllTemplateItems();
     @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId" )

@@ -2,6 +2,8 @@ package comv.example.zyrmj.precious_time01.entity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -11,7 +13,7 @@ import androidx.room.Index;
 @Entity(primaryKeys = {"user_id","template_name","start_time"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
         },
         indices = {@Index(value = "template_name")})
-public class TemplateItem {
+public class TemplateItem implements Serializable {
     @NonNull
     @ColumnInfo(name = "user_id")
     private String userId;

@@ -40,17 +40,17 @@ public class TemplateItemRepository {
         }
     }
 
-    public Integer ifTimeConfilict(String week, String start, String templateName, String userID) {
+    public Integer ifTimeConfilict(String ... strings) {
         try {
-            return new FindByTime(templateItemDao).execute(week, start, templateName, userID).get();
+            return new FindByTime(templateItemDao).execute(strings).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
 
-    public void updateTemplateItems(TemplateItem... templateItems) {
-        new UpdateAsyncTask(templateItemDao).execute(templateItems);
+    public void updateTemplateItems(String... strings) {
+        new UpdateAsyncTask(templateItemDao).execute(strings);
     }
     public void deleteTemplateItems(TemplateItem... templateItems) {
         new DeleteAsyncTask(templateItemDao).execute(templateItems);
@@ -107,11 +107,27 @@ return null;
             if (items.size() == 0) {
                 return 1;
             }
-            for (int i = 0; i < items.size(); i++) {
-                if (strings[1].compareTo(items.get(i).getStartTime()) > 0
-                        && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
-                    return 0;
+            if(strings.length==4) {
+                for (int i = 0; i < items.size(); i++) {
+                    if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                            && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                        return 0;
+                    }
                 }
+            }
+            else
+            {
+                for (int i = 0; i < items.size(); i++) {
+                    if(strings[4].equals(items.get(i).getStartTime()))
+                    {
+                        continue;
+                    }
+                    if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                            && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                        return 0;
+                    }
+                }
+
             }
             return 1;
         }
@@ -157,16 +173,17 @@ return null;
         }
     }
 
-    static class UpdateAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
+    static class UpdateAsyncTask extends AsyncTask<String, Void, Void> {
         private TemplateItemDao templateItemDao;
 
         private UpdateAsyncTask(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
 
+
         @Override
-        protected Void doInBackground(TemplateItem... templateItems) {
-            templateItemDao.updateTemplateItem(templateItems);
+        protected Void doInBackground(String... strings) {
+            templateItemDao.updateTemplateItem(strings[0], strings[1], strings[2], strings[3], strings[4], strings[5]);
             return null;
         }
     }
