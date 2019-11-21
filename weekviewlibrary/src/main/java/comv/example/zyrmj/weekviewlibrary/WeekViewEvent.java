@@ -12,6 +12,7 @@ public class WeekViewEvent implements Serializable {
     private Calendar mStartTime;
     private Calendar mEndTime;
     private String mName;
+    //新增index,表示在events列表中的位置
     private Integer index;
     private int mColor;
 
