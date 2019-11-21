@@ -37,13 +37,17 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class WeekViewFragment extends Fragment implements WeekView.MonthChangeListener,
-        WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewClickListener, WeekView.EmptyViewLongPressListener, WeekView.ScrollListener  {
+        WeekView.EventClickListener, WeekView.EmptyViewClickListener,
+        WeekView.EmptyViewLongPressListener, WeekView.ScrollListener
+{
     private WeekView mWeekView;
     String userId,templateName;
     private FloatingActionButton add;
     private TextView title;
     private ImageView returnImge;
     private Switch changeView;
+    private List<WeekViewEvent> events;
+    private List<TemplateItem> datas;
 
     public WeekViewFragment() {
         // Required empty public constructor
@@ -89,12 +93,9 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
                 controller.navigate(R.id.action_testWeekView_to_addTemplateItem, bundle);
             }
         });
-        // mWeekHeaderView= (WeekHeaderView) findViewById(R.id.weekheaderview);
-        //mTv_date =(TextView)findViewById(R.id.tv_date);
-        //init WeekView
+
         mWeekView.setNumberOfVisibleDays(7);
         mWeekView.setMonthChangeListener(this);
-        mWeekView.setEventLongPressListener(this);
         mWeekView.setOnEventClickListener(this);
         mWeekView.setScrollListener(this);
         WeekView.EmptyViewClickListener emptyViewClickListener = new WeekView.EmptyViewClickListener() {
@@ -160,14 +161,24 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        int index=event.getIndex();
+      TemplateItem templateItem=datas.get(index);
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("templateItem",templateItem);
+        bundle.putString("viewOption","0");
+        NavController controller= Navigation.findNavController(getView());
+        controller.navigate(R.id.action_testWeekView_to_updateTemplateItemFragment,bundle);
+
+
 
     }
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
-        List<TemplateItem> datas = new TemplateItemRepository(getContext()).getSpecificList(templateName,userId);
+         events = new ArrayList<WeekViewEvent>();
+         datas = new TemplateItemRepository(getContext()).getSpecificList(templateName,userId);
         int i = 1;
+        int index=0;
         for (TemplateItem ti : datas) {
             Log.d("列表2", ti.getItemName());
             String weekday = ti.getStartTime().split("-")[0];
@@ -192,7 +203,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
             Calendar endTime = (Calendar) startTime.clone();
             endTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
             endTime.set(Calendar.MINUTE, Integer.valueOf(endminute));
-            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime);
+            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime,index);
             if(i%4==0)
                 event.setColor(getResources().getColor(R.color.event_color_01));
             else if(i%4==1)
@@ -201,16 +212,15 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
                 event.setColor(getResources().getColor(R.color.event_color_03));
             else
                 event.setColor(getResources().getColor(R.color.event_color_04));
+            index+=1;
             events.add(event);
             i++;
         }
         return events;
     }
 
-    @Override
-    public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
 
-    }
+
 
     @Override
     public void onEmptyViewClicked(Calendar time) {

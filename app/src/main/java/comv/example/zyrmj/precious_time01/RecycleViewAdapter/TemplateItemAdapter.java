@@ -53,7 +53,7 @@ public void setAllTemplateItems(List<TemplateItem> templateItems){
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        TemplateItem templateItem=allTemplateItems.get(position);
+        final TemplateItem templateItem=allTemplateItems.get(position);
 //      下面开始利用template中的信息对Viewholder布局中的组件如textView等进行赋值
         holder.number.setText(String.valueOf(position+1));
         holder.name.setText(templateItem.getItemName());
@@ -66,6 +66,11 @@ public void setAllTemplateItems(List<TemplateItem> templateItems){
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle=new Bundle();
+               bundle.putSerializable("templateItem",templateItem);
+               bundle.putString("viewOption","1");
+                NavController controller= Navigation.findNavController(view);
+                controller.navigate(R.id.action_tmpItemListFragment_to_updateTemplateItemFragment,bundle);
 
             }
         });

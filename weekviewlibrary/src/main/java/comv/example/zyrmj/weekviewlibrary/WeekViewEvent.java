@@ -12,6 +12,7 @@ public class WeekViewEvent implements Serializable {
     private Calendar mStartTime;
     private Calendar mEndTime;
     private String mName;
+    private Integer index;
     private int mColor;
 
     public WeekViewEvent(){
@@ -66,6 +67,13 @@ public class WeekViewEvent implements Serializable {
         this.mStartTime = startTime;
         this.mEndTime = endTime;
     }
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime,Integer index) {
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.index=index;
+    }
 
 
     public Calendar getStartTime() {
@@ -106,5 +114,9 @@ public class WeekViewEvent implements Serializable {
 
     public void setId(long id) {
         this.mId = id;
+    }
+
+    public Integer getIndex() {
+        return index;
     }
 }
