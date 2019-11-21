@@ -17,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -37,7 +38,7 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
     private EditText name;
     private String viewOption;
     private TemplateItem templateItem;
-    final String[] weekLabels = { "周一", "周二", "周三", "周四", "周五", "周六","周日"};
+    final String[] weekLabels = { "一", "二", "三", "四", "五", "六","日"};
     public UpdateTemplateItemFragment() {
 
     }
@@ -122,12 +123,6 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startText == null || endText == null) {
-                    //用户输入起止时间
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    promptDialog.showWarn ( "未填写开始或终止时间！" );
-                    return;
-                }
                 if (name.getText().toString().equals("")) {
                     //提示用户指定用户名字
                     PromptDialog promptDialog = new PromptDialog (getActivity ());
@@ -137,7 +132,8 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
 
                 String startTime = mTvSelectedTime1.getText().toString();
                 String endTime = mTvSelectedTime2.getText().toString();
-
+Log.d("startTime",startTime);
+Log.d("endTime",endTime);
                 String week = getWeek(mTvSelectedTimeWeek.getText().toString());
                 String startFinal = week + "-" + startTime;
                 String endFinal = week + "-" + endTime;
@@ -159,11 +155,11 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
         });
     }
     boolean checkAndUpdate(String week, String start, String end) {
-        TemplateItem item = new TemplateItem("offline", name.getText().toString(),
+        TemplateItem item = new TemplateItem(templateItem.getUserId(), name.getText().toString(),
                 templateItem.getTemplateName(), "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
-        int s = t.ifTimeConfilict(week, start);
-        int e = t.ifTimeConfilict(week, end);
+        int s = t.ifTimeConfilict(week, start,templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime());
+        int e = t.ifTimeConfilict(week, end,templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime());
         if (s == 0 || e == 0) {
             return false;
         }
@@ -174,6 +170,7 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
         }
     }
     public String getWeek(String selected) {
+        String target=selected;
         String week = "";
         if(selected.equals("日")) {
             week = "6";
@@ -291,7 +288,6 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
         int weekIndex=Integer.valueOf(templateItem.getStartTime().split("-")[0]);
         mTvSelectedTimeWeek.setText(weekLabels[weekIndex]);
-
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
         mTimePickerWeek = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
             @Override
