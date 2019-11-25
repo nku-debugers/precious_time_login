@@ -7,6 +7,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity(foreignKeys = @ForeignKey(entity = Category.class,
         parentColumns = "name",
         childColumns = "category_name"),indices=@Index(value = "category_name"))
@@ -82,7 +84,11 @@ public class Habit {
     public String category;
     public double completion;
 
-    public Habit(String userId, String name, String endTime, String startTime,
+    public String location;     //执行地点
+    public int priority;        //优先级
+    public int reminder;        //提醒
+
+    public Habit(@NotNull String userId, String name, String endTime, String startTime,
                  String length, String category, double completion) {
         this.userId = userId;
         this.name = name;
