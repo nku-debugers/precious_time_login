@@ -44,10 +44,9 @@ import java.util.Objects;
  */
 public class WeekViewFragment extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
-        WeekView.EmptyViewLongPressListener, WeekView.ScrollListener
-{
+        WeekView.EmptyViewLongPressListener, WeekView.ScrollListener {
     private WeekView mWeekView;
-    String userId,templateName;
+    String userId, templateName;
     private FloatingActionButton add;
     private TextView title;
     private ImageView returnImge;
@@ -70,17 +69,19 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(getArguments()!=null)
-        {  userId=getArguments().getString("userId","");
-            templateName=getArguments().getString("templateName","");}
+        if (getArguments() != null) {
+            userId = getArguments().getString("userId", "");
+            templateName = getArguments().getString("templateName", "");
+        }
         enableBackButton();
         assignViews();
     }
+
     private void assignViews() {
-        title=getView().findViewById(R.id.title);
+        title = getView().findViewById(R.id.title);
         title.setText(templateName);
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
-        returnImge=getView().findViewById(R.id.toTemplateView);
+        returnImge = getView().findViewById(R.id.toTemplateView);
         returnImge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,7 +90,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
 
             }
         });
-        add = (FloatingActionButton)getView().findViewById(R.id.floatingActionButton2);
+        add = (FloatingActionButton) getView().findViewById(R.id.floatingActionButton2);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,18 +114,16 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
         };
         mWeekView.setEmptyViewClickListener(emptyViewClickListener);
         setupDateTimeInterpreter();
-        changeView=getView().findViewById(R.id.switch1);
+        changeView = getView().findViewById(R.id.switch1);
         changeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked)
-                {}
-                else
-                {
+                if (isChecked) {
+                } else {
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
-                    bundle.putString("templateName",templateName);
-                    bundle.putString("viewOption","0");
+                    bundle.putString("templateName", templateName);
+                    bundle.putString("viewOption", "0");
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_testWeekView_to_tmpItemListFragment, bundle);
 
@@ -135,8 +134,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
     }
 
     private void setupDateTimeInterpreter(/*final boolean shortDate*/) {
-        final String[] weekLabels = { "一", "二", "三", "四", "五", "六","日"};
-
+        final String[] weekLabels = {"一", "二", "三", "四", "五", "六", "日"};
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
             public String interpretDate(Calendar date) {
@@ -158,7 +156,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
 
             @Override
             public String interpretWeek(int date) {
-                return weekLabels[date %7];
+                return weekLabels[date % 7];
 
             }
         });
@@ -167,42 +165,38 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
     private void enableBackButton() {
         Objects.requireNonNull(getView()).setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener( new View.OnKeyListener()
-        {
+        getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
-                {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_testWeekView_to_templateShowFragment);
                     return true;
                 }
                 return false;
             }
-        } );
+        });
     }
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        int index=event.getIndex();
-      TemplateItem templateItem=datas.get(index);
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("templateItem",templateItem);
-        bundle.putString("viewOption","0");
-        NavController controller= Navigation.findNavController(getView());
-        controller.navigate(R.id.action_testWeekView_to_updateTemplateItemFragment,bundle);
-
+        int index = event.getIndex();
+        TemplateItem templateItem = datas.get(index);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("templateItem", templateItem);
+        bundle.putString("viewOption", "0");
+        NavController controller = Navigation.findNavController(getView());
+        controller.navigate(R.id.action_testWeekView_to_updateTemplateItemFragment, bundle);
 
 
     }
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-         events = new ArrayList<WeekViewEvent>();
-         datas = new TemplateItemRepository(getContext()).getSpecificList(templateName,userId);
+        events = new ArrayList<WeekViewEvent>();
+        datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
         int i = 1;
-        int index=0;
+        int index = 0;
         for (TemplateItem ti : datas) {
             Log.d("列表2", ti.getItemName());
             String weekday = ti.getStartTime().split("-")[0];
@@ -210,15 +204,15 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
             String starttime = ti.getStartTime().split("-")[1];
             Log.d("列表2", starttime);
             String starthour = starttime.split(":")[0];
-            String startminute=starttime.split(":")[1];
+            String startminute = starttime.split(":")[1];
             String endtime = ti.getEndTime().split("-")[1];
-            String endminute=endtime.split(":")[1];
+            String endminute = endtime.split(":")[1];
             Log.d("列表2", starthour);
             String endhour = endtime.split(":")[0];
             Calendar startTime = Calendar.getInstance();
-            int currdiff=startTime.get(Calendar.DAY_OF_WEEK)-2;
-            if(currdiff<0) currdiff=6;
-            int distance=diff-currdiff;
+            int currdiff = startTime.get(Calendar.DAY_OF_WEEK) - 2;
+            if (currdiff < 0) currdiff = 6;
+            int distance = diff - currdiff;
             startTime.set(Calendar.DATE, startTime.get(Calendar.DATE) + distance);
             startTime.set(Calendar.MONTH, newMonth - 1);
             startTime.set(Calendar.YEAR, newYear);
@@ -227,23 +221,21 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
             Calendar endTime = (Calendar) startTime.clone();
             endTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
             endTime.set(Calendar.MINUTE, Integer.valueOf(endminute));
-            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime,index);
-            if(i%4==0)
+            WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime, index);
+            if (i % 4 == 0)
                 event.setColor(getResources().getColor(R.color.event_color_01));
-            else if(i%4==1)
+            else if (i % 4 == 1)
                 event.setColor(getResources().getColor(R.color.event_color_02));
-            else if(i%4==2)
+            else if (i % 4 == 2)
                 event.setColor(getResources().getColor(R.color.event_color_03));
             else
                 event.setColor(getResources().getColor(R.color.event_color_04));
-            index+=1;
+            index += 1;
             events.add(event);
             i++;
         }
         return events;
     }
-
-
 
 
     @Override

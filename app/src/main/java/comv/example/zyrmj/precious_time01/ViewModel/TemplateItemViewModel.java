@@ -14,12 +14,14 @@ import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 public class TemplateItemViewModel extends AndroidViewModel {
     private TemplateItemRepository templateItemRepository;
+
     public TemplateItemViewModel(@NonNull Application application) {
         super(application);
         templateItemRepository = new TemplateItemRepository(application);
     }
+
     public LiveData<List<TemplateItem>> getSpecificTemplateItems(String templateName, String userId) {
-        return templateItemRepository.getSpecificList2(templateName,userId);
+        return templateItemRepository.getSpecificList2(templateName, userId);
     }
 
 

@@ -16,24 +16,29 @@ import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 public interface TemplateItemDao {
     @Insert
     void insertTemplateItem(TemplateItem... templateItems);
+
     @Delete
     void deleteTemplateItem(TemplateItem... templateItems);
 
     @Query("UPDATE TemplateItem SET item_name = :itemName ,start_time=:newStartTime," +
-            "end_time=:newEndTime WHERE template_name=:templateName AND user_id=:userId AND start_time=:oldStartTime" )
-    int updateTemplateItem(String templateName,String userId,String oldStartTime,String itemName,String newStartTime,
-                   String newEndTime );
+            "end_time=:newEndTime WHERE template_name=:templateName AND user_id=:userId AND start_time=:oldStartTime")
+    int updateTemplateItem(String templateName, String userId, String oldStartTime, String itemName, String newStartTime,
+                           String newEndTime);
+
     @Query("Select * from TemplateItem")
-    LiveData<List<TemplateItem>>getAllTemplateItems();
-    @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId" )
-    List<TemplateItem>getSpecificTemplateItems(String templateName,String userId);
-    @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId" )
-    LiveData<List<TemplateItem>>getSpecificTemplateItems2(String templateName,String userId);
+    LiveData<List<TemplateItem>> getAllTemplateItems();
+
+    @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId")
+    List<TemplateItem> getSpecificTemplateItems(String templateName, String userId);
+
+    @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId")
+    LiveData<List<TemplateItem>> getSpecificTemplateItems2(String templateName, String userId);
+
     @Query("Select * from TemplateItem")
-    List<TemplateItem>getAll();
+    List<TemplateItem> getAll();
 
     @Query("Select * from TemplateItem WHERE template_name=:templateName AND user_id=:userId AND start_time like  :week || '%'")
-    List<TemplateItem>getSameWeek(String week, String templateName, String userId);
+    List<TemplateItem> getSameWeek(String week, String templateName, String userId);
 
 //    @RawQuery("Select * from TemplateItem WHERE start_time like *")
 //    List<TemplateItem>getSameWeek(String week);

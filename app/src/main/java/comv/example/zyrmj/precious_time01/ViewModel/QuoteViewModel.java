@@ -12,12 +12,13 @@ import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 
 public class QuoteViewModel extends AndroidViewModel {
     private QuoteRepository quoteRepository;
+
     public QuoteViewModel(@NonNull Application application) {
         super(application);
-        this.quoteRepository=new QuoteRepository(application);
+        this.quoteRepository = new QuoteRepository(application);
     }
-    public LiveData<List<Quote>> getAllQuotes(String userId)
-    {
-return quoteRepository.getAllQuotes(userId);
-    };
+
+    public LiveData<List<Quote>> getAllQuotes(String userId) {
+        return quoteRepository.getAllQuotes(userId);
+    }
 }

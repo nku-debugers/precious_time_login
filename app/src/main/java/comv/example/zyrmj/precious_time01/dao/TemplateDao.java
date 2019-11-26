@@ -15,14 +15,18 @@ import comv.example.zyrmj.precious_time01.entity.Template;
 public interface TemplateDao {
     @Insert
     void insertTemplate(Template... templates);
+
     @Delete
     void deleteTemplate(Template... templateItems);
+
     @Update
     void updateTemplate(Template... templateItems);
+
     @Query("Select * from Template where user_id=:userId")
     LiveData<List<Template>> getAllTemplates(String userId);
+
     //根据字段查询
     @Query("SELECT * FROM Template WHERE user_id=:userId AND name= :name")
-    Template getSpecificTemplate(String userId,String name);
+    Template getSpecificTemplate(String userId, String name);
 
 }

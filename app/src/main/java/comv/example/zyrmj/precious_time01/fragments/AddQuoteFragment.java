@@ -27,10 +27,10 @@ import me.leefeng.promptlibrary.PromptDialog;
  * A simple {@link Fragment} subclass.
  */
 public class AddQuoteFragment extends Fragment {
-    private EditText words,author;
-    private Button save,clear;
+    private EditText words, author;
+    private Button save, clear;
     private ImageView back;
-    private String userId="offline";
+    private String userId = "offline";
     private QuoteRepository quoteRepository;
 
     public AddQuoteFragment() {
@@ -48,10 +48,10 @@ public class AddQuoteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        quoteRepository=new QuoteRepository(getContext());
-        words=getView().findViewById(R.id.words);
-        author=getView().findViewById(R.id.author);
-        save=getView().findViewById(R.id.save);
+        quoteRepository = new QuoteRepository(getContext());
+        words = getView().findViewById(R.id.words);
+        author = getView().findViewById(R.id.author);
+        save = getView().findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,8 +63,7 @@ public class AddQuoteFragment extends Fragment {
                     if (quoteRepository.getSpecificQuote(newQuote.getUserId(), newQuote.getWords()) != null) {
                         PromptDialog promptDialog = new PromptDialog(getActivity());
                         promptDialog.showWarn("所添加箴言已存在！");
-                    }
-                    else {
+                    } else {
                         quoteRepository.insertQuote(newQuote);
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_addQuoteFragment_to_quoteFragment);
@@ -72,7 +71,7 @@ public class AddQuoteFragment extends Fragment {
                 }
             }
         });
-        clear=getView().findViewById(R.id.clear);
+        clear = getView().findViewById(R.id.clear);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,11 +79,11 @@ public class AddQuoteFragment extends Fragment {
                 author.setText("");
             }
         });
-        back=getView().findViewById(R.id.back);
+        back = getView().findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PromptDialog promptDialog = new PromptDialog (getActivity ());
+                PromptDialog promptDialog = new PromptDialog(getActivity());
                 PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
                     @Override
                     public void onClick(PromptButton button) {
@@ -92,17 +91,16 @@ public class AddQuoteFragment extends Fragment {
                         controller.navigate(R.id.action_addQuoteFragment_to_quoteFragment);
                     }
                 });
-                PromptButton cancel = new PromptButton("取消", new PromptButtonListener () {
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
                     @Override
                     public void onClick(PromptButton button) {
                         //Nothing
                     }
                 });
-                confirm.setTextColor( Color.parseColor("#DAA520"));
+                confirm.setTextColor(Color.parseColor("#DAA520"));
                 confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
                 promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
 
-                
 
             }
         });

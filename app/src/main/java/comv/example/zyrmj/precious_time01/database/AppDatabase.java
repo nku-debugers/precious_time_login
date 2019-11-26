@@ -1,4 +1,5 @@
 package comv.example.zyrmj.precious_time01.database;
+
 import android.content.Context;
 
 import androidx.room.Database;
@@ -21,20 +22,27 @@ import comv.example.zyrmj.precious_time01.entity.User;
 
 //Singleton
 @Database(entities = {Category.class, Habit.class, Quote.class, Template.class, TemplateItem.class,
-        Todo.class, User.class}, version = 1,exportSchema = false)
+        Todo.class, User.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
+
     public static synchronized AppDatabase getDatabase(Context context) {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "time_db").allowMainThreadQueries()
                     .build();
         }
         return INSTANCE;
     }
+
     public abstract CategoryDao categoryDao();
+
     public abstract TemplateItemDao templateItemDao();
+
     public abstract TemplateDao templateDao();
+
     public abstract HabitDao habitDao();
+
     public abstract UserDao userDao();
+
     public abstract QuoteDao quoteDao();
 }

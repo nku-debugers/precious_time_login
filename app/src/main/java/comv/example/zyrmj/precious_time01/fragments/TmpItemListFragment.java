@@ -70,46 +70,44 @@ public class TmpItemListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(getArguments()!=null)
-        {  userId=getArguments().getString("userId","");
-            templateName=getArguments().getString("templateName","");}
+        if (getArguments() != null) {
+            userId = getArguments().getString("userId", "");
+            templateName = getArguments().getString("templateName", "");
+        }
 
-        templateItemRepository=new TemplateItemRepository(getContext());
-        recyclerView=getView().findViewById(R.id.recycleView);
-        final TemplateItemAdapter templateItemAdapter=new TemplateItemAdapter();
+        templateItemRepository = new TemplateItemRepository(getContext());
+        recyclerView = getView().findViewById(R.id.recycleView);
+        final TemplateItemAdapter templateItemAdapter = new TemplateItemAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(templateItemAdapter);
-        TemplateItemViewModel templateItemViewModel= ViewModelProviders.of(getActivity()).get(TemplateItemViewModel.class);
-        templateItemViewModel.getSpecificTemplateItems(templateName,userId).observe(getActivity(), new Observer<List<TemplateItem>>() {
+        TemplateItemViewModel templateItemViewModel = ViewModelProviders.of(getActivity()).get(TemplateItemViewModel.class);
+        templateItemViewModel.getSpecificTemplateItems(templateName, userId).observe(getActivity(), new Observer<List<TemplateItem>>() {
 
 
             @Override
             public void onChanged(List<TemplateItem> templateItems) {
                 templateItemAdapter.setAllTemplateItems(templateItems);
                 templateItemAdapter.notifyDataSetChanged();
-                allTemplateItems=templateItems;
+                allTemplateItems = templateItems;
             }
         });
-        chageView=getView().findViewById(R.id.switch1);
+        chageView = getView().findViewById(R.id.switch1);
         chageView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean ischecked) {
-                if (ischecked)
-                {
+                if (ischecked) {
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
-                    bundle.putString("templateName",templateName);
+                    bundle.putString("templateName", templateName);
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_tmpItemListFragment_to_testWeekView, bundle);
-                }
-                else
-                {
+                } else {
 
 
                 }
             }
         });
-        title=getView().findViewById(R.id.title);
+        title = getView().findViewById(R.id.title);
         title.setText(templateName);
         add = getView().findViewById(R.id.floatingActionButton2);
         add.setOnClickListener(new View.OnClickListener() {
@@ -119,20 +117,19 @@ public class TmpItemListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("userId", userId);
                 bundle.putString("templateName", templateName);
-                bundle.putString("viewOption","1");
+                bundle.putString("viewOption", "1");
                 controller.navigate(R.id.action_tmpItemListFragment_to_addTemplateItem, bundle);
             }
         });
-       toTemplateView=getView().findViewById(R.id.toTemplateView);
-       toTemplateView.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               NavController controller = Navigation.findNavController(getView());
-               controller.navigate(R.id.action_tmpItemListFragment_to_templateShowFragment);
-           }
-       });
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.START | ItemTouchHelper.END)
-        {
+        toTemplateView = getView().findViewById(R.id.toTemplateView);
+        toTemplateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_tmpItemListFragment_to_templateShowFragment);
+            }
+        });
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -141,11 +138,10 @@ public class TmpItemListFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final TemplateItem templateItemToDelete =allTemplateItems.get(viewHolder.getAdapterPosition());
+                final TemplateItem templateItemToDelete = allTemplateItems.get(viewHolder.getAdapterPosition());
                 templateItemRepository.deleteTemplateItems(templateItemToDelete);
-                Snackbar.make(getView(),"删除了一个模板事项",Snackbar.LENGTH_SHORT).
-                        setAction("撤销",new View.OnClickListener()
-                                {
+                Snackbar.make(getView(), "删除了一个模板事项", Snackbar.LENGTH_SHORT).
+                        setAction("撤销", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         templateItemRepository.insertTemplateItems(templateItemToDelete);
@@ -156,7 +152,7 @@ public class TmpItemListFragment extends Fragment {
             }
             //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
 
-            Drawable icon = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_delete_black_24dp);
+            Drawable icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete_black_24dp);
             Drawable background = new ColorDrawable(Color.LTGRAY);
 
             @Override
@@ -165,38 +161,34 @@ public class TmpItemListFragment extends Fragment {
                 View itemView = viewHolder.itemView;
                 int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
 
-                int iconLeft,iconRight,iconTop,iconBottom;
-                int backTop,backBottom,backLeft,backRight;
+                int iconLeft, iconRight, iconTop, iconBottom;
+                int backTop, backBottom, backLeft, backRight;
                 backTop = itemView.getTop();
                 backBottom = itemView.getBottom();
-                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) /2;
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
                 iconBottom = iconTop + icon.getIntrinsicHeight();
                 if (dX > 0) {
                     backLeft = itemView.getLeft();
-                    backRight = itemView.getLeft() + (int)dX;
-                    background.setBounds(backLeft,backTop,backRight,backBottom);
-                    iconLeft = itemView.getLeft() + iconMargin ;
+                    backRight = itemView.getLeft() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin;
                     iconRight = iconLeft + icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
-                } else if (dX < 0){
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else if (dX < 0) {
                     backRight = itemView.getRight();
-                    backLeft = itemView.getRight() + (int)dX;
-                    background.setBounds(backLeft,backTop,backRight,backBottom);
-                    iconRight = itemView.getRight()  - iconMargin;
+                    backLeft = itemView.getRight() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconRight = itemView.getRight() - iconMargin;
                     iconLeft = iconRight - icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
                 } else {
-                    background.setBounds(0,0,0,0);
-                    icon.setBounds(0,0,0,0);
+                    background.setBounds(0, 0, 0, 0);
+                    icon.setBounds(0, 0, 0, 0);
                 }
                 background.draw(c);
                 icon.draw(c);
             }
         }).attachToRecyclerView(recyclerView);
-
-
-
-
 
 
     }

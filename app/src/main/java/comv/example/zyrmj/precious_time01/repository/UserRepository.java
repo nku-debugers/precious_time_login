@@ -11,6 +11,7 @@ import comv.example.zyrmj.precious_time01.dao.UserDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.User;
 
+
 public class UserRepository {
     private LiveData<List<User>> allUsers;
     private UserDao userDao;
@@ -27,9 +28,11 @@ public class UserRepository {
 
     static class InsertAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
+
         InsertAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
+
         @Override
         protected Void doInBackground(User... users) {
             userDao.insertUser(users);
@@ -39,9 +42,11 @@ public class UserRepository {
 
     static class UpdateAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
+
         UpdateAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
+
         @Override
         protected Void doInBackground(User... users) {
             userDao.updateUser(users);
@@ -51,9 +56,11 @@ public class UserRepository {
 
     static class DeleteAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
+
         DeleteAsyncTask(UserDao userDao) {
             this.userDao = userDao;
         }
+
         @Override
         protected Void doInBackground(User... users) {
             userDao.deleteUser(users);
@@ -64,9 +71,11 @@ public class UserRepository {
     public void insertUsers(User... users) {
         new InsertAsyncTask(userDao).execute(users);
     }
+
     public void updateUsers(User... users) {
         new UpdateAsyncTask(userDao).execute(users);
     }
+
     public void DeleteUsers(User... users) {
         new DeleteAsyncTask(userDao).execute(users);
     }

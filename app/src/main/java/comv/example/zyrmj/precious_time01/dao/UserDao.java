@@ -15,10 +15,13 @@ import comv.example.zyrmj.precious_time01.entity.User;
 public interface UserDao {
     @Insert
     void insertUser(User... users);
+
     @Update
     void updateUser(User... users);
+
     @Delete
     void deleteUser(User... users);
+
     @Query("select * from User")
-    LiveData<List<User>>getAllUsers();
+    LiveData<List<User>> getAllUsers();
 }

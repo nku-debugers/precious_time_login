@@ -28,11 +28,11 @@ import me.leefeng.promptlibrary.PromptDialog;
  * A simple {@link Fragment} subclass.
  */
 public class UpdateQuoteFragment extends Fragment {
-private Quote quote;
-    private EditText words,author;
-    private Button save,clear;
+    private Quote quote;
+    private EditText words, author;
+    private Button save, clear;
     private ImageView back;
-    private String userId="offline";
+    private String userId = "offline";
     private QuoteRepository quoteRepository;
 
     public UpdateQuoteFragment() {
@@ -51,14 +51,14 @@ private Quote quote;
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            quote=(Quote) getArguments().getSerializable("quote");
+            quote = (Quote) getArguments().getSerializable("quote");
         }
-        quoteRepository=new QuoteRepository(getContext());
-        words=getView().findViewById(R.id.words);
+        quoteRepository = new QuoteRepository(getContext());
+        words = getView().findViewById(R.id.words);
         words.setText(quote.getWords());
-        author=getView().findViewById(R.id.author);
+        author = getView().findViewById(R.id.author);
         author.setText(quote.getAuthor());
-        save=getView().findViewById(R.id.save);
+        save = getView().findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +78,7 @@ private Quote quote;
                 }
             }
         });
-        clear=getView().findViewById(R.id.clear);
+        clear = getView().findViewById(R.id.clear);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,25 +86,25 @@ private Quote quote;
                 author.setText("");
             }
         });
-        back=getView().findViewById(R.id.back);
+        back = getView().findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PromptDialog promptDialog = new PromptDialog (getActivity ());
+                PromptDialog promptDialog = new PromptDialog(getActivity());
                 PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
                     @Override
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
-                       controller.navigate(R.id.action_updateQuoteFragment_to_quoteFragment);
+                        controller.navigate(R.id.action_updateQuoteFragment_to_quoteFragment);
                     }
                 });
-                PromptButton cancel = new PromptButton("取消", new PromptButtonListener () {
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
                     @Override
                     public void onClick(PromptButton button) {
                         //Nothing
                     }
                 });
-                confirm.setTextColor( Color.parseColor("#DAA520"));
+                confirm.setTextColor(Color.parseColor("#DAA520"));
                 confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
                 promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
 

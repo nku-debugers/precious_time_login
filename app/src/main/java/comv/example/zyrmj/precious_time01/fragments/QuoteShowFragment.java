@@ -51,7 +51,7 @@ public class QuoteShowFragment extends Fragment {
     private FloatingActionButton addQuote;
     private QuoteViewModel quoteViewModel;
     //需从个人中心fragment传递userId参数,这里为了测试，默认使用offline
-    private String userId="offline";
+    private String userId = "offline";
 
 
     public QuoteShowFragment() {
@@ -69,40 +69,39 @@ public class QuoteShowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        quoteRepository=new QuoteRepository(getContext());
-        recyclerView=getView().findViewById(R.id.recycleView);
-        final QuoteAdapter quoteAdapter=new QuoteAdapter();
+        quoteRepository = new QuoteRepository(getContext());
+        recyclerView = getView().findViewById(R.id.recycleView);
+        final QuoteAdapter quoteAdapter = new QuoteAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(quoteAdapter);
-        quoteViewModel= ViewModelProviders.of(getActivity()).get(QuoteViewModel.class);
+        quoteViewModel = ViewModelProviders.of(getActivity()).get(QuoteViewModel.class);
         quoteViewModel.getAllQuotes(userId).observe(getActivity(), new Observer<List<Quote>>() {
             @Override
             public void onChanged(List<Quote> quotes) {
                 quoteAdapter.setAllQutoes(quotes);
                 quoteAdapter.notifyDataSetChanged();
-                allQuotes=quotes;
+                allQuotes = quotes;
             }
         });
-        addQuote=getView().findViewById(R.id.addQuote);
+        addQuote = getView().findViewById(R.id.addQuote);
         addQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller= Navigation.findNavController(view);
+                NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_quoteFragment_to_addQuoteFragment);
             }
         });
-        back=getView().findViewById(R.id.back);
+        back = getView().findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller= Navigation.findNavController(view);
+                NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_quoteFragment_to_personCenterFragment);
             }
         });
 
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END)
-        {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
 
 
             @Override
@@ -112,16 +111,15 @@ public class QuoteShowFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final Quote quoteToDelete =allQuotes.get(viewHolder.getAdapterPosition());
-                String words=quoteToDelete.getWords();
-                String useId=quoteToDelete.getUserId();
+                final Quote quoteToDelete = allQuotes.get(viewHolder.getAdapterPosition());
+                String words = quoteToDelete.getWords();
+                String useId = quoteToDelete.getUserId();
                 quoteRepository.DeleteQuote(quoteToDelete);
-                Snackbar.make(getView(),"删除了一条箴言",Snackbar.LENGTH_SHORT).
-                        setAction("撤销",new View.OnClickListener()
-                                {
+                Snackbar.make(getView(), "删除了一条箴言", Snackbar.LENGTH_SHORT).
+                        setAction("撤销", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                       quoteRepository.insertQuote(quoteToDelete);
+                                        quoteRepository.insertQuote(quoteToDelete);
                                     }
                                 }
                         ).show();
@@ -129,7 +127,7 @@ public class QuoteShowFragment extends Fragment {
             }
             //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
 
-            Drawable icon = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_delete_black_24dp);
+            Drawable icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete_black_24dp);
             Drawable background = new ColorDrawable(Color.LTGRAY);
 
             @Override
@@ -138,29 +136,29 @@ public class QuoteShowFragment extends Fragment {
                 View itemView = viewHolder.itemView;
                 int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
 
-                int iconLeft,iconRight,iconTop,iconBottom;
-                int backTop,backBottom,backLeft,backRight;
+                int iconLeft, iconRight, iconTop, iconBottom;
+                int backTop, backBottom, backLeft, backRight;
                 backTop = itemView.getTop();
                 backBottom = itemView.getBottom();
-                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) /2;
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
                 iconBottom = iconTop + icon.getIntrinsicHeight();
                 if (dX > 0) {
                     backLeft = itemView.getLeft();
-                    backRight = itemView.getLeft() + (int)dX;
-                    background.setBounds(backLeft,backTop,backRight,backBottom);
-                    iconLeft = itemView.getLeft() + iconMargin ;
+                    backRight = itemView.getLeft() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin;
                     iconRight = iconLeft + icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
-                } else if (dX < 0){
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else if (dX < 0) {
                     backRight = itemView.getRight();
-                    backLeft = itemView.getRight() + (int)dX;
-                    background.setBounds(backLeft,backTop,backRight,backBottom);
-                    iconRight = itemView.getRight()  - iconMargin;
+                    backLeft = itemView.getRight() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconRight = itemView.getRight() - iconMargin;
                     iconLeft = iconRight - icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
                 } else {
-                    background.setBounds(0,0,0,0);
-                    icon.setBounds(0,0,0,0);
+                    background.setBounds(0, 0, 0, 0);
+                    icon.setBounds(0, 0, 0, 0);
                 }
                 background.draw(c);
                 icon.draw(c);
@@ -169,9 +167,6 @@ public class QuoteShowFragment extends Fragment {
         }).attachToRecyclerView(recyclerView);
 
     }
-
-
-
 
 
 }

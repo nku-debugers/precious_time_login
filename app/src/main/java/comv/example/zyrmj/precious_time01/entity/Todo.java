@@ -14,7 +14,7 @@ public class Todo implements Serializable {
     @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
     private String userId;
     @NonNull
-    @ColumnInfo(name="item_name")
+    @ColumnInfo(name = "item_name")
     private String name;
     @ColumnInfo(name = "category_name")
     @ForeignKey(entity = Category.class, parentColumns = "name", childColumns = "category_name")

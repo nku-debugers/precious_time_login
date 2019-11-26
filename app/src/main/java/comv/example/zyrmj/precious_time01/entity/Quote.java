@@ -31,6 +31,7 @@ public class Quote implements Serializable {
 
     @NotNull
     private String author;
+
     @NonNull
     public String getUserId() {
         return userId;
@@ -49,9 +50,9 @@ public class Quote implements Serializable {
         this.words = words;
     }
 
-    public Quote(@NonNull String userId, @NonNull String words,@NotNull String author) {
+    public Quote(@NonNull String userId, @NonNull String words, @NotNull String author) {
         this.userId = userId;
         this.words = words;
-        this.author=author;
+        this.author = author;
     }
 }

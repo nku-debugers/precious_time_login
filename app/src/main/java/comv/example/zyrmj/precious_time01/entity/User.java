@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
 @Entity
 public class User implements Serializable {
     @PrimaryKey
