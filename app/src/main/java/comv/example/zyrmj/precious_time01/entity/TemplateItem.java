@@ -10,8 +10,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-@Entity(primaryKeys = {"user_id","template_name","start_time"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
-        },
+@Entity(primaryKeys = {"user_id", "template_name", "start_time"}, foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id"),
+},
         indices = {@Index(value = "template_name")})
 public class TemplateItem implements Serializable {
     @NonNull
@@ -19,10 +19,10 @@ public class TemplateItem implements Serializable {
     private String userId;
     @NonNull
     @ColumnInfo(name = "item_name")
-    private  String itemName;
+    private String itemName;
     @NotNull
     @ColumnInfo(name = "template_name")
-    private  String templateName;
+    private String templateName;
     @ColumnInfo(name = "category_name")
     private String categoryName;
     @ColumnInfo(name = "end_time")

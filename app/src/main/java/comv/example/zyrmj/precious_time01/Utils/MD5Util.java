@@ -4,11 +4,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5Util {
-    public static String  getMd5(String password)
-    {
-        char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F' };
-        byte[] btInput =password.getBytes();
+    public static String getMd5(String password) {
+        char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'};
+        byte[] btInput = password.getBytes();
         // 获得MD5摘要算法的 MessageDigest 对象
         MessageDigest mdInst = null;
         try {

@@ -37,11 +37,12 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     private Date startDate, endDate;
     private boolean startDateModified, endDateModified;
     private EditText name;
-    private String userId, templateName,viewOption;
+    private String userId, templateName, viewOption;
     private Date today;
     private boolean timeReverse;
-    private String[] weekString = {"日","一","二","三","四","五","六"};
+    private String[] weekString = {"日", "一", "二", "三", "四", "五", "六"};
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
+
     public AddTemplateItemFragment() {
 
     }
@@ -59,7 +60,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "");
             templateName = getArguments().getString("templateName", "");
-            viewOption=getArguments().getString("viewOption","0");
+            viewOption = getArguments().getString("viewOption", "0");
         }
         startDateModified = false;
         endDateModified = false;
@@ -74,41 +75,38 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     private void enableBackButton() {
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener( new View.OnKeyListener()
-        {
+        getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
-                {
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener () {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
                         @Override
                         public void onClick(PromptButton button) {
                             NavController controller = Navigation.findNavController(getView());
                             Bundle bundle = new Bundle();
                             bundle.putString("userId", userId);
                             bundle.putString("templateName", templateName);
-                            if(viewOption.equals("0"))
-                            controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                            if (viewOption.equals("0"))
+                                controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
                             else
-                                controller.navigate(R.id.action_addTemplateItem_to_tmpItemListFragment,bundle);
+                                controller.navigate(R.id.action_addTemplateItem_to_tmpItemListFragment, bundle);
                         }
                     });
-                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener () {
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
                         @Override
                         public void onClick(PromptButton button) {
                             //Nothing
                         }
                     });
-                    confirm.setTextColor( Color.parseColor("#DAA520"));
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
                     confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
                     promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
                     return true;
                 }
                 return false;
             }
-        } );
+        });
     }
 
     private void init() {
@@ -132,20 +130,20 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
             public void onClick(View view) {
                 if (startDate == null || endDate == null) {
                     //用户输入起止时间
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    promptDialog.showWarn ( "未填写开始或终止时间！" );
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarn("未填写开始或终止时间！");
                     return;
                 }
                 if (name.getText().toString().equals("")) {
                     //提示用户指定用户名字
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    promptDialog.showWarn ( "未填写名称！" );
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarn("未填写名称！");
                     return;
                 }
 
                 if (timeReverse) {
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    promptDialog.showWarn ( "结束时间应晚于开始时间！" );
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarn("结束时间应晚于开始时间！");
                     return;
                 }
 
@@ -162,12 +160,12 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", userId);
                     bundle.putString("templateName", templateName);
-                    if(viewOption.equals("0"))
-                    controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
+                    if (viewOption.equals("0"))
+                        controller.navigate(R.id.action_addTemplateItem_to_testWeekView, bundle);
                     else
                         controller.navigate(R.id.action_addTemplateItem_to_tmpItemListFragment, bundle);
                 } else {
-                   //提示有重复项
+                    //提示有重复项
                 }
             }
         });
@@ -177,16 +175,16 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         TemplateItem item = new TemplateItem("offline", name.getText().toString(),
                 templateName, "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
-        int s = t.ifTimeConfilict(week, start, templateName, userId);
-        int e = t.ifTimeConfilict(week, end, templateName, userId);
+        int s = t.ifTimeConfilict(week, start, templateName, userId, "start");
+        int e = t.ifTimeConfilict(week, end, templateName, userId, "end");
         if (s == 0 || e == 0) {
             return false;
-        }
-        else{
+        } else {
             t.insertTemplateItems(item);
             return true;
         }
     }
+
     private String getWeek(String selected) {
         String week = "";
         switch (selected) {
@@ -216,6 +214,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         }
         return week;
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -303,6 +302,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         // 允许滚动动画
         mTimePicker2.setCanShowAnim(true);
     }
+
     private void initTimerPicker3() {
         String beginTime = df.format(today);
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);

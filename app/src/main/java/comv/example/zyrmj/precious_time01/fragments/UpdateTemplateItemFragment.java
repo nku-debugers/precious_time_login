@@ -33,12 +33,13 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class UpdateTemplateItemFragment extends Fragment implements View.OnClickListener {
     private TextView mTvSelectedTime1, mTvSelectedTime2, mTvSelectedTimeWeek;
     private CustomDatePicker mTimePicker1, mTimePicker2, mTimePickerWeek;
-    private Button save, delete;
+    private Button save;
     private Date startText, endText;
     private EditText name;
     private String viewOption;
     private TemplateItem templateItem;
-    final String[] weekLabels = { "一", "二", "三", "四", "五", "六","日"};
+    final String[] weekLabels = {"一", "二", "三", "四", "五", "六", "日"};
+
     public UpdateTemplateItemFragment() {
 
     }
@@ -54,8 +55,8 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            templateItem=(TemplateItem)getArguments().getSerializable("templateItem");
-            viewOption=getArguments().getString("viewOption","0");
+            templateItem = (TemplateItem) getArguments().getSerializable("templateItem");
+            viewOption = getArguments().getString("viewOption", "0");
 
         }
         init();
@@ -65,15 +66,12 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
     private void enableBackButton() {
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener( new View.OnKeyListener()
-        {
+        getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
-                {
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener () {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
                         @Override
                         public void onClick(PromptButton button) {
                             Log.d("mytag", "onKey: Back button successfully enabled!");
@@ -81,26 +79,26 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
                             Bundle bundle = new Bundle();
                             bundle.putString("userId", templateItem.getUserId());
                             bundle.putString("templateName", templateItem.getTemplateName());
-                            if(viewOption.equals("0"))
+                            if (viewOption.equals("0"))
                                 controller.navigate(R.id.action_updateTemplateItemFragment_to_testWeekView, bundle);
                             else
-                                controller.navigate(R.id.action_updateTemplateItemFragment_to_tmpItemListFragment,bundle);
+                                controller.navigate(R.id.action_updateTemplateItemFragment_to_tmpItemListFragment, bundle);
                         }
                     });
-                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener () {
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
                         @Override
                         public void onClick(PromptButton button) {
                             //Nothing
                         }
                     });
-                    confirm.setTextColor( Color.parseColor("#DAA520"));
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
                     confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
                     promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
                     return true;
                 }
                 return false;
             }
-        } );
+        });
     }
 
     private void init() {
@@ -125,15 +123,15 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
             public void onClick(View view) {
                 if (name.getText().toString().equals("")) {
                     //提示用户指定用户名字
-                    PromptDialog promptDialog = new PromptDialog (getActivity ());
-                    promptDialog.showWarn ( "未填写名称！" );
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarn("未填写名称！");
                     return;
                 }
 
                 String startTime = mTvSelectedTime1.getText().toString();
                 String endTime = mTvSelectedTime2.getText().toString();
-Log.d("startTime",startTime);
-Log.d("endTime",endTime);
+                Log.d("startTime", startTime);
+                Log.d("endTime", endTime);
                 String week = getWeek(mTvSelectedTimeWeek.getText().toString());
                 String startFinal = week + "-" + startTime;
                 String endFinal = week + "-" + endTime;
@@ -144,59 +142,55 @@ Log.d("endTime",endTime);
                     Bundle bundle = new Bundle();
                     bundle.putString("userId", templateItem.getUserId());
                     bundle.putString("templateName", templateItem.getTemplateName());
-                    if(viewOption.equals("0"))
+                    if (viewOption.equals("0"))
                         controller.navigate(R.id.action_updateTemplateItemFragment_to_testWeekView, bundle);
                     else
-                        controller.navigate(R.id.action_updateTemplateItemFragment_to_tmpItemListFragment,bundle);
+                        controller.navigate(R.id.action_updateTemplateItemFragment_to_tmpItemListFragment, bundle);
                 } else {
                     //提示有重复项
                 }
             }
         });
     }
+
     boolean checkAndUpdate(String week, String start, String end) {
         TemplateItem item = new TemplateItem(templateItem.getUserId(), name.getText().toString(),
                 templateItem.getTemplateName(), "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
-        int s = t.ifTimeConfilict(week, start,templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime());
-        int e = t.ifTimeConfilict(week, end,templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime());
+        int s = t.ifTimeConfilict(week, start, templateItem.getTemplateName(), templateItem.getUserId(), "start", templateItem.getStartTime());
+        int e = t.ifTimeConfilict(week, end, templateItem.getTemplateName(), templateItem.getUserId(), "end", templateItem.getStartTime());
         if (s == 0 || e == 0) {
             return false;
-        }
-        else{
-            t.updateTemplateItems(templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime(),
-                    item.getItemName(),item.getStartTime(),item.getEndTime());
+        } else {
+            t.updateTemplateItems(templateItem.getTemplateName(), templateItem.getUserId(), templateItem.getStartTime(),
+                    item.getItemName(), item.getStartTime(), item.getEndTime());
             return true;
         }
     }
+
     public String getWeek(String selected) {
-        String target=selected;
+        String target = selected;
         String week = "";
-        if(selected.equals("日")) {
+        if (selected.equals("日")) {
             week = "6";
-        }
-        else if (selected.equals("一")) {
+        } else if (selected.equals("一")) {
             week = "0";
-        }
-        else if (selected.equals("二")) {
+        } else if (selected.equals("二")) {
             week = "1";
-        }
-        else if (selected.equals("三")) {
+        } else if (selected.equals("三")) {
             week = "2";
-        }
-        else if (selected.equals("四")) {
+        } else if (selected.equals("四")) {
             week = "3";
-        }
-        else if (selected.equals("五")) {
+        } else if (selected.equals("五")) {
             week = "4";
-        }
-        else if (selected.equals("六")) {
+        } else if (selected.equals("六")) {
             week = "5";
         } else {
             return "0";
         }
         return week;
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -282,11 +276,12 @@ Log.d("endTime",endTime);
         // 允许滚动动画
         mTimePicker2.setCanShowAnim(true);
     }
+
     private void initTimerPicker3() {
         String beginTime = "2018-10-17 18:00";
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
-        int weekIndex=Integer.valueOf(templateItem.getStartTime().split("-")[0]);
+        int weekIndex = Integer.valueOf(templateItem.getStartTime().split("-")[0]);
         mTvSelectedTimeWeek.setText(weekLabels[weekIndex]);
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
         mTimePickerWeek = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {

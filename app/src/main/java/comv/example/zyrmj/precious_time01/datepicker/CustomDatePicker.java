@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import comv.example.zyrmj.precious_time01.R;
 
 import java.text.DecimalFormat;
@@ -247,7 +248,8 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mBeginMonth = mBeginTime.get(Calendar.MONTH) + 1;
         mBeginDay = mBeginTime.get(Calendar.DAY_OF_MONTH);
         //mBeginHour = mBeginTime.get(Calendar.HOUR_OF_DAY);
-        mBeginHour=0;
+
+        mBeginHour = 0;
         //mBeginMinute = mBeginTime.get(Calendar.MINUTE);
         mBeginMinute = 0;
 
@@ -255,8 +257,9 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mEndMonth = mEndTime.get(Calendar.MONTH) + 1;
         mEndDay = mEndTime.get(Calendar.DAY_OF_MONTH);
         //mEndHour = mEndTime.get(Calendar.HOUR_OF_DAY);
-        mEndHour=23;
+        mEndHour = 23;
         //mEndMinute = mEndTime.get(Calendar.MINUTE);
+
         mEndMinute = 59;
 
         boolean canSpanYear = mBeginYear != mEndYear;
@@ -275,7 +278,7 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         } else if (canSpanMinute) {
             initDateUnits(mEndMonth, mEndDay, mEndHour, mEndMinute);
         }
-        List list = Arrays.asList("日","一","二","三","四","五","六");
+        List list = Arrays.asList("日", "一", "二", "三", "四", "五", "六");
         mWeekUnits.addAll(list);
         mDpvWeek.setDataList(mWeekUnits);
         mDpvWeek.setSelected(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1);

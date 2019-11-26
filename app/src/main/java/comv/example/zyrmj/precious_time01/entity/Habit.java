@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Entity(foreignKeys = @ForeignKey(entity = Category.class,
         parentColumns = "name",
-        childColumns = "category_name"),indices=@Index(value = "category_name"))
+        childColumns = "category_name"), indices = @Index(value = "category_name"))
 public class Habit {
     @PrimaryKey
     @NonNull

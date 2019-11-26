@@ -15,10 +15,13 @@ import comv.example.zyrmj.precious_time01.entity.Category;
 public interface CategoryDao {
     @Insert
     void insert(Category... categories);
+
     @Update
     void update(Category... categories);
+
     @Delete
     void delete(Category... categories);
+
     @Query("select * from Category")
-    LiveData<List<Category>>getAllCategories();
+    LiveData<List<Category>> getAllCategories();
 }

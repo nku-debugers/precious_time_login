@@ -12,8 +12,9 @@ import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.Category;
 
 public class CategoryRepository {
-    private LiveData<List<Category>>allCateories;
+    private LiveData<List<Category>> allCateories;
     private CategoryDao categoryDao;
+
     public CategoryRepository(Context context) {
         AppDatabase appDatabase = AppDatabase.getDatabase(context.getApplicationContext());
         categoryDao = appDatabase.categoryDao();
@@ -26,9 +27,11 @@ public class CategoryRepository {
 
     static class InsertAsyncTask extends AsyncTask<Category, Void, Void> {
         private CategoryDao categoryDao;
-        InsertAsyncTask (CategoryDao categoryDao) {
+
+        InsertAsyncTask(CategoryDao categoryDao) {
             this.categoryDao = categoryDao;
         }
+
         @Override
         protected Void doInBackground(Category... categories) {
             categoryDao.insert(categories);
@@ -38,9 +41,11 @@ public class CategoryRepository {
 
     static class UpdateAsyncTask extends AsyncTask<Category, Void, Void> {
         private CategoryDao categoryDao;
-        UpdateAsyncTask (CategoryDao categoryDao) {
+
+        UpdateAsyncTask(CategoryDao categoryDao) {
             this.categoryDao = categoryDao;
         }
+
         @Override
         protected Void doInBackground(Category... categories) {
             categoryDao.update(categories);
@@ -50,9 +55,11 @@ public class CategoryRepository {
 
     static class DeleteAsyncTask extends AsyncTask<Category, Void, Void> {
         private CategoryDao categoryDao;
-        DeleteAsyncTask (CategoryDao categoryDao) {
+
+        DeleteAsyncTask(CategoryDao categoryDao) {
             this.categoryDao = categoryDao;
         }
+
         @Override
         protected Void doInBackground(Category... categories) {
             categoryDao.delete(categories);
@@ -63,9 +70,11 @@ public class CategoryRepository {
     public void insertCategory(Category... categories) {
         new InsertAsyncTask(categoryDao).execute(categories);
     }
+
     public void updateCategory(Category... categories) {
         new UpdateAsyncTask(categoryDao).execute(categories);
     }
+
     public void DeleteCategory(Category... categories) {
         new DeleteAsyncTask(categoryDao).execute(categories);
     }

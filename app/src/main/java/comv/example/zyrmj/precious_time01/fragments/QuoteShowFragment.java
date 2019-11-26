@@ -15,10 +15,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -33,29 +31,30 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateItemAdapter;
-import comv.example.zyrmj.precious_time01.ViewModel.TemplateItemViewModel;
-import comv.example.zyrmj.precious_time01.ViewModel.TemplateViewModel;
+import comv.example.zyrmj.precious_time01.RecycleViewAdapter.QuoteAdapter;
+import comv.example.zyrmj.precious_time01.ViewModel.QuoteViewModel;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
-import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TmpItemListFragment extends Fragment {
-    private List<TemplateItem> allTemplateItems;
-    private TemplateItemRepository templateItemRepository;
-    private RecyclerView recyclerView;
-    private Switch chageView;
-    private TextView title;
-    private FloatingActionButton add;
-    private ImageView toTemplateView;
-    String userId;
-    String templateName;
+public class QuoteShowFragment extends Fragment {
 
-    public TmpItemListFragment() {
+    private List<Quote> allQuotes;
+    private QuoteRepository quoteRepository;
+    private RecyclerView recyclerView;
+    private ImageView back;
+    private FloatingActionButton addQuote;
+    private QuoteViewModel quoteViewModel;
+    //需从个人中心fragment传递userId参数,这里为了测试，默认使用offline
+    private String userId = "offline";
+
+
+    public QuoteShowFragment() {
         // Required empty public constructor
     }
 
@@ -64,72 +63,46 @@ public class TmpItemListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.tmpitemlistview, container, false);
+        return inflater.inflate(R.layout.fragment_quote_show, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null) {
-            userId = getArguments().getString("userId", "");
-            templateName = getArguments().getString("templateName", "");
-        }
-
-        templateItemRepository = new TemplateItemRepository(getContext());
+        quoteRepository = new QuoteRepository(getContext());
         recyclerView = getView().findViewById(R.id.recycleView);
-        final TemplateItemAdapter templateItemAdapter = new TemplateItemAdapter();
+        final QuoteAdapter quoteAdapter = new QuoteAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(templateItemAdapter);
-        TemplateItemViewModel templateItemViewModel = ViewModelProviders.of(getActivity()).get(TemplateItemViewModel.class);
-        templateItemViewModel.getSpecificTemplateItems(templateName, userId).observe(getActivity(), new Observer<List<TemplateItem>>() {
-
-
+        recyclerView.setAdapter(quoteAdapter);
+        quoteViewModel = ViewModelProviders.of(getActivity()).get(QuoteViewModel.class);
+        quoteViewModel.getAllQuotes(userId).observe(getActivity(), new Observer<List<Quote>>() {
             @Override
-            public void onChanged(List<TemplateItem> templateItems) {
-                templateItemAdapter.setAllTemplateItems(templateItems);
-                templateItemAdapter.notifyDataSetChanged();
-                allTemplateItems = templateItems;
+            public void onChanged(List<Quote> quotes) {
+                quoteAdapter.setAllQutoes(quotes);
+                quoteAdapter.notifyDataSetChanged();
+                allQuotes = quotes;
             }
         });
-        chageView = getView().findViewById(R.id.switch1);
-        chageView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean ischecked) {
-                if (ischecked) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userId", userId);
-                    bundle.putString("templateName", templateName);
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_tmpItemListFragment_to_testWeekView, bundle);
-                } else {
-
-
-                }
-            }
-        });
-        title = getView().findViewById(R.id.title);
-        title.setText(templateName);
-        add = getView().findViewById(R.id.floatingActionButton2);
-        add.setOnClickListener(new View.OnClickListener() {
+        addQuote = getView().findViewById(R.id.addQuote);
+        addQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller = Navigation.findNavController(getView());
-                Bundle bundle = new Bundle();
-                bundle.putString("userId", userId);
-                bundle.putString("templateName", templateName);
-                bundle.putString("viewOption", "1");
-                controller.navigate(R.id.action_tmpItemListFragment_to_addTemplateItem, bundle);
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_quoteFragment_to_addQuoteFragment);
             }
         });
-        toTemplateView = getView().findViewById(R.id.toTemplateView);
-        toTemplateView.setOnClickListener(new View.OnClickListener() {
+        back = getView().findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_tmpItemListFragment_to_templateShowFragment);
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_quoteFragment_to_personCenterFragment);
             }
         });
+
+
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
+
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -138,13 +111,15 @@ public class TmpItemListFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final TemplateItem templateItemToDelete = allTemplateItems.get(viewHolder.getAdapterPosition());
-                templateItemRepository.deleteTemplateItems(templateItemToDelete);
-                Snackbar.make(getView(), "删除了一个模板事项", Snackbar.LENGTH_SHORT).
+                final Quote quoteToDelete = allQuotes.get(viewHolder.getAdapterPosition());
+                String words = quoteToDelete.getWords();
+                String useId = quoteToDelete.getUserId();
+                quoteRepository.DeleteQuote(quoteToDelete);
+                Snackbar.make(getView(), "删除了一条箴言", Snackbar.LENGTH_SHORT).
                         setAction("撤销", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        templateItemRepository.insertTemplateItems(templateItemToDelete);
+                                        quoteRepository.insertQuote(quoteToDelete);
                                     }
                                 }
                         ).show();
@@ -187,9 +162,11 @@ public class TmpItemListFragment extends Fragment {
                 }
                 background.draw(c);
                 icon.draw(c);
+
             }
         }).attachToRecyclerView(recyclerView);
 
-
     }
+
+
 }

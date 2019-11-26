@@ -13,23 +13,25 @@ import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 public class TemplateViewModel extends AndroidViewModel {
     private TemplateRepository templateRepository;
+
     public TemplateViewModel(@NonNull Application application) {
         super(application);
         templateRepository = new TemplateRepository(application);
     }
-    public LiveData<List<Template>> getAllTemplates() {
-        return templateRepository.getAllTemplates();
+
+    public LiveData<List<Template>> getAllTemplates(String userId) {
+        return templateRepository.getAllTemplates(userId);
     }
 
-   public void insertTemplates(Template... templates) {
+    public void insertTemplates(Template... templates) {
         templateRepository.insertTemplates(templates);
     }
 
-   public void deleteTemplates(Template... templates) {
+    public void deleteTemplates(Template... templates) {
         templateRepository.deleteTemplates(templates);
     }
 
-   public void updateTemplates(Template... templates) {
+    public void updateTemplates(Template... templates) {
         templateRepository.updateTemplates(templates);
     }
 }

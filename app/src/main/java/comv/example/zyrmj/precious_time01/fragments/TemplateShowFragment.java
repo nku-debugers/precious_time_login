@@ -52,6 +52,8 @@ public class TemplateShowFragment extends Fragment {
     private List<Template> allTemplates;
     private TemplateRepository templateRepository;
     private RecyclerView recyclerView;
+    //需从个人中心fragment传递userId参数,这里为了测试，默认使用offline
+    private String userId = "offline";
 
     public TemplateShowFragment() {
         // Required empty public constructor
@@ -69,41 +71,40 @@ public class TemplateShowFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         enableBackButton();
-        templateRepository=new TemplateRepository(getContext());
-        recyclerView=getView().findViewById(R.id.recycleView);
-        final TemplateAdapter templateAdapter=new TemplateAdapter();
+        templateRepository = new TemplateRepository(getContext());
+        recyclerView = getView().findViewById(R.id.recycleView);
+        final TemplateAdapter templateAdapter = new TemplateAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(templateAdapter);
-        TemplateViewModel templateViewModel= ViewModelProviders.of(getActivity()).get(TemplateViewModel.class);
-        templateViewModel.getAllTemplates().observe(getActivity(), new Observer<List<Template>>() {
+        TemplateViewModel templateViewModel = ViewModelProviders.of(getActivity()).get(TemplateViewModel.class);
+        templateViewModel.getAllTemplates(userId).observe(getActivity(), new Observer<List<Template>>() {
             @Override
             public void onChanged(List<Template> templates) {
                 templateAdapter.setAllTemplates(templates);
                 templateAdapter.notifyDataSetChanged();
-                allTemplates=templates;
+                allTemplates = templates;
             }
         });
 
-        ImageView returnimage=getView().findViewById(R.id.returnimage);
+        ImageView returnimage = getView().findViewById(R.id.returnimage);
         returnimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller= Navigation.findNavController(view);
+                NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
             }
         });
 
-        FloatingActionButton addTemplate=getView().findViewById(R.id.addTemplate);
+        FloatingActionButton addTemplate = getView().findViewById(R.id.addTemplate);
         addTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              showDialog("请输入模板名称",templateRepository);
+                showDialog("请输入模板名称", templateRepository);
 
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.START | ItemTouchHelper.END)
-        {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
 
 
             @Override
@@ -113,20 +114,18 @@ public class TemplateShowFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final Template templateToDelete =allTemplates.get(viewHolder.getAdapterPosition());
-                String templateName=templateToDelete.getName();
-                String useId=templateToDelete.getUserId();
-                TemplateItemRepository templateItemRepository=new TemplateItemRepository(getContext());
-               List<TemplateItem> templateItems= templateItemRepository.getSpecificList(templateName,useId);
-               for(int i=0;i<templateItems.size();i++)
-               {
-                   templateItemRepository.deleteTemplateItems(templateItems.get(i));
+                final Template templateToDelete = allTemplates.get(viewHolder.getAdapterPosition());
+                String templateName = templateToDelete.getName();
+                String useId = templateToDelete.getUserId();
+                TemplateItemRepository templateItemRepository = new TemplateItemRepository(getContext());
+                List<TemplateItem> templateItems = templateItemRepository.getSpecificList(templateName, useId);
+                for (int i = 0; i < templateItems.size(); i++) {
+                    templateItemRepository.deleteTemplateItems(templateItems.get(i));
 
-               }
+                }
                 templateRepository.deleteTemplates(templateToDelete);
-                Snackbar.make(getView(),"删除了一个模板",Snackbar.LENGTH_SHORT).
-                        setAction("撤销",new View.OnClickListener()
-                                {
+                Snackbar.make(getView(), "删除了一个模板", Snackbar.LENGTH_SHORT).
+                        setAction("撤销", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         templateRepository.insertTemplates(templateToDelete);
@@ -137,7 +136,7 @@ public class TemplateShowFragment extends Fragment {
             }
             //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
 
-            Drawable icon = ContextCompat.getDrawable(requireActivity(),R.drawable.ic_delete_black_24dp);
+            Drawable icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete_black_24dp);
             Drawable background = new ColorDrawable(Color.LTGRAY);
 
             @Override
@@ -146,29 +145,29 @@ public class TemplateShowFragment extends Fragment {
                 View itemView = viewHolder.itemView;
                 int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
 
-                int iconLeft,iconRight,iconTop,iconBottom;
-                int backTop,backBottom,backLeft,backRight;
+                int iconLeft, iconRight, iconTop, iconBottom;
+                int backTop, backBottom, backLeft, backRight;
                 backTop = itemView.getTop();
                 backBottom = itemView.getBottom();
-                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) /2;
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
                 iconBottom = iconTop + icon.getIntrinsicHeight();
                 if (dX > 0) {
                     backLeft = itemView.getLeft();
-                    backRight = itemView.getLeft() + (int)dX;
-                    background.setBounds(backLeft,backTop,backRight,backBottom);
-                    iconLeft = itemView.getLeft() + iconMargin ;
+                    backRight = itemView.getLeft() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin;
                     iconRight = iconLeft + icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
-                } else if (dX < 0){
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else if (dX < 0) {
                     backRight = itemView.getRight();
-                    backLeft = itemView.getRight() + (int)dX;
-                    background.setBounds(backLeft,backTop,backRight,backBottom);
-                    iconRight = itemView.getRight()  - iconMargin;
+                    backLeft = itemView.getRight() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconRight = itemView.getRight() - iconMargin;
                     iconLeft = iconRight - icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft,iconTop,iconRight,iconBottom);
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
                 } else {
-                    background.setBounds(0,0,0,0);
-                    icon.setBounds(0,0,0,0);
+                    background.setBounds(0, 0, 0, 0);
+                    icon.setBounds(0, 0, 0, 0);
                 }
                 background.draw(c);
                 icon.draw(c);
@@ -182,24 +181,20 @@ public class TemplateShowFragment extends Fragment {
     private void enableBackButton() {
         Objects.requireNonNull(getView()).setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener( new View.OnKeyListener()
-        {
+        getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP )
-                {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
                     return true;
                 }
                 return false;
             }
-        } );
+        });
     }
 
-    public void showDialog(String info, final TemplateRepository templateRepository)
-    {
+    public void showDialog(String info, final TemplateRepository templateRepository) {
         new MaterialDialog.Builder(getContext())
                 .title("添加新模板")
                 .content(info)
@@ -209,26 +204,21 @@ public class TemplateShowFragment extends Fragment {
                 .input("", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                //判断模板名是否为空
-                        if(input.toString().equals(""))
-                        {
+                        //判断模板名是否为空
+                        if (input.toString().equals("")) {
                             dialog.setContent("模板名不能为空，请重新输入！");
-                        }
-                        else {
-                             String userId="offline",templateName=input.toString();
-                            Log.i("yqy", "输入的是：" + input);
+                        } else {
+                            String templateName = input.toString();
                             //查找是否有同名Template存在
-                            if(templateRepository.getSpecificTemplate(userId,templateName)!=null)
-                            {
-                                Log.i("dialog","存在同名模板");
+                            if (templateRepository.getSpecificTemplate(userId, templateName) != null) {
+                                Log.i("dialog", "存在同名模板");
                                 dialog.setContent("存在同名模板，请重新输入！");
-                            }
-                            else {
-                                Log.i("dialog","add template");
+                            } else {
+                                Log.i("dialog", "add template");
                                 dialog.dismiss();
-                               templateRepository.insertTemplates(new Template(userId,templateName));
+                                templateRepository.insertTemplates(new Template(userId, templateName));
                                 Bundle bundle = new Bundle();
-                                bundle.putString("userId", "offline");
+                                bundle.putString("userId", userId);
                                 bundle.putString("templateName", input.toString());
                                 NavController controller = Navigation.findNavController(getView());
                                 controller.navigate(R.id.action_templateShowFragment_to_testWeekView, bundle);
@@ -244,13 +234,12 @@ public class TemplateShowFragment extends Fragment {
 
                     }
                 })
-               .autoDismiss(false) .show();
+                .autoDismiss(false).show();
 
     }
 
 
-
-    }
+}
 
 
 

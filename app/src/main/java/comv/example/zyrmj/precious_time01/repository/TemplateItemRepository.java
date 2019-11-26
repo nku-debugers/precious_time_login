@@ -16,7 +16,7 @@ import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 
 public class TemplateItemRepository {
 
-    private LiveData<List<TemplateItem>>allTemplateItems;
+    private LiveData<List<TemplateItem>> allTemplateItems;
     private TemplateItemDao templateItemDao;
     private static String TAG = "newjk";
 
@@ -40,7 +40,7 @@ public class TemplateItemRepository {
         }
     }
 
-    public Integer ifTimeConfilict(String ... strings) {
+    public Integer ifTimeConfilict(String... strings) {
         try {
             return new FindByTime(templateItemDao).execute(strings).get();
         } catch (Exception e) {
@@ -52,9 +52,11 @@ public class TemplateItemRepository {
     public void updateTemplateItems(String... strings) {
         new UpdateAsyncTask(templateItemDao).execute(strings);
     }
+
     public void deleteTemplateItems(TemplateItem... templateItems) {
         new DeleteAsyncTask(templateItemDao).execute(templateItems);
     }
+
     public List<TemplateItem> getAll() {
         try {
             return new GetList(templateItemDao).execute().get();
@@ -63,43 +65,44 @@ public class TemplateItemRepository {
         }
         return null;
     }
-    public List<TemplateItem> getSpecificList(String templateName,String userId)
-    {
+
+    public List<TemplateItem> getSpecificList(String templateName, String userId) {
         try {
-            return new GetSpecificList(templateItemDao).execute(templateName,userId).get();
-        }
-        catch (Exception e) {
+            return new GetSpecificList(templateItemDao).execute(templateName, userId).get();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-return null;
-    }
-    public LiveData<List<TemplateItem>> getSpecificList2(String templateName,String userId)
-    {
-
-        return templateItemDao.getSpecificTemplateItems2(templateName,userId);
+        return null;
     }
 
-    static class GetSpecificList extends AsyncTask<String,Void,List<TemplateItem>>
-    { private TemplateItemDao templateItemDao;
+    public LiveData<List<TemplateItem>> getSpecificList2(String templateName, String userId) {
+
+        return templateItemDao.getSpecificTemplateItems2(templateName, userId);
+    }
+
+    static class GetSpecificList extends AsyncTask<String, Void, List<TemplateItem>> {
+        private TemplateItemDao templateItemDao;
+
         private GetSpecificList(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
 
         @Override
         protected List<TemplateItem> doInBackground(String... strings) {
-            return templateItemDao.getSpecificTemplateItems(strings[0],strings[1]);
+            return templateItemDao.getSpecificTemplateItems(strings[0], strings[1]);
             //string[0] templateName string[1] userId
         }
     }
 
 
-
     static class FindByTime extends AsyncTask<String, Void, Integer> {
         private TemplateItemDao templateItemDao;
-        FindByTime(TemplateItemDao templateItemDao){
+
+        FindByTime(TemplateItemDao templateItemDao) {
             super();
             this.templateItemDao = templateItemDao;
         }
+
         @Override
         protected Integer doInBackground(String... strings) {
             //String 1 week 2 startTime 3 templateName 4 userID,
@@ -107,25 +110,45 @@ return null;
             if (items.size() == 0) {
                 return 1;
             }
-            if(strings.length==4) {
-                for (int i = 0; i < items.size(); i++) {
-                    if (strings[1].compareTo(items.get(i).getStartTime()) > 0
-                            && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
-                        return 0;
+            if (strings[4].equals("start")) {
+                if (strings.length == 5) {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[1].compareTo(items.get(i).getStartTime()) >= 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                            return 0;
+                        }
                     }
+                } else {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[4].equals(items.get(i).getStartTime())) {
+                            continue;
+                        }
+                        if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                            return 0;
+                        }
+                    }
+
                 }
-            }
-            else
-            {
-                for (int i = 0; i < items.size(); i++) {
-                    if(strings[4].equals(items.get(i).getStartTime()))
-                    {
-                        continue;
+            } else {
+                if (strings.length == 5) {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                            return 0;
+                        }
                     }
-                    if (strings[1].compareTo(items.get(i).getStartTime()) > 0
-                            && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
-                        return 0;
+                } else {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[4].equals(items.get(i).getStartTime())) {
+                            continue;
+                        }
+                        if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) <= 0) {
+                            return 0;
+                        }
                     }
+
                 }
 
             }
@@ -133,8 +156,9 @@ return null;
         }
     }
 
-    static class GetList extends  AsyncTask<Void, Void, List<TemplateItem>> {
+    static class GetList extends AsyncTask<Void, Void, List<TemplateItem>> {
         private TemplateItemDao templateItemDao;
+
         private GetList(TemplateItemDao templateItemDao) {
             this.templateItemDao = templateItemDao;
         }
@@ -145,6 +169,7 @@ return null;
             return templateItemDao.getAll();
         }
     }
+
     static class InsertAsyncTask extends AsyncTask<TemplateItem, Void, Void> {
         private TemplateItemDao templateItemDao;
 
