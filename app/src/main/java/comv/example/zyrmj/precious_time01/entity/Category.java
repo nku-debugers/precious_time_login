@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.entity;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +9,7 @@ import androidx.room.Index;
 
 
 @Entity(primaryKeys = {"user_id", "name"}, indices = @Index(value = "name", unique = true))
-public class Category {
+public class Category implements Serializable {
     @ColumnInfo(name = "user_id")
     @NonNull
     public String userId;

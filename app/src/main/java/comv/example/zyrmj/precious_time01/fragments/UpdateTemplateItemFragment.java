@@ -33,7 +33,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class UpdateTemplateItemFragment extends Fragment implements View.OnClickListener {
     private TextView mTvSelectedTime1, mTvSelectedTime2, mTvSelectedTimeWeek;
     private CustomDatePicker mTimePicker1, mTimePicker2, mTimePickerWeek;
-    private Button save, delete;
+    private Button save;
     private Date startText, endText;
     private EditText name;
     private String viewOption;
@@ -158,8 +158,8 @@ Log.d("endTime",endTime);
         TemplateItem item = new TemplateItem(templateItem.getUserId(), name.getText().toString(),
                 templateItem.getTemplateName(), "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
-        int s = t.ifTimeConfilict(week, start,templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime());
-        int e = t.ifTimeConfilict(week, end,templateItem.getTemplateName(),templateItem.getUserId(),templateItem.getStartTime());
+        int s = t.ifTimeConfilict(week, start,templateItem.getTemplateName(),templateItem.getUserId(),"start",templateItem.getStartTime());
+        int e = t.ifTimeConfilict(week, end,templateItem.getTemplateName(),templateItem.getUserId(),"end",templateItem.getStartTime());
         if (s == 0 || e == 0) {
             return false;
         }

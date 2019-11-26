@@ -6,23 +6,21 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import comv.example.zyrmj.precious_time01.dao.QuoteDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Template;
 
 public class TemplateRepository {
-    private LiveData<List<Template>> allTemplates;
     private TemplateDao templateDao;
 
-    public LiveData<List<Template>> getAllTemplates() {
-        return allTemplates;
-    }
 
     public TemplateRepository(Context context) {
         AppDatabase appDatabase = AppDatabase.getDatabase(context.getApplicationContext());
         templateDao =  appDatabase.templateDao();
-        allTemplates = templateDao.getAllTemplates();
     }
 
 static class getSpecificTemplateTask extends AsyncTask<String,Void,Template>
@@ -79,6 +77,20 @@ private TemplateDao templateDao;
         }
     }
 
+    static class GetAllTemplatesAsyncTask extends AsyncTask<String,Void ,LiveData<List<Template>>>
+    {
+        private TemplateDao templateDao;
+        public GetAllTemplatesAsyncTask(TemplateDao templateDao) {
+            this.templateDao=templateDao;
+        }
+
+
+        @Override
+        protected LiveData<List<Template>> doInBackground(String... strings) {
+            return templateDao.getAllTemplates(strings[0]);
+        }
+    }
+
     public void insertTemplates(Template... templates) {
 
         new InsertAsyncTask(templateDao).execute(templates);
@@ -92,5 +104,14 @@ private TemplateDao templateDao;
     public Template getSpecificTemplate(String... strings)
     {
         return templateDao.getSpecificTemplate(strings[0],strings[1]);
+    }
+    public LiveData<List<Template>> getAllTemplates(String userId)
+    {
+        try {
+            return new GetAllTemplatesAsyncTask(templateDao).execute(userId).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

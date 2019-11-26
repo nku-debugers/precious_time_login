@@ -52,6 +52,8 @@ public class TemplateShowFragment extends Fragment {
     private List<Template> allTemplates;
     private TemplateRepository templateRepository;
     private RecyclerView recyclerView;
+    //需从个人中心fragment传递userId参数,这里为了测试，默认使用offline
+    private String userId="offline";
 
     public TemplateShowFragment() {
         // Required empty public constructor
@@ -75,7 +77,7 @@ public class TemplateShowFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(templateAdapter);
         TemplateViewModel templateViewModel= ViewModelProviders.of(getActivity()).get(TemplateViewModel.class);
-        templateViewModel.getAllTemplates().observe(getActivity(), new Observer<List<Template>>() {
+        templateViewModel.getAllTemplates(userId).observe(getActivity(), new Observer<List<Template>>() {
             @Override
             public void onChanged(List<Template> templates) {
                 templateAdapter.setAllTemplates(templates);
@@ -215,8 +217,7 @@ public class TemplateShowFragment extends Fragment {
                             dialog.setContent("模板名不能为空，请重新输入！");
                         }
                         else {
-                             String userId="offline",templateName=input.toString();
-                            Log.i("yqy", "输入的是：" + input);
+                             String templateName=input.toString();
                             //查找是否有同名Template存在
                             if(templateRepository.getSpecificTemplate(userId,templateName)!=null)
                             {
@@ -228,7 +229,7 @@ public class TemplateShowFragment extends Fragment {
                                 dialog.dismiss();
                                templateRepository.insertTemplates(new Template(userId,templateName));
                                 Bundle bundle = new Bundle();
-                                bundle.putString("userId", "offline");
+                                bundle.putString("userId", userId);
                                 bundle.putString("templateName", input.toString());
                                 NavController controller = Navigation.findNavController(getView());
                                 controller.navigate(R.id.action_templateShowFragment_to_testWeekView, bundle);

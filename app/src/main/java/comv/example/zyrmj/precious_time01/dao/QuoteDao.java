@@ -15,10 +15,12 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 public interface QuoteDao {
     @Insert
     void insertQuote(Quote... quotes);
-    @Update
-    void updateQuote(Quote... quotes);
+    @Query("UPDATE QUOTE SET words=:newWords,author=:newAuthor WHERE user_id=:userId AND words=:oldWords")
+    void updateQuote(String userId,String oldWords,String newWords,String newAuthor);
     @Delete
     void deleteQuote(Quote... quotes);
-    @Query("select * from Quote")
-    LiveData<List<Quote>>getAllQuotes();
+    @Query("select * from Quote where user_id=:userId")
+    LiveData<List<Quote>>getAllQuotes(String userId);
+    @Query("select * from quote where user_id=:userId and words=:words")
+    Quote getSpecificQuote(String userId,String words);
 }

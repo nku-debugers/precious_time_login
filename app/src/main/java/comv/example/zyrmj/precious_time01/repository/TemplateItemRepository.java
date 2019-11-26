@@ -107,25 +107,47 @@ return null;
             if (items.size() == 0) {
                 return 1;
             }
-            if(strings.length==4) {
-                for (int i = 0; i < items.size(); i++) {
-                    if (strings[1].compareTo(items.get(i).getStartTime()) > 0
-                            && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
-                        return 0;
+            if(strings[4].equals("start")) {
+                if (strings.length == 5) {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[1].compareTo(items.get(i).getStartTime()) >= 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                            return 0;
+                        }
                     }
+                } else {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[4].equals(items.get(i).getStartTime())) {
+                            continue;
+                        }
+                        if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                            return 0;
+                        }
+                    }
+
                 }
             }
             else
             {
-                for (int i = 0; i < items.size(); i++) {
-                    if(strings[4].equals(items.get(i).getStartTime()))
-                    {
-                        continue;
+                if (strings.length == 5) {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
+                            return 0;
+                        }
                     }
-                    if (strings[1].compareTo(items.get(i).getStartTime()) > 0
-                            && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
-                        return 0;
+                } else {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (strings[4].equals(items.get(i).getStartTime())) {
+                            continue;
+                        }
+                        if (strings[1].compareTo(items.get(i).getStartTime()) > 0
+                                && strings[1].compareTo(items.get(i).getEndTime()) <=0) {
+                            return 0;
+                        }
                     }
+
                 }
 
             }

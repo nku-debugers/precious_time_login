@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_personCenterFragment_to_templateShowFragment"
             app:destination="@id/templateShowFragment" />
+        <action
+            android:id="@+id/action_personCenterFragment_to_quoteFragment"
+            app:destination="@id/quoteFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
@@ -126,5 +129,41 @@
         <action
             android:id="@+id/action_updateTemplateItemFragment_to_testWeekView"
             app:destination="@id/testWeekView" />
+    </fragment>
+    <fragment
+        android:id="@+id/quoteFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.QuoteShowFragment"
+        android:label="fragment_quote"
+        tools:layout="@layout/fragment_quote" >
+        <action
+            android:id="@+id/action_quoteFragment_to_personCenterFragment"
+            app:destination="@id/personCenterFragment" />
+        <action
+            android:id="@+id/action_quoteFragment_to_addQuoteFragment"
+            app:destination="@id/addQuoteFragment" />
+        <action
+            android:id="@+id/action_quoteFragment_to_updateQuoteFragment"
+            app:destination="@id/updateQuoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addQuoteFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.AddQuoteFragment"
+        android:label="fragment_add_quote"
+        tools:layout="@layout/fragment_add_quote" >
+        <action
+            android:id="@+id/action_addQuoteFragment_to_quoteFragment"
+            app:destination="@id/quoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateQuoteFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.UpdateQuoteFragment"
+        android:label="fragment_update_quote"
+        tools:layout="@layout/fragment_update_quote" >
+        <action
+            android:id="@+id/action_updateQuoteFragment_to_quoteFragment"
+            app:destination="@id/quoteFragment" />
+        <action
+            android:id="@+id/action_updateQuoteFragment_to_quoteFragment2"
+            app:destination="@id/quoteFragment" />
     </fragment>
 </navigation>

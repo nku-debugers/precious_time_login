@@ -2,10 +2,12 @@ package comv.example.zyrmj.precious_time01.entity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 @Entity
-public class User {
+public class User implements Serializable {
     @PrimaryKey
     @NotNull
     private String id;

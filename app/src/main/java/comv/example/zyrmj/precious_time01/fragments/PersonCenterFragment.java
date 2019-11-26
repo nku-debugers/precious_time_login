@@ -10,8 +10,10 @@ import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.entity.User;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
+import comv.example.zyrmj.precious_time01.repository.UserRepository;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -80,11 +82,19 @@ public class PersonCenterFragment extends Fragment {
         Button logout=getView().findViewById(R.id.logout);
         TextView user=getView().findViewById(R.id.userId);
         View toTemplate=getView().findViewById(R.id.toTemplate);
+        View toQuote=getView().findViewById(R.id.toQuote);
         toTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavController controller=Navigation.findNavController(view);
                 controller.navigate(R.id.action_personCenterFragment_to_templateShowFragment);
+            }
+        });
+        toQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller=Navigation.findNavController(view);
+                controller.navigate(R.id.action_personCenterFragment_to_quoteFragment);
             }
         });
         tologin.setOnClickListener(new View.OnClickListener() {

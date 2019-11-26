@@ -1,5 +1,9 @@
 package comv.example.zyrmj.precious_time01.entity;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,13 +13,24 @@ import androidx.room.ForeignKey;
         foreignKeys = @ForeignKey(entity = User.class,
                 parentColumns = "id",
                 childColumns = "user_id"))
-public class Quote {
+public class Quote implements Serializable {
     @NonNull
     @ColumnInfo(name = "user_id")
     private String userId;
     @NonNull
     private String words;
 
+    @NotNull
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(@NotNull String author) {
+        this.author = author;
+    }
+
+    @NotNull
+    private String author;
     @NonNull
     public String getUserId() {
         return userId;
@@ -34,8 +49,9 @@ public class Quote {
         this.words = words;
     }
 
-    public Quote(@NonNull String userId, @NonNull String words) {
+    public Quote(@NonNull String userId, @NonNull String words,@NotNull String author) {
         this.userId = userId;
         this.words = words;
+        this.author=author;
     }
 }

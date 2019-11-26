@@ -177,8 +177,8 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         TemplateItem item = new TemplateItem("offline", name.getText().toString(),
                 templateName, "study", end, start);
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
-        int s = t.ifTimeConfilict(week, start, templateName, userId);
-        int e = t.ifTimeConfilict(week, end, templateName, userId);
+        int s = t.ifTimeConfilict(week, start, templateName, userId,"start");
+        int e = t.ifTimeConfilict(week, end, templateName, userId,"end");
         if (s == 0 || e == 0) {
             return false;
         }

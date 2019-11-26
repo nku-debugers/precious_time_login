@@ -17,8 +17,8 @@ public class TemplateViewModel extends AndroidViewModel {
         super(application);
         templateRepository = new TemplateRepository(application);
     }
-    public LiveData<List<Template>> getAllTemplates() {
-        return templateRepository.getAllTemplates();
+    public LiveData<List<Template>> getAllTemplates(String userId) {
+        return templateRepository.getAllTemplates(userId);
     }
 
    public void insertTemplates(Template... templates) {

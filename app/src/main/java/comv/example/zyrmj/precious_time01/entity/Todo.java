@@ -1,12 +1,14 @@
 package comv.example.zyrmj.precious_time01.entity;
 
+import java.io.Serializable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
 @Entity(primaryKeys = {"user_id", "item_name"})
-public class Todo {
+public class Todo implements Serializable {
     @NonNull
     @ColumnInfo(name = "user_id")
     @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
