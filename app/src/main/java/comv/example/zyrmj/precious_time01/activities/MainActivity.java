@@ -16,9 +16,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+
+         if (getSupportActionBar() != null){
+             getSupportActionBar().hide();
+         }
+// 首次启动app时执行下列代码
+//         User u = new User();
+//         UserRepository re = new UserRepository(this);
+//         re.insertUsers(u);
 
 
         NavController controller = Navigation.findNavController(this, R.id.fragment);
