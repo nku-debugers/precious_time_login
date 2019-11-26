@@ -17,7 +17,9 @@ public class MainActivity extends AppCompatActivity {
          if (getSupportActionBar() != null){
              getSupportActionBar().hide();
          }
-
+//         User u = new User();
+//         UserRepository re = new UserRepository(this);
+//         re.insertUsers(u);
 
 
         NavController controller= Navigation.findNavController(this,R.id.fragment);
