@@ -315,6 +315,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         mTimePickerWeek = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
+                Log.d("mytag", "this is the timestmap: "+ timestamp);
                 mTvSelectedTimeWeek.setText(DateFormatUtils.long2Str(timestamp, 4));
                 try {
                     startDate = new SimpleDateFormat("HH:mm", Locale.CHINA)
