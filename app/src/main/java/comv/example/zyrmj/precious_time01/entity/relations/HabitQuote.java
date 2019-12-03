@@ -25,6 +25,9 @@ public class HabitQuote {
         this.words = quote.getWords();
     }
 
+    public HabitQuote() {
+    }
+
     @NonNull
     public String getUserId() {
         return userId;

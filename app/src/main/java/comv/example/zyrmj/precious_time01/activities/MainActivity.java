@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
          if (getSupportActionBar() != null){
              getSupportActionBar().hide();
          }
-// 首次启动app时执行下列代码
+// //首次启动app时执行下列代码
 //         User u = new User();
 //         UserRepository re = new UserRepository(this);
 //         re.insertUsers(u);

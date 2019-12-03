@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase;
 
 import comv.example.zyrmj.precious_time01.dao.CategoryDao;
 import comv.example.zyrmj.precious_time01.dao.HabitDao;
+import comv.example.zyrmj.precious_time01.dao.HabitQuoteDao;
 import comv.example.zyrmj.precious_time01.dao.QuoteDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateItemDao;
@@ -19,10 +20,11 @@ import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;
+import comv.example.zyrmj.precious_time01.entity.relations.HabitQuote;
 
 //Singleton
 @Database(entities = {Category.class, Habit.class, Quote.class, Template.class, TemplateItem.class,
-        Todo.class, User.class}, version = 1, exportSchema = false)
+        Todo.class, User.class, HabitQuote.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
@@ -45,4 +47,5 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
 
     public abstract QuoteDao quoteDao();
+    public abstract HabitQuoteDao habitQuoteDao();
 }

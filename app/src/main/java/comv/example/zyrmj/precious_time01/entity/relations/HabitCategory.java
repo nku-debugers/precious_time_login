@@ -54,4 +54,7 @@ public class HabitCategory {
         this.userId = category.getUserId();
         this.category = category.name;
     }
+
+    public HabitCategory() {
+    }
 }

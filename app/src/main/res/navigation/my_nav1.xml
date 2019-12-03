@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_personCenterFragment_to_quoteFragment"
             app:destination="@id/quoteFragment" />
+        <action
+            android:id="@+id/action_personCenterFragment_to_addHabit1"
+            app:destination="@id/addHabit1" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
@@ -166,4 +169,18 @@
             android:id="@+id/action_updateQuoteFragment_to_quoteFragment2"
             app:destination="@id/quoteFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addHabit1"
+        android:name="comv.example.zyrmj.precious_time01.fragments.habits.AddHabit1"
+        android:label="add_habit_item"
+        tools:layout="@layout/add_habit_item" >
+        <action
+            android:id="@+id/action_addHabit1_to_addHabit2"
+            app:destination="@id/addHabit2" />
+    </fragment>
+    <fragment
+        android:id="@+id/addHabit2"
+        android:name="comv.example.zyrmj.precious_time01.fragments.habits.AddHabit2"
+        android:label="add_habit_item2"
+        tools:layout="@layout/add_habit_item2" />
 </navigation>

@@ -132,6 +132,8 @@ public class Habit {
     @ColumnInfo(name = "expected_time")
     public int expectedTime;    //希望安排时间
 
+
+
     public Habit(@NotNull String userId, String name, String endTime, String startTime,
                  String length, String category, double completion) {
         this.userId = userId;

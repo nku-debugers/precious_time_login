@@ -24,6 +24,8 @@ public interface QuoteDao {
 
     @Query("select * from Quote where user_id=:userId")
     LiveData<List<Quote>> getAllQuotes(String userId);
+    @Query("select * from Quote where user_id=:userId")
+    List<Quote> getAllQuotes2(String userId);
 
     @Query("select * from quote where user_id=:userId and words=:words")
     Quote getSpecificQuote(String userId, String words);
