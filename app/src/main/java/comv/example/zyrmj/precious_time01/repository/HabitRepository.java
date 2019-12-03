@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
@@ -84,3 +85,62 @@ public class HabitRepository {
     }
 
 }
+=======
+package comv.example.zyrmj.precious_time01.repository;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import android.provider.ContactsContract;
+
+import java.util.List;
+
+import comv.example.zyrmj.precious_time01.dao.HabitCategoryDao;
+import comv.example.zyrmj.precious_time01.dao.HabitDao;
+import comv.example.zyrmj.precious_time01.database.AppDatabase;
+import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
+
+public class HabitRepository {
+    private HabitDao habitDao;
+    private HabitCategoryDao habitCategoryDao;
+    public HabitRepository(Context context) {
+        AppDatabase appDatabase = AppDatabase.getDatabase(context.getApplicationContext());
+        habitDao = appDatabase.habitDao();
+        habitCategoryDao = appDatabase.habitCategoryDao();
+    }
+    public void insertHabit(Habit... habits) {
+        new InsertAsyncTask(habitDao).execute(habits);
+    }
+
+    public void insertHabitCategory(List<HabitCategory>list) {
+        new InsertHabitCategoryTask(habitCategoryDao).execute(list);
+    }
+
+    static class InsertHabitCategoryTask extends AsyncTask<List<HabitCategory>, Void, Void> {
+        private HabitCategoryDao habitCategoryDao;
+        InsertHabitCategoryTask(HabitCategoryDao habitCategoryDao) {
+            this.habitCategoryDao = habitCategoryDao;
+        }
+
+        @Override
+        protected Void doInBackground(List<HabitCategory> ...lists) {
+            for(int i = 0; i < lists[0].size(); i++) {
+                habitCategoryDao.insert(lists[0].get(i));
+            }
+            return null;
+        }
+    }
+
+    static class InsertAsyncTask extends AsyncTask<Habit, Void, Void> {
+        private HabitDao habitDao;
+        InsertAsyncTask(HabitDao habitDao){
+            this.habitDao = habitDao;
+        }
+        @Override
+        protected Void doInBackground(Habit... habits) {
+            habitDao.insert(habits);
+            return null;
+        }
+    }
+}
+>>>>>>> Add habit database management.
