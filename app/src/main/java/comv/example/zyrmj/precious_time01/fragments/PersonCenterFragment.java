@@ -100,7 +100,7 @@ public class PersonCenterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_personCenterFragment_to_addHabit1);
+                controller.navigate(R.id.action_personCenterFragment_to_habitShow);
             }
         });
         tologin.setOnClickListener(new View.OnClickListener() {

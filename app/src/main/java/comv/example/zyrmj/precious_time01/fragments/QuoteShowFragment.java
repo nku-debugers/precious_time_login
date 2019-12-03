@@ -83,7 +83,7 @@ public class QuoteShowFragment extends Fragment {
                 allQuotes = quotes;
             }
         });
-        addQuote = getView().findViewById(R.id.addQuote);
+        addQuote = getView().findViewById(R.id.add);
         addQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
