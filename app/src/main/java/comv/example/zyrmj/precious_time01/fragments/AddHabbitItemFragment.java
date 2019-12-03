@@ -38,7 +38,7 @@ public class AddHabbitItemFragment extends AppCompatActivity implements View.OnC
     private void init(){
         labelsView =(LabelsView)findViewById ( R.id.category );
         button = findViewById ( R.id.habbit_complete );
-        advanced_option = findViewById ( R.id.advanced_option );
+        advanced_option = findViewById ( R.id.toAddHabit2 );
         final ArrayList<String> label = new ArrayList<> ();
         //添加从数据库中获取的标签名称
         //label.add()
@@ -53,7 +53,7 @@ public class AddHabbitItemFragment extends AppCompatActivity implements View.OnC
         labelsView.setOnLabelClickListener ( new LabelsView.OnLabelClickListener () {
             @Override
             public void onLabelClick(TextView label , Object data , int position) {
-                if(data == '+'){
+                if(data.toString().equals("+")){
                     //添加模板名称
                     //showDialog (  );
                 }
