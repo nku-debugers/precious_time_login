@@ -165,7 +165,14 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     else
                         controller.navigate(R.id.action_addTemplateItem_to_tmpItemListFragment, bundle);
                 } else {
-                    //提示有重复项
+                   //提示有重复项
+                    PromptDialog promptDialog = new PromptDialog (getActivity ());
+                    promptDialog.showWarnAlert ( "存在冲突时间，请重新选择！",new PromptButton ( "确定" , new PromptButtonListener () {
+                        @Override
+                        public void onClick(PromptButton button) {
+
+                        }
+                    } ) );
                 }
             }
         });
