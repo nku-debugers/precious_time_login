@@ -44,10 +44,10 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/habbit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="习惯名称"
+        android:text="@string/habbit_name"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline56"
         app:layout_constraintEnd_toStartOf="@+id/guideline57"
@@ -55,11 +55,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline55" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/habbit_name_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="思考"
+        android:hint="@string/habbit_name_hint"
         android:inputType="textPersonName"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline56"
@@ -69,10 +69,10 @@
         app:layout_constraintVertical_bias="0.507" />
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/habbit_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="习惯属性"
+        android:text="@string/habbit_category"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline58"
         app:layout_constraintEnd_toStartOf="@+id/guideline57"
@@ -107,6 +107,18 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35" />
 
+
+    <TextView
+        android:id="@+id/week_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/week_time"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline79"
+        app:layout_constraintEnd_toStartOf="@+id/guideline57"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline58" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline79"
         android:layout_width="wrap_content"
@@ -115,11 +127,11 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/confirm"
+        android:id="@+id/habbit_complete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="25dp"
-        android:text="  完成  "
+        android:text="@string/habbit_complete"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,10 +140,10 @@
         app:layout_constraintVertical_bias="0.8" />
 
     <TextView
-        android:id="@+id/textView34"
+        android:id="@+id/habbit_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="习惯属性"
+        android:text="@string/habbit_title"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline55"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,16 +151,59 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/advanced_option"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="高级选项"
+        android:text="@string/advanced_option"
         android:textAllCaps="false"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/confirm"
+        app:layout_constraintBottom_toTopOf="@+id/habbit_complete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline79" />
+
+    <com.donkingliang.labels.LabelsView
+        android:id="@+id/category"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:labelTextPaddingBottom="5dp"
+        app:labelTextPaddingLeft="10dp"
+        app:labelTextPaddingRight="10dp"
+        app:labelTextPaddingTop="5dp"
+        app:labelBackground="@drawable/label_bg"
+        app:layout_constraintBottom_toTopOf="@+id/guideline58"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline57"
+        app:layout_constraintTop_toTopOf="@+id/guideline56"
+        app:lineMargin="10dp"
+        app:selectType="SINGLE_IRREVOCABLY"
+        app:wordMargin="10dp">
+    </com.donkingliang.labels.LabelsView>
+
+    <EditText
+        android:id="@+id/week_time_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/week_time_hint"
+        android:inputType="numberSigned"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/guideline79"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="@+id/guideline57"
+        app:layout_constraintTop_toTopOf="@+id/guideline58" />
+
+    <TextView
+        android:id="@+id/week_time_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/week_time_hour"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline79"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/week_time_input"
+        app:layout_constraintTop_toTopOf="@+id/guideline58" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

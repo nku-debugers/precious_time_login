@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <org.angmarch.views.NiceSpinner
-        android:id="@+id/niceSpinner4"
+        android:id="@+id/time_period_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/guideline82"
@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline81" />
 
     <org.angmarch.views.NiceSpinner
-        android:id="@+id/niceSpinner5"
+        android:id="@+id/habbit_priority_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/guideline88"
@@ -45,10 +45,10 @@
         app:layout_constraintGuide_percent="0.3" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/time_period"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="时间段"
+        android:text="@string/time_period"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline82"
         app:layout_constraintEnd_toStartOf="@+id/guideline84"
@@ -63,10 +63,10 @@
         app:layout_constraintGuide_percent="0.35" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/time_once"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="单次时长"
+        android:text="@string/time_once"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline83"
         app:layout_constraintEnd_toStartOf="@+id/guideline84"
@@ -81,10 +81,10 @@
         app:layout_constraintGuide_percent="0.4" />
 
     <TextView
-        android:id="@+id/textView28"
+        android:id="@+id/habbit_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="习惯地点"
+        android:text="@string/habbit_place"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline85"
         app:layout_constraintEnd_toStartOf="@+id/guideline84"
@@ -92,11 +92,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline83" />
 
     <EditText
-        android:id="@+id/editText7"
+        android:id="@+id/habbit_place_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="未知"
+        android:hint="@string/habbit_place_hint"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline85"
         app:layout_constraintEnd_toEndOf="parent"
@@ -111,21 +111,21 @@
         app:layout_constraintGuide_percent="0.55" />
 
     <TextView
-        android:id="@+id/textView29"
+        android:id="@+id/time_remind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="定时提醒"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline86"
         app:layout_constraintEnd_toStartOf="@+id/guideline84"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline85" />
+        app:layout_constraintTop_toTopOf="@+id/guideline85"
+        tools:text="@string/time_remind" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/time_remind_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="开"
+        android:text="@string/time_remind_switch"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline86"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,22 +134,22 @@
         app:layout_constraintTop_toTopOf="@+id/guideline85" />
 
     <TextView
-        android:id="@+id/textView31"
+        android:id="@+id/advance_forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="提前"
+        android:text="@string/advance_forward"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/switch2"
+        app:layout_constraintBottom_toBottomOf="@+id/time_remind_switch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/switch2"
-        app:layout_constraintTop_toTopOf="@+id/switch2" />
+        app:layout_constraintStart_toEndOf="@+id/time_remind_switch"
+        app:layout_constraintTop_toTopOf="@+id/time_remind_switch" />
 
     <TextView
-        android:id="@+id/textView32"
+        android:id="@+id/advance_backward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="分钟"
+        android:text="@string/advance_backward"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/editText9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,17 +163,17 @@
         android:ems="10"
         android:hint="5"
         android:inputType="numberSigned"
-        app:layout_constraintBottom_toBottomOf="@+id/textView31"
+        app:layout_constraintBottom_toBottomOf="@+id/advance_forward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toEndOf="@+id/textView31"
-        app:layout_constraintTop_toTopOf="@+id/textView31" />
+        app:layout_constraintStart_toEndOf="@+id/advance_forward"
+        app:layout_constraintTop_toTopOf="@+id/advance_forward" />
 
     <TextView
-        android:id="@+id/textView33"
+        android:id="@+id/habbit_quote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="箴言"
+        android:text="@string/habbit_quote"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline87"
         app:layout_constraintEnd_toStartOf="@+id/guideline84"
@@ -188,7 +188,7 @@
         app:layout_constraintGuide_percent="0.75" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/habbit_quote_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="未选择"
@@ -199,11 +199,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline88" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/advanced_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="返回"
+        android:text="@string/advanced_back"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -212,10 +212,10 @@
         app:layout_constraintVertical_bias="0.85" />
 
     <TextView
-        android:id="@+id/textView35"
+        android:id="@+id/advanced_option_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="高级选项"
+        android:text="@string/advanced_option_title"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline81"
         app:layout_constraintEnd_toEndOf="parent"
@@ -223,10 +223,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/habbit_priority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="习惯优先级"
+        android:text="@string/habbit_priority"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline88"
         app:layout_constraintEnd_toStartOf="@+id/guideline84"

@@ -29,4 +29,28 @@
     <string name="delete">删除</string>
     <string name="save">保存</string>
     <string name="add_item_button">add_item</string>
+
+    <string name="habbit_title">习惯属性</string>
+    <string name="habbit_name">习惯名称</string>
+    <string name="habbit_category">习惯属性</string>
+    <string name="week_time">每周预计用时</string>
+    <string name="week_time_hour">小时</string>
+    <string name="advanced_option">高级选项</string>
+    <string name="habbit_complete"> 完 成</string>
+    <string name="habbit_name_hint">思考</string>
+    <string name="week_time_hint">0</string>
+
+    <string name="advanced_option_title">高级选项</string>
+    <string name="time_period">时间段</string>
+    <string name="time_once">单次时长</string>
+    <string name="habbit_place">习惯地点</string>
+    <string name="habbit_place_hint">未知</string>
+    <string name="time_remind">定时提醒</string>
+    <string name="time_remind_switch">开</string>
+    <string name="habbit_priority">习惯优先级</string>
+    <string name="advance_forward">提前</string>
+    <string name="advance_backward">分钟</string>
+    <string name="habbit_quote">箴言</string>
+    <string name="advanced_back">返回</string>
+
 </resources>
