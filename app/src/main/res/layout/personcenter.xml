@@ -213,7 +213,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline41" />
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/toHabit"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#FFFFFF"
@@ -293,7 +293,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.22" />
 
     <TextView
         android:id="@+id/textView22"
@@ -410,10 +410,11 @@
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline46"
-        app:layout_constraintEnd_toEndOf="@+id/view4"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline67"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline69"
-        app:layout_constraintTop_toTopOf="@+id/guideline45" />
+        app:layout_constraintTop_toTopOf="@+id/guideline45"
+        app:layout_constraintVertical_bias="0.578" />
 
     <TextView
         android:id="@+id/textView3"

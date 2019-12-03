@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,12 +22,26 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Template;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder> {
+    private String option="0";
     private List<Quote> allQutoes = new ArrayList<>();
+    private List<Quote> selectedQuotes=new ArrayList<>();
+
+    public QuoteAdapter(List<Quote> allQutoes) {
+        this.option="1";
+        this.allQutoes = allQutoes;
+    }
+
+    public QuoteAdapter() {
+
+    }
+
+
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView number, words, author;
         ImageView next;
+        CheckBox checked;
 
         //     定义View中的所有组件
         public MyViewHolder(@NonNull View itemView) {
@@ -36,6 +52,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
             words = itemView.findViewById(R.id.words);
             author = itemView.findViewById(R.id.author);
             next = itemView.findViewById(R.id.next);
+            checked=itemView.findViewById(R.id.checked);
         }
     }
 
@@ -61,7 +78,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
         holder.author.setText(quote.getAuthor());
 
 //        定义itemView点击监听器等触发事件  更新quote
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        if(option.equals("0"))
+        {   holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -70,12 +88,32 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
                 controller.navigate(R.id.action_quoteFragment_to_updateQuoteFragment, bundle);
 
             }
-        });
+        });}
+        else
+        {
+            holder.next.setVisibility(View.INVISIBLE);
+            holder.checked.setVisibility(View.VISIBLE);
+            holder.checked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    if(isChecked){
+                        selectedQuotes.add(quote);
+                    }else{
+                        selectedQuotes.remove(quote);
+                    }
+
+                }
+            });
+        }
 
     }
 
     @Override
     public int getItemCount() {
         return allQutoes.size();
+    }
+    public List<Quote> getSelctedQuotes()
+    {
+        return selectedQuotes;
     }
 }

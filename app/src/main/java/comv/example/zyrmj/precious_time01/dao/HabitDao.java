@@ -10,7 +10,7 @@ import comv.example.zyrmj.precious_time01.entity.Habit;
 @Dao
 public interface HabitDao {
     @Insert
-    void insert(Habit category);
+    void insert(Habit... habits);
 }
 
 

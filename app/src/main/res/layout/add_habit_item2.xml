@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/rechoseQuote"
+        android:layout_width="96dp"
+        android:layout_height="39dp"
+        android:text="重新选择"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline87"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline88" />
+
     <org.angmarch.views.NiceSpinner
         android:id="@+id/time_period_spinner"
         android:layout_width="wrap_content"
@@ -188,7 +199,8 @@
         app:layout_constraintGuide_percent="0.75" />
 
     <Button
-        android:id="@+id/habbit_quote_button"
+
+        android:id="@+id/choseQuote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="未选择"
@@ -239,4 +251,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.65" />
+
+    <TextView
+        android:id="@+id/showQuote"
+        android:layout_width="179dp"
+        android:layout_height="36dp"
+        android:text="TextView"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline87"
+        app:layout_constraintStart_toStartOf="@+id/guideline84"
+        app:layout_constraintTop_toTopOf="@+id/guideline88" />
 </androidx.constraintlayout.widget.ConstraintLayout>

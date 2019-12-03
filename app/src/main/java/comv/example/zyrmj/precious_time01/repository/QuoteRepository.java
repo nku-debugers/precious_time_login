@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import comv.example.zyrmj.precious_time01.dao.QuoteDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
@@ -76,6 +75,20 @@ public class QuoteRepository {
         }
     }
 
+    static class GetAllQuotesAsyncTask2 extends  AsyncTask<String ,Void ,List<Quote>>
+    {
+        private QuoteDao quoteDao;
+
+        public GetAllQuotesAsyncTask2(QuoteDao quoteDao) {
+            this.quoteDao = quoteDao;
+        }
+
+        @Override
+        protected List<Quote> doInBackground(String... strings) {
+            return quoteDao.getAllQuotes2(strings[0]);
+        }
+    }
+
     static class GetSpecifcAsyncTask extends AsyncTask<String, Void, Quote> {
         private QuoteDao quoteDao;
 
@@ -108,6 +121,16 @@ public class QuoteRepository {
             e.printStackTrace();
         }
         return null;
+    }
+    public List<Quote> getAllQuotes2(String userId) {
+
+        try {
+            return new GetAllQuotesAsyncTask2(quoteDao).execute(userId).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  null;
     }
 
     public Quote getSpecificQuote(String... strings) {
