@@ -20,8 +20,6 @@ public class Habit {
     @NotNull
     @ColumnInfo(name="habit_name")
     public String name;
-    @ColumnInfo(name = "end_time")
-    private String endTime;
 
     public String getUserId() {
         return userId;
@@ -39,36 +37,12 @@ public class Habit {
         this.name = name;
     }
 
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
     public String getLength() {
         return length;
     }
 
     public void setLength(String length) {
         this.length = length;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public double getCompletion() {
@@ -79,11 +53,8 @@ public class Habit {
         this.completion = completion;
     }
 
-    @ColumnInfo(name = "start_time")
-    private String startTime;
     private String length;
     @ColumnInfo(name = "category_name")
-    public String category;
     public double completion;
 
     public String location;     //执行地点
@@ -134,16 +105,10 @@ public class Habit {
     @ColumnInfo(name = "expected_time")
     public int expectedTime;    //希望安排时间
 
-
-
-    public Habit(@NotNull String userId, String name, String endTime, String startTime,
-                 String length, String category, double completion) {
+    public Habit(@NotNull String userId, String name, String length, double completion) {
         this.userId = userId;
         this.name = name;
-        this.endTime = endTime;
-        this.startTime = startTime;
         this.length = length;
-        this.category = category;
         this.completion = completion;
     }
 }
