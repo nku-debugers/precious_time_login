@@ -26,7 +26,7 @@ import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
 
 //Singleton
 @Database(entities = {Category.class, Habit.class, Quote.class, Template.class, TemplateItem.class,
-        Todo.class, User.class, HabitQuote.class}, version = 1, exportSchema = false)
+        Todo.class, User.class, HabitQuote.class, HabitCategory.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
