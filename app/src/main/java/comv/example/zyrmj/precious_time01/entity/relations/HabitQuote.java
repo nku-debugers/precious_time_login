@@ -3,11 +3,17 @@ package comv.example.zyrmj.precious_time01.entity.relations;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
+import comv.example.zyrmj.precious_time01.entity.User;
 
-@Entity(primaryKeys = {"user_id", "words", "habit_name"})
+@Entity(primaryKeys = {"user_id", "words", "habit_name"},
+        foreignKeys = @ForeignKey(entity = User.class,
+                parentColumns = "id",
+                childColumns = "user_id"), indices = @Index(value = "user_id"))
 public class HabitQuote {
     @NonNull
     @ColumnInfo(name = "user_id")

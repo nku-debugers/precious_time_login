@@ -10,9 +10,9 @@ import androidx.room.PrimaryKey;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(primaryKeys = {"user_id","habit_name"},
-        foreignKeys = @ForeignKey(entity = Category.class,
-        parentColumns = "name",
-        childColumns = "category_name"), indices = @Index(value = "category_name"))
+        foreignKeys = @ForeignKey(entity = User.class,
+        parentColumns = "id",
+        childColumns = "user_id"), indices = @Index(value = "user_id"))
 public class Habit {
     @NonNull
     @ColumnInfo(name = "user_id")
