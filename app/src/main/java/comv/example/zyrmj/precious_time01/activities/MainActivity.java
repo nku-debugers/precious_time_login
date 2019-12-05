@@ -23,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
              getSupportActionBar().hide();
          }
  //首次启动app时执行下列代码
-         User u = new User();
-         UserRepository re = new UserRepository(this);
-         re.insertUsers(u);
-        Category category=new Category("offline","test");
-         new CategoryRepository(this).insertCategory(category);
-         Habit habit1=new Habit("offline","test1","length",20.0);
-        Habit habit2=new Habit("offline","test2","length",30.0);
-        new HabitRepository(this).insertHabit(habit1,habit2);
+//         User u = new User();
+//         UserRepository re = new UserRepository(this);
+//         re.insertUsers(u);
+//        Category category=new Category("offline","test");
+//         new CategoryRepository(this).insertCategory(category);
+//         Habit habit1=new Habit("offline","test1","length",20.0);
+//        Habit habit2=new Habit("offline","test2","length",30.0);
+//        new HabitRepository(this).insertHabit(habit1,habit2);
 
         NavController controller = Navigation.findNavController(this, R.id.fragment);
         NavigationUI.setupActionBarWithNavController(this, controller);
