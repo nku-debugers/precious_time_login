@@ -6,23 +6,33 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import comv.example.zyrmj.precious_time01.dao.CategoryDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.Category;
 
 public class CategoryRepository {
-    private LiveData<List<Category>> allCateories;
     private CategoryDao categoryDao;
 
     public CategoryRepository(Context context) {
         AppDatabase appDatabase = AppDatabase.getDatabase(context.getApplicationContext());
         categoryDao = appDatabase.categoryDao();
-        allCateories = categoryDao.getAllCategories();
     }
 
-    public LiveData<List<Category>> getAllCateories() {
-        return allCateories;
+    static class GetAllAsyncTask extends  AsyncTask<String ,Void ,List<Category>>
+    {
+        private CategoryDao categoryDao;
+
+        public GetAllAsyncTask(CategoryDao categoryDao) {
+            this.categoryDao = categoryDao;
+        }
+
+        @Override
+        protected List<Category> doInBackground(String... strings) {
+
+            return categoryDao.getAllCategories(strings[0]);
+        }
     }
 
     static class InsertAsyncTask extends AsyncTask<Category, Void, Void> {
@@ -66,7 +76,14 @@ public class CategoryRepository {
             return null;
         }
     }
-
+    public List<Category> getAllCateories(String userId) {
+        try {
+            return  new GetAllAsyncTask(categoryDao).execute(userId).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public void insertCategory(Category... categories) {
         new InsertAsyncTask(categoryDao).execute(categories);
     }

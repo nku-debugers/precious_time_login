@@ -5,6 +5,7 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 
 import androidx.room.Query;
@@ -18,6 +19,9 @@ public interface HabitDao {
 
     @Query("SELECT * FROM Habit WHERE user_id=:userId")
     LiveData<List<Habit>> getAllHabits(String userId);
+
+    @Delete
+    void deleteHabit(Habit...habits);
 }
 
 

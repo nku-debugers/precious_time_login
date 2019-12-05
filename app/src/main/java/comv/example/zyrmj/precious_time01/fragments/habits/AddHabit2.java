@@ -72,7 +72,7 @@ public class AddHabit2 extends Fragment {
                                 List<Quote> selectedQuotes = quoteAdapter.getSelctedQuotes();
 
                                 for (Quote q : selectedQuotes) {
-                                    Habit h=new Habit("offline","test","test","test","test","test",0.0);
+                                    Habit h=new Habit("offline","test","test",0.0);
                                     HabitQuote habitQuote=new HabitQuote(q,h) ;
                                 habitRepository.insertHabitQuote(habitQuote);
                                 }

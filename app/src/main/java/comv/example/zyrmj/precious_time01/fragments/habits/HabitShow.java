@@ -1,9 +1,15 @@
 package comv.example.zyrmj.precious_time01.fragments.habits;
 
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -20,12 +27,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
 import comv.example.zyrmj.precious_time01.ViewModel.HabitViewModel;
 import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 
 /**
@@ -61,7 +70,7 @@ public class HabitShow extends Fragment {
         final HabitAdapter habitAdapter=new HabitAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(habitAdapter);
-        HabitViewModel habitViewModel= ViewModelProviders.of(getActivity()).get(HabitViewModel.class);
+        habitViewModel= ViewModelProviders.of(getActivity()).get(HabitViewModel.class);
         habitViewModel.getAllHabits(userId).observe(getActivity(), new Observer<List<Habit>>() {
             @Override
             public void onChanged(List<Habit> habits) {
@@ -79,5 +88,78 @@ public class HabitShow extends Fragment {
                 controller.navigate(R.id.action_habitShow_to_addHabit1);
             }
         });
+        back = getView().findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_habitShow_to_personCenterFragment);
+            }
+        });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
+
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final Habit habitToDelete = allHabits.get(viewHolder.getAdapterPosition());
+                habitRepository.deleteHabit(habitToDelete);
+                Snackbar.make(getView(), "删除了一条箴言", Snackbar.LENGTH_SHORT).
+                        setAction("撤销", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        habitRepository.insertHabit(habitToDelete);
+                                    }
+                                }
+                        ).show();
+
+            }
+            //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
+
+            Drawable icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete_black_24dp);
+            Drawable background = new ColorDrawable(Color.LTGRAY);
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                View itemView = viewHolder.itemView;
+                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+
+                int iconLeft, iconRight, iconTop, iconBottom;
+                int backTop, backBottom, backLeft, backRight;
+                backTop = itemView.getTop();
+                backBottom = itemView.getBottom();
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                iconBottom = iconTop + icon.getIntrinsicHeight();
+                if (dX > 0) {
+                    backLeft = itemView.getLeft();
+                    backRight = itemView.getLeft() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin;
+                    iconRight = iconLeft + icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else if (dX < 0) {
+                    backRight = itemView.getRight();
+                    backLeft = itemView.getRight() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconRight = itemView.getRight() - iconMargin;
+                    iconLeft = iconRight - icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else {
+                    background.setBounds(0, 0, 0, 0);
+                    icon.setBounds(0, 0, 0, 0);
+                }
+                background.draw(c);
+                icon.draw(c);
+
+            }
+        }).attachToRecyclerView(recyclerView);
     }
+
+
 }
