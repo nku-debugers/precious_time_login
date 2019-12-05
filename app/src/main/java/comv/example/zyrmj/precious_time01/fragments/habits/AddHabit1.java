@@ -14,16 +14,25 @@ import android.widget.TextView;
 import com.donkingliang.labels.LabelsView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.entity.Category;
+import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
+import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AddHabit1 extends Fragment {
-private TextView toAddHabit2;
+    private String userId = "offline";
+    private HabitRepository habitRepository;
+    private CategoryRepository categoryRepository;
+    private List<Category> categories;
+
+    private TextView toAddHabit2;
     LabelsView labelsView;
 
     public AddHabit1() {
@@ -41,28 +50,27 @@ private TextView toAddHabit2;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        labelsView =getView().findViewById ( R.id.category );
-        final ArrayList<String> label = new ArrayList<> ();
+        labelsView = getView().findViewById(R.id.category);
+        final ArrayList<String> label = new ArrayList<>();
+        categoryRepository = new CategoryRepository(getContext());
         //添加从数据库中获取的标签名称
-        //label.add()
-        label.add("Android");
-        label.add("IOS");
-        label.add("前端");
-        label.add("后台");
-        label.add("微信开发");
-        label.add("游戏开发");
+        categories = categoryRepository.getAllCateories(userId);
+        for (Category category : categories) {
+            label.add(category.getName());
+        }
         label.add("+");
         labelsView.setLabels(label); //直接设置一个字符串数组就可以了。
-        labelsView.setOnLabelClickListener ( new LabelsView.OnLabelClickListener () {
+        labelsView.setOnLabelClickListener(new LabelsView.OnLabelClickListener() {
+
             @Override
-            public void onLabelClick(TextView label , Object data , int position) {
-                if(data.toString().equals("+")){
-                    //添加模板名称
-                    //showDialog (  );
+            public void onLabelClick(TextView label, Object data, int position) {
+                data = (String) data;
+                if (data.equals("+")) {
+                    //添加一个新类别
                 }
             }
-        } );
-        toAddHabit2=getView().findViewById(R.id.toAddHabit2);
+        });
+        toAddHabit2 = getView().findViewById(R.id.toAddHabit2);
         toAddHabit2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -36,20 +36,14 @@ public class AddHabbitItemFragment extends AppCompatActivity implements View.OnC
     Button button;
     TextView advanced_option;
     private void init(){
-        labelsView =(LabelsView)findViewById ( R.id.category );
+        labelsView =findViewById ( R.id.category );
         button = findViewById ( R.id.habbit_complete );
         advanced_option = findViewById ( R.id.toAddHabit2 );
-        final ArrayList<String> label = new ArrayList<> ();
+        final ArrayList<String> labels = new ArrayList<> ();
         //添加从数据库中获取的标签名称
-        //label.add()
-        label.add("Android");
-        label.add("IOS");
-        label.add("前端");
-        label.add("后台");
-        label.add("微信开发");
-        label.add("游戏开发");
-        label.add("+");
-        labelsView.setLabels(label); //直接设置一个字符串数组就可以了。
+
+        labels.add("+");
+        labelsView.setLabels(labels); //直接设置一个字符串数组就可以了。
         labelsView.setOnLabelClickListener ( new LabelsView.OnLabelClickListener () {
             @Override
             public void onLabelClick(TextView label , Object data , int position) {

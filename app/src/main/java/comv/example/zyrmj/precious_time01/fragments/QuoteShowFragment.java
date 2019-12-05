@@ -112,8 +112,6 @@ public class QuoteShowFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final Quote quoteToDelete = allQuotes.get(viewHolder.getAdapterPosition());
-                String words = quoteToDelete.getWords();
-                String useId = quoteToDelete.getUserId();
                 quoteRepository.DeleteQuote(quoteToDelete);
                 Snackbar.make(getView(), "删除了一条箴言", Snackbar.LENGTH_SHORT).
                         setAction("撤销", new View.OnClickListener() {

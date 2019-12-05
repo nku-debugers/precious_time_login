@@ -37,11 +37,11 @@ public class HabitRepository {
            return null;
         }
     }
-    static class InsertHabitAsynvTask extends AsyncTask<Habit,Void,Void>
+    static class InsertHabitAsyncTask extends AsyncTask<Habit,Void,Void>
     {
         private HabitDao habitDao;
 
-        public InsertHabitAsynvTask(HabitDao habitDao) {
+        public InsertHabitAsyncTask(HabitDao habitDao) {
             this.habitDao = habitDao;
         }
 
@@ -51,6 +51,21 @@ public class HabitRepository {
             return null;
         }
     }
+    static class DeleteHabitAsyncTask extends AsyncTask<Habit,Void ,Void>
+    {
+        private HabitDao habitDao;
+
+        public DeleteHabitAsyncTask(HabitDao habitDao) {
+            this.habitDao = habitDao;
+        }
+
+        @Override
+        protected Void doInBackground(Habit... habits) {
+            habitDao.deleteHabit(habits);
+            return null;
+        }
+    }
+
     static class getAllHabitsAsyncTask extends  AsyncTask<String ,Void , LiveData<List<Habit>>>
     {
     private HabitDao habitDao;
@@ -71,8 +86,13 @@ public class HabitRepository {
     }
     public void insertHabit(Habit...habits)
     {
-        new InsertHabitAsynvTask(habitDao).execute(habits);
+        new InsertHabitAsyncTask(habitDao).execute(habits);
     }
+    public void deleteHabit(Habit...habits)
+    {
+        new DeleteHabitAsyncTask(habitDao).execute(habits);
+    }
+
     public LiveData<List<Habit>> getAllHabits(String userId)
     {
         try {
