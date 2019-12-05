@@ -18,15 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline58">
 
-        <TextView
-            android:layout_width="127dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="15dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:text="总时长"
-            android:textSize="15sp" />
-
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -177,7 +168,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline57"
         app:layout_constraintTop_toTopOf="@+id/guideline56"
         app:lineMargin="10dp"
-        app:selectType="SINGLE_IRREVOCABLY"
+        app:selectType="MULTI"
         app:wordMargin="10dp">
     </com.donkingliang.labels.LabelsView>
 

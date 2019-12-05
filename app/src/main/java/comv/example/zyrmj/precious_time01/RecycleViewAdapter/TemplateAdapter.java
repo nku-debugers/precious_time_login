@@ -1,7 +1,6 @@
 package comv.example.zyrmj.precious_time01.RecycleViewAdapter;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.MyView
 //            初始化所有组件
             cardView = itemView.findViewById(R.id.cardview);
             number = itemView.findViewById(R.id.number);
-            name = itemView.findViewById(R.id.name);
+            name = itemView.findViewById(R.id.habitName);
         }
     }
 

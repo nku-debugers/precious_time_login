@@ -1,7 +1,6 @@
 package comv.example.zyrmj.precious_time01.RecycleViewAdapter;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 
 public class TemplateItemAdapter extends RecyclerView.Adapter<TemplateItemAdapter.MyViewHolder> {
@@ -33,7 +31,7 @@ public class TemplateItemAdapter extends RecyclerView.Adapter<TemplateItemAdapte
 //            初始化所有组件
             cardView = itemView.findViewById(R.id.cardview);
             number = itemView.findViewById(R.id.number);
-            name = itemView.findViewById(R.id.name);
+            name = itemView.findViewById(R.id.habitName);
             startTime = itemView.findViewById(R.id.startTime);
             endTime = itemView.findViewById(R.id.endTime);
             weekDay = itemView.findViewById(R.id.weekDay);
