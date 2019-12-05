@@ -1,35 +1,19 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.donkingliang.labels.LabelsView;
 
 import java.util.ArrayList;
 
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
-import me.leefeng.promptlibrary.PromptDialog;
 
 public class AddHabbitItemFragment extends AppCompatActivity implements View.OnClickListener {
     LabelsView labelsView;
@@ -38,7 +22,7 @@ public class AddHabbitItemFragment extends AppCompatActivity implements View.OnC
     private void init(){
         labelsView =findViewById ( R.id.category );
         button = findViewById ( R.id.habbit_complete );
-        advanced_option = findViewById ( R.id.toAddHabit2 );
+        advanced_option = findViewById ( R.id.advanced_option);
         final ArrayList<String> labels = new ArrayList<> ();
         //添加从数据库中获取的标签名称
 

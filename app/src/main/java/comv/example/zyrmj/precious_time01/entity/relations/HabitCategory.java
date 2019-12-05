@@ -8,7 +8,7 @@ import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 
-@Entity
+@Entity(primaryKeys = {"user_id", "category_name", "habit_name"})
 public class HabitCategory {
     @NonNull
     @ColumnInfo(name = "user_id")

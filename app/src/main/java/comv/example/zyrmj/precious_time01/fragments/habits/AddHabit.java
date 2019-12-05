@@ -1,6 +1,12 @@
 package comv.example.zyrmj.precious_time01.fragments.habits;
 
+
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,31 +14,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import com.donkingliang.labels.LabelsView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Habit;
-import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
+import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 
-public class AddHabit extends Fragment implements View.OnClickListener {
-    private TextView totalTime, title, habitName, habitCategory, gotoAdvanced;
-    private String userId, templateName;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class AddHabit extends Fragment {
+    private TextView totalTime, title, habitName,gotoAdvanced;
+    private String userId="offline", templateName;
     private Button save;
     private EditText name, weekTime;
+    private LabelsView labelsView;
     private Habit newHabit;
-    private List<HabitCategory>categories;
+    private List<Category>categories;
+    private HabitRepository habitRepository;
+    private CategoryRepository categoryRepository;
 
-    @Override
-    public void onClick(View view) {
-    }
 
     public AddHabit() {
     }
@@ -60,11 +68,8 @@ public class AddHabit extends Fragment implements View.OnClickListener {
         gotoAdvanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller = Navigation.findNavController(getView());
-                Bundle bundle = new Bundle();
-                bundle.putString("userId", userId);
-                bundle.putString("templateName", templateName);
-                controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_addHabit1_to_addHabit2);
             }
         });
 
@@ -76,10 +81,10 @@ public class AddHabit extends Fragment implements View.OnClickListener {
                 String habitName = name.getText().toString();
                 String length = weekTime.getText().toString();
                 Habit habit = new Habit(userId, habitName, length, 0);
-                this.newHabit = habit;
+                newHabit = habit;
                 HabitRepository habitRepository = new HabitRepository(getContext());
                 habitRepository.insertHabit(habit);
-                habitRepository.insertHabitCategory(categories);
+                // habitRepository.insertHabitCategory(categories);
             }
         });
     }
@@ -89,10 +94,30 @@ public class AddHabit extends Fragment implements View.OnClickListener {
         title = getView().findViewById(R.id.habbit_title);
         habitName = getView().findViewById(R.id.habbit_name);
         name = getView().findViewById(R.id.habbit_name_input);
-        habitCategory = getView().findViewById(R.id.habbit_category);
         totalTime = getView().findViewById(R.id.week_time);
         gotoAdvanced = getView().findViewById(R.id.advanced_option);
         gotoAdvanced.setClickable(true);
+        labelsView=getView().findViewById(R.id.category);
+        categoryRepository = new CategoryRepository(getContext());
+        final ArrayList<String> labels = new ArrayList<>();
+        //添加从数据库中获取的标签名称
+        categories = categoryRepository.getAllCateories(userId);
+        for (Category category : categories) {
+            labels.add(category.getName());
+        }
+        labels.add("+");
+        labelsView.setLabels(labels); //直接设置一个字符串数组就可以了。
+        labelsView.setOnLabelClickListener(new LabelsView.OnLabelClickListener() {
+
+            @Override
+            public void onLabelClick(TextView label, Object data, int position) {
+                data = (String) data;
+                if (data.equals("+")) {
+                    //添加一个新类别
+                    Log.d("add ","category");
+                }
+            }
+        });
     }
 
 }
