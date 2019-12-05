@@ -54,6 +54,8 @@ public class AddHabit extends Fragment implements View.OnClickListener {
         enableButtons();
     }
 
+
+
     private void enableButtons() {
         gotoAdvanced.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,8 @@ public class AddHabit extends Fragment implements View.OnClickListener {
                 controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
             }
         });
+
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
