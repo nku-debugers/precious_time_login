@@ -11,17 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline35"
-        app:layout_constraintEnd_toStartOf="@+id/guideline25"
+        android:contentDescription="@string/desc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/quote_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="箴言"
+        android:text="@string/quote_name"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/words"
         app:layout_constraintEnd_toStartOf="@+id/guideline51"
@@ -40,13 +39,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="寸光"
+        android:hint="@string/quote_words_hint"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline53"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline51"
         app:layout_constraintTop_toTopOf="@+id/guideline52"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.5"
+        android:importantForAutofill="no" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline52"
@@ -70,10 +70,10 @@
         app:layout_constraintGuide_percent="0.65" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/quote_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="作者"
+        android:text="@string/quote_author"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/author"
         app:layout_constraintEnd_toStartOf="@+id/guideline51"
@@ -85,19 +85,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="佚名"
+        android:hint="@string/quote_author_hint"
         android:inputType="textPersonName"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline54"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline51"
-        app:layout_constraintTop_toTopOf="@+id/guideline53" />
+        app:layout_constraintTop_toTopOf="@+id/guideline53"
+        android:importantForAutofill="no" />
 
     <Button
-        android:id="@+id/clear"
+        android:id="@+id/quote_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="删除"
+        android:text="@string/delete"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline51"
@@ -105,10 +106,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline54" />
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/quote_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="保存"
+        android:text="@string/save"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,10 +117,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline54" />
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/quote_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="箴言详情"
+        android:text="@string/quote_title"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline52"
         app:layout_constraintEnd_toEndOf="parent"

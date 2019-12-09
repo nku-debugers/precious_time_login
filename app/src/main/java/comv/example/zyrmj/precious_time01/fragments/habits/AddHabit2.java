@@ -18,6 +18,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import org.angmarch.views.NiceSpinner;
+
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.QuoteAdapter;
 import comv.example.zyrmj.precious_time01.entity.Habit;
@@ -33,7 +36,6 @@ public class AddHabit2 extends Fragment {
     private String userId = "offline";
     private Button choseQuote;
     private HabitRepository habitRepository;
-
 
     public AddHabit2() {
         // Required empty public constructor

@@ -5,40 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/total_time"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline79"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline58">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/tv_selected_start_time"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="15dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/habbit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/habbit_name"
+        android:text="@string/habit_name"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline56"
         app:layout_constraintEnd_toStartOf="@+id/guideline57"
@@ -50,7 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/habbit_name_hint"
+        android:hint="@string/habit_name_hint"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline56"
@@ -63,7 +35,7 @@
         android:id="@+id/habbit_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/habbit_category"
+        android:text="@string/habit_category"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline58"
         app:layout_constraintEnd_toStartOf="@+id/guideline57"
@@ -122,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="25dp"
-        android:text="@string/habbit_complete"
+        android:text="@string/habit_complete"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,10 +103,10 @@
         app:layout_constraintVertical_bias="0.8" />
 
     <TextView
-        android:id="@+id/habbit_title"
+        android:id="@+id/habit_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/habbit_title"
+        android:text="@string/habit_title"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline55"
         app:layout_constraintEnd_toEndOf="parent"
@@ -184,7 +156,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="@+id/guideline57"
-        app:layout_constraintTop_toTopOf="@+id/guideline58" />
+        app:layout_constraintTop_toTopOf="@+id/guideline58"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/week_time_hour"

@@ -46,8 +46,8 @@ holder.completion.setProgress((int) habit.getCompletion());
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView=itemView.findViewById(R.id.cardview);
-            number=itemView.findViewById(R.id.number);
-            habitName=itemView.findViewById(R.id.habitName);
+            number=itemView.findViewById(R.id.habit_number);
+            habitName=itemView.findViewById(R.id.habit_name);
             completion=itemView.findViewById(R.id.completion);
         }
     }

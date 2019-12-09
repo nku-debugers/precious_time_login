@@ -44,6 +44,7 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
         app:layout_constraintEnd_toStartOf="@+id/guideline25"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,10 +52,10 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/fragment_habit_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="个人习惯"
+        android:text="@string/habit_title"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +63,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <SearchView
+        android:id="@+id/habit_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
@@ -70,7 +72,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
+        android:id="@+id/habit_recycleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -89,5 +91,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline22"
         app:layout_constraintTop_toTopOf="@+id/guideline38"
-        app:srcCompat="@drawable/ic_add_black_96dp" />
+        app:srcCompat="@drawable/ic_add_black_96dp"
+        android:focusable="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>

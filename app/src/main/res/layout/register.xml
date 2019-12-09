@@ -12,7 +12,7 @@
         android:id="@+id/register"
         android:layout_width="114dp"
         android:layout_height="62dp"
-        android:text="注册"
+        android:text="@string/register"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline30"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
@@ -23,7 +23,7 @@
         android:id="@+id/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="已有账户登录"
+        android:text="@string/register_to_login"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
         app:layout_constraintTop_toTopOf="@+id/guideline30" />
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:background="#EBEBEB"
         android:ems="10"
-        android:hint="请输入邮箱"
+        android:hint="@string/email_hint"
         android:inputType="textPersonName"
         android:padding="5dp"
         android:textColor="#000000"
@@ -44,7 +44,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline27"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
         app:layout_constraintStart_toStartOf="@+id/guideline78"
-        app:layout_constraintTop_toTopOf="@+id/guideline26" />
+        app:layout_constraintTop_toTopOf="@+id/guideline26"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/username"
@@ -52,7 +53,7 @@
         android:layout_height="wrap_content"
         android:background="#EBEBEB"
         android:ems="10"
-        android:hint="请输入用户昵称"
+        android:hint="@string/username_hint"
         android:inputType="textPersonName"
         android:padding="5dp"
         android:textColor="#000000"
@@ -62,7 +63,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline27"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
         app:layout_constraintStart_toStartOf="@+id/guideline78"
-        app:layout_constraintTop_toTopOf="@+id/guideline26" />
+        app:layout_constraintTop_toTopOf="@+id/guideline26"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/phone"
@@ -70,7 +72,7 @@
         android:layout_height="wrap_content"
         android:background="#EBEBEB"
         android:ems="10"
-        android:hint="请输入手机号"
+        android:hint="@string/phone_hint"
         android:inputType="textPersonName"
         android:padding="5dp"
         android:textColor="#000000"
@@ -80,7 +82,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline27"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
         app:layout_constraintStart_toStartOf="@+id/guideline78"
-        app:layout_constraintTop_toTopOf="@+id/guideline26" />
+        app:layout_constraintTop_toTopOf="@+id/guideline26"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/password"
@@ -88,7 +91,7 @@
         android:layout_height="wrap_content"
         android:background="#EBEBEB"
         android:ems="10"
-        android:hint="请输入密码"
+        android:hint="@string/register_password_hint"
         android:inputType="textPassword"
         android:padding="5dp"
         android:textColor="#000000"
@@ -97,7 +100,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline28"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
         app:layout_constraintStart_toStartOf="@+id/guideline23"
-        app:layout_constraintTop_toTopOf="@+id/guideline27" />
+        app:layout_constraintTop_toTopOf="@+id/guideline27"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/password2"
@@ -105,7 +109,7 @@
         android:layout_height="wrap_content"
         android:background="#EBEBEB"
         android:ems="10"
-        android:hint="请再次确认密码"
+        android:hint="@string/register_password2_hint"
         android:inputType="textPassword"
         android:padding="5dp"
         android:textColor="#000000"
@@ -114,28 +118,31 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline29"
         app:layout_constraintEnd_toStartOf="@+id/guideline24"
         app:layout_constraintStart_toStartOf="@+id/guideline23"
-        app:layout_constraintTop_toTopOf="@+id/guideline28" />
+        app:layout_constraintTop_toTopOf="@+id/guideline28"
+        android:importantForAutofill="no" />
 
     <ImageView
-        android:id="@+id/imageView19"
+        android:id="@+id/register_qq"
         android:layout_width="65dp"
         android:layout_height="56dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline78"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView27"
+        app:layout_constraintTop_toBottomOf="@+id/register_thirdpart"
         app:srcCompat="@drawable/qq" />
 
     <ImageView
-        android:id="@+id/imageView20"
+        android:id="@+id/register_wechat"
         android:layout_width="69dp"
         android:layout_height="64dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="@+id/guideline78"
-        app:layout_constraintTop_toBottomOf="@+id/textView27"
+        app:layout_constraintTop_toBottomOf="@+id/register_thirdpart"
         app:srcCompat="@drawable/wechat" />
 
     <Spinner
@@ -150,11 +157,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline26" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/register_title"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="寸光"
+        android:text="@string/app_title"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="50sp"
@@ -165,20 +172,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/register_problem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="注册遇到问题？"
+        android:text="@string/register_problem"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/next"
         app:layout_constraintStart_toStartOf="@+id/guideline23"
         app:layout_constraintTop_toTopOf="@+id/guideline30" />
 
     <TextView
-        android:id="@+id/textView27"
+        android:id="@+id/register_thirdpart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="———第三方账号注册———"
+        android:text="@string/register_thirdpart"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

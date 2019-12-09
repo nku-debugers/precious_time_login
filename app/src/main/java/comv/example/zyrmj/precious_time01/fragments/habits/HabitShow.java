@@ -66,7 +66,7 @@ public class HabitShow extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         habitRepository=new HabitRepository(getContext());
-        recyclerView=getView().findViewById(R.id.recycleView);
+        recyclerView=getView().findViewById(R.id.habit_recycleView);
         final HabitAdapter habitAdapter=new HabitAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(habitAdapter);

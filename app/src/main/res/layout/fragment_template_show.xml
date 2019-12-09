@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline44"
         app:layout_constraintEnd_toStartOf="@+id/guideline49"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,7 +18,7 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
     <SearchView
-        android:id="@+id/searchView"
+        android:id="@+id/template_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:queryHint="搜索模板"
@@ -28,10 +29,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/fragment_template_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="个人模板"
+        android:text="@string/fragment_template_title"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline44"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +77,7 @@
         app:layout_constraintGuide_percent="0.15" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
+        android:id="@+id/template_recycleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

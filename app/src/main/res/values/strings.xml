@@ -30,27 +30,78 @@
     <string name="save">保存</string>
     <string name="add_item_button">add_item</string>
 
-    <string name="habbit_title">习惯属性</string>
-    <string name="habbit_name">习惯名称</string>
-    <string name="habbit_category">习惯属性</string>
+    <string name="habit_title">习惯属性</string>
+    <string name="habit_name">习惯名称</string>
+    <string name="habit_category">习惯属性</string>
     <string name="week_time">每周预计用时</string>
     <string name="week_time_hour">小时</string>
     <string name="advanced_option">高级选项</string>
-    <string name="habbit_complete"> 完 成</string>
-    <string name="habbit_name_hint">思考</string>
+    <string name="habit_complete"> 完 成</string>
+    <string name="habit_name_hint">思考</string>
     <string name="week_time_hint">0</string>
 
     <string name="advanced_option_title">高级选项</string>
     <string name="time_period">时间段</string>
     <string name="time_once">单次时长</string>
-    <string name="habbit_place">习惯地点</string>
-    <string name="habbit_place_hint">未知</string>
+    <string name="habit_place">习惯地点</string>
+    <string name="habit_place_hint">未知</string>
     <string name="time_remind">定时提醒</string>
     <string name="time_remind_switch">开</string>
-    <string name="habbit_priority">习惯优先级</string>
+    <string name="habit_priority">习惯优先级</string>
     <string name="advance_forward">提前</string>
     <string name="advance_backward">分钟</string>
-    <string name="habbit_quote">箴言</string>
+    <string name="habit_quote">箴言</string>
     <string name="advanced_back">返回</string>
+
+    <string name="rechosequote">重新选择</string>
+    <string name="chosequote">未选择</string>
+    <string name="advance_time_hint">5</string>
+    <string name="show_quote">show_quote</string>
+
+    <string name="quote_title">箴言详情</string>
+    <string name="quote_name">箴言</string>
+    <string name="quote_author">作者</string>
+    <string name="quote_words_hint">寸光</string>
+    <string name="quote_author_hint">佚名</string>
+
+    <string name="event_name">事件名称</string>
+    <string name="event_input_hint">名称</string>
+
+    <string name="desc"></string>
+
+    <string name="card_number">序号</string>
+    <string name="card_title">标题</string>
+
+    <string name="words">一寸光阴一寸金</string>
+    <string name="author">作者</string>
+
+    <string name="fragment_habit_title">个人习惯</string>
+    <string name="fragment_quote_title">个人箴言</string>
+    <string name="fragment_template_title">个人模板</string>
+
+    <string name="app_title">寸光</string>
+    <string name="login_password_hint">请输入密码</string>
+    <string name="login">登录</string>
+    <string name="login_to_register">新用户注册</string>
+    <string name="login_problem">登录遇到问题？</string>
+    <string name="login_thirdpart">———使用第三方软件登录———</string>
+    <string name="username_hint">请输入用户名</string>
+    <string name="email_hint">请输入邮箱</string>
+    <string name="phone_hint">请输入手机号</string>
+    <string name="personcenter_title">个人中心</string>
+    <string name="tologin">登录/注册</string>
+    <string name="logout">退出登录</string>
+
+    <string name="register">注册</string>
+    <string name="register_password_hint">请输入密码</string>
+    <string name="register_password2_hint">请再次确认密码</string>
+    <string name="register_to_login">已有账户登录</string>
+    <string name="register_problem">注册遇到问题？</string>
+    <string name="register_thirdpart">———第三方账号注册———</string>
+
+    <string name="weekDay">星期几</string>
+
+    <string name="model_name">模板名称</string>
+    <string name="week_switch">周视图</string>
 
 </resources>

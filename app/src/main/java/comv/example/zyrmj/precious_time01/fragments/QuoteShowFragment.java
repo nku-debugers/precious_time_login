@@ -70,7 +70,7 @@ public class QuoteShowFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         quoteRepository = new QuoteRepository(getContext());
-        recyclerView = getView().findViewById(R.id.recycleView);
+        recyclerView = getView().findViewById(R.id.quote_recycleView);
         final QuoteAdapter quoteAdapter = new QuoteAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(quoteAdapter);

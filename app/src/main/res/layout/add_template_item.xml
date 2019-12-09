@@ -21,36 +21,36 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="事件名称"
+        android:text="@string/event_name"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/event_input"
         app:layout_constraintEnd_toStartOf="@+id/guideline61"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintTop_toTopOf="@+id/event_input" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/event_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:ems="10"
-        android:hint="名称"
+        android:hint="@string/event_input_hint"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline60"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
         app:layout_constraintStart_toStartOf="@+id/guideline61"
-        app:layout_constraintTop_toTopOf="@+id/guideline62" />
+        app:layout_constraintTop_toTopOf="@+id/guideline62"
+        android:importantForAutofill="no" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/template_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="删除"
+        android:text="@string/delete"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline61"
@@ -59,10 +59,10 @@
         app:layout_constraintVertical_bias="0.51" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/template_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="保存"
+        android:text="@string/save"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
@@ -92,7 +92,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:text="星期"
+                android:text="@string/week"
                 android:textSize="15sp" />
 
             <Space
@@ -135,7 +135,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:text="开始时间"
+                android:text="@string/start_time"
                 android:textSize="15sp" />
 
             <Space
@@ -169,7 +169,8 @@
             android:layout_height="50dp"
             android:clickable="true"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:focusable="true">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -177,7 +178,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:text="终止时间"
+                android:text="@string/end_time"
                 android:textSize="15sp" />
 
             <Space

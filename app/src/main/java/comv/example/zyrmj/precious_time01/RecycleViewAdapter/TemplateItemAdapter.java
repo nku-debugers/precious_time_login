@@ -30,8 +30,8 @@ public class TemplateItemAdapter extends RecyclerView.Adapter<TemplateItemAdapte
             super(itemView);
 //            初始化所有组件
             cardView = itemView.findViewById(R.id.cardview);
-            number = itemView.findViewById(R.id.number);
-            name = itemView.findViewById(R.id.habitName);
+            number = itemView.findViewById(R.id.tmpitem_number);
+            name = itemView.findViewById(R.id.tmpitem_title);
             startTime = itemView.findViewById(R.id.startTime);
             endTime = itemView.findViewById(R.id.endTime);
             weekDay = itemView.findViewById(R.id.weekDay);

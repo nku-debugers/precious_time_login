@@ -91,7 +91,7 @@ public class AddHabit extends Fragment {
 
     private void init() {
         save = getView().findViewById(R.id.habbit_complete);
-        title = getView().findViewById(R.id.habbit_title);
+        title = getView().findViewById(R.id.habit_title );
         habitName = getView().findViewById(R.id.habbit_name);
         name = getView().findViewById(R.id.habbit_name_input);
         totalTime = getView().findViewById(R.id.week_time);
