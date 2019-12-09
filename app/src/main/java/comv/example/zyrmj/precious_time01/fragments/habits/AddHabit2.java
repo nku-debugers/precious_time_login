@@ -13,14 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.angmarch.views.NiceSpinner;
@@ -39,10 +44,13 @@ import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
  */
 public class AddHabit2 extends Fragment {
     private String userId = "offline";
-    private Button choseQuote;
+    private Button choseQuote,back;
     private HabitRepository habitRepository;
     private Habit newHabit;
-    private NiceSpinner timePeriodSpinner;
+    private NiceSpinner timePeriodSpinner,habitPrioritySpinner;
+    private EditText habitPlace,advancedMinute;
+    private Switch timeRemind;
+    private ArrayList<Quote> selectedQuotes;
 
     public AddHabit2() {
         // Required empty public constructor
@@ -74,13 +82,7 @@ public class AddHabit2 extends Fragment {
 
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                List<Quote> selectedQuotes = quoteAdapter.getSelctedQuotes();
-
-                                for (Quote q : selectedQuotes) {
-                                    Habit h=new Habit("offline","test","test",0.0);
-                                    HabitQuote habitQuote=new HabitQuote(q,h) ;
-                                    habitRepository.insertHabitQuote(habitQuote);
-                                }
+                               selectedQuotes = (ArrayList<Quote>) quoteAdapter.getSelctedQuotes();
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -96,22 +98,79 @@ public class AddHabit2 extends Fragment {
             @Override
             public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                Log.d("mytag", "onItemSelected: this is the String: " + item);
             }
         });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //收集界面信息，统一放到habit中传回上一个界面
+                setValues();
+                NavController controller = Navigation.findNavController(view);
+                Bundle bundle = new Bundle();
+                bundle.putString("userId",userId);
+                bundle.putSerializable("theHabit", newHabit);
+                bundle.putSerializable("selectedQuotes",selectedQuotes);
+                if(getArguments().getSerializable("labels")!=null)
+                    bundle.putSerializable("labels",getArguments().getSerializable("labels"));
+                if(getArguments().getSerializable("selectedIndex")!=null)
+                    bundle.putSerializable("selectedIndex",getArguments().getSerializable("selectedIndex"));
+                controller.navigate(R.id.action_addHabit2_to_addHabit1,bundle);
+            }
+        });
+    }
+
+    public void init()
+    {
+        choseQuote = getView().findViewById(R.id.choseQuote);
+        back=getView().findViewById(R.id.advanced_back);
+        timePeriodSpinner = getView().findViewById(R.id.time_period_spinner);
+        List<String> dataset = new LinkedList<>(Arrays.asList("上午", "下午", "晚上"));
+        timePeriodSpinner.attachDataSource(dataset);
+        habitPrioritySpinner= getView().findViewById(R.id.habbit_priority_spinner);
+        List<String> priorities=new LinkedList<>(Arrays.asList("低","中","高"));
+        habitPrioritySpinner.attachDataSource(priorities);
+        habitPlace=getView().findViewById(R.id.habbit_place_input);
+        advancedMinute= getView().findViewById(R.id.advancedminute);
+        timeRemind=getView().findViewById(R.id.time_remind_switch);
+
+    }
+
+    public void setValues()
+    {
+        if(habitPlace.getText() != null) {
+            newHabit.setLocation(habitPlace.getText().toString());
+        }
+        if(timeRemind.isChecked())
+        {
+            if(advancedMinute.getText()!=null)
+            {
+                newHabit.setReminder(Integer.valueOf(advancedMinute.getText().toString()));
+            }
+        }
+        else newHabit.setReminder(0);
+        newHabit.setExpectedTime(timePeriodSpinner.getSelectedIndex());//0-上午 1-下午 2-晚上
+        newHabit.setPriority(habitPrioritySpinner.getSelectedIndex());//0-低 1-中 2-高
+        //设置单次时长
+
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
         if(getArguments() != null) {
+            userId=getArguments().getString("userId","offline");
             newHabit = (Habit)getArguments().getSerializable("theHabit");
         }
+        else
+        {
+            newHabit=new Habit();
+        }
+        selectedQuotes=new ArrayList<>();
         habitRepository=new HabitRepository(getContext());
-        choseQuote = getView().findViewById(R.id.choseQuote);
-        timePeriodSpinner = (NiceSpinner) getView().findViewById(R.id.time_period_spinner);
-        List<String> dataset = new LinkedList<>(Arrays.asList("上午", "下午", "晚上"));
-        timePeriodSpinner.attachDataSource(dataset);
         enableButtons();
     }
+
 }

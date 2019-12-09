@@ -115,5 +115,7 @@ public class Habit implements Serializable {
         this.completion = completion;
     }
     @Ignore
-    public Habit(){}
+    public Habit(){
+        this.completion=0.0;
+    }
 }

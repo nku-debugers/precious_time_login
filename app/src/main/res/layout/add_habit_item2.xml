@@ -162,13 +162,13 @@
         android:layout_height="wrap_content"
         android:text="@string/advance_backward"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText9"
+        app:layout_constraintBottom_toBottomOf="@+id/advancedminute"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText9"
-        app:layout_constraintTop_toTopOf="@+id/editText9" />
+        app:layout_constraintStart_toEndOf="@+id/advancedminute"
+        app:layout_constraintTop_toTopOf="@+id/advancedminute" />
 
     <EditText
-        android:id="@+id/editText9"
+        android:id="@+id/advancedminute"
         android:layout_width="57dp"
         android:layout_height="wrap_content"
         android:ems="10"
