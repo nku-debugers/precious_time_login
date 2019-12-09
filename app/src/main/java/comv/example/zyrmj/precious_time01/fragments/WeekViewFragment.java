@@ -1,7 +1,6 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
 
-import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 
@@ -16,9 +15,6 @@ import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
-import me.leefeng.promptlibrary.PromptButton;
-import me.leefeng.promptlibrary.PromptButtonListener;
-import me.leefeng.promptlibrary.PromptDialog;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -90,7 +86,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
 
             }
         });
-        add = (FloatingActionButton) getView().findViewById(R.id.floatingActionButton2);
+        add = (FloatingActionButton) getView().findViewById(R.id.add );
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +110,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
         };
         mWeekView.setEmptyViewClickListener(emptyViewClickListener);
         setupDateTimeInterpreter();
-        changeView = getView().findViewById(R.id.switch1);
+        changeView = getView().findViewById(R.id.week_switch );
         changeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

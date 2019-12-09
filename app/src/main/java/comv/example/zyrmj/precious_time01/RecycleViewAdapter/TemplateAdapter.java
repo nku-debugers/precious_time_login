@@ -71,8 +71,8 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.MyView
             super(itemView);
 //            初始化所有组件
             cardView = itemView.findViewById(R.id.cardview);
-            number = itemView.findViewById(R.id.number);
-            name = itemView.findViewById(R.id.habitName);
+            number = itemView.findViewById(R.id.model_number);
+            name = itemView.findViewById(R.id.model_name);
         }
     }
 

@@ -72,7 +72,7 @@ public class TemplateShowFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         enableBackButton();
         templateRepository = new TemplateRepository(getContext());
-        recyclerView = getView().findViewById(R.id.recycleView);
+        recyclerView = getView().findViewById(R.id.template_recycleView);
         final TemplateAdapter templateAdapter = new TemplateAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(templateAdapter);

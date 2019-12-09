@@ -80,9 +80,9 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      * @param beginDateStr 日期字符串，格式为 yyyy-MM-dd HH:mm
      * @param endDateStr   日期字符串，格式为 yyyy-MM-dd HH:mm
      */
-    public CustomDatePicker(Context context, Callback callback, String beginDateStr, String endDateStr) {
+    public CustomDatePicker(Context context, Callback callback, String beginDateStr, String endDateStr, int whichView) {
         this(context, callback, DateFormatUtils.str2Long(beginDateStr, 1),
-                DateFormatUtils.str2Long(endDateStr, 1));
+                DateFormatUtils.str2Long(endDateStr, 1), whichView);
     }
 
     /**
@@ -92,8 +92,9 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
      * @param callback       选择结果回调
      * @param beginTimestamp 毫秒级时间戳
      * @param endTimestamp   毫秒级时间戳
+     * @param whichView      表示用哪个 xml 进行填充 1 代表原始：2 代表habit中使用的
      */
-    public CustomDatePicker(Context context, Callback callback, long beginTimestamp, long endTimestamp) {
+    public CustomDatePicker(Context context, Callback callback, long beginTimestamp, long endTimestamp, int whichView) {
         if (context == null || callback == null || beginTimestamp <= 0 || beginTimestamp > endTimestamp) {
             mCanDialogShow = false;
             return;
@@ -105,15 +106,19 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
         mEndTime = Calendar.getInstance();
         mEndTime.setTimeInMillis(endTimestamp);
         mSelectedTime = Calendar.getInstance();
-        initView();
+        initView(whichView);
         initData();
         mCanDialogShow = true;
     }
 
-    private void initView() {
+    private void initView(int whichView) {
         mPickerDialog = new Dialog(mContext, R.style.date_picker_dialog);
         mPickerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mPickerDialog.setContentView(R.layout.dialog_date_picker);
+        if (whichView == 1) {
+            mPickerDialog.setContentView(R.layout.dialog_date_picker);
+        } else {
+            mPickerDialog.setContentView(R.layout.habit_once_time_picker);
+        }
 
         Window window = mPickerDialog.getWindow();
         if (window != null) {
@@ -639,6 +644,14 @@ public class CustomDatePicker implements View.OnClickListener, PickerView.OnSele
 
         }
         mCanShowPreciseTime = canShowPreciseTime;
+    }
+
+    public void setInitMinute(int minute) {
+        mDpvMinute.setSelected(minute);
+    }
+
+    public void setInitHour(int hour) {
+        mDpvHour.setSelected(hour);
     }
 
     public void setCanShowYearAndDay(boolean canShowYearAndDay) {

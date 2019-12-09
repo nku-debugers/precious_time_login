@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
@@ -18,7 +19,8 @@
         android:foreground="?selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,12 +34,12 @@
                 app:layout_constraintGuide_percent="0.54" />
 
             <TextView
-                android:id="@+id/habitName"
+                android:id="@+id/tmpitem_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="标题"
+                android:text="@string/card_title"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline15"
@@ -45,10 +47,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/number"
+                android:id="@+id/tmpitem_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="序号"
+                android:text="@string/card_number"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline42"
@@ -59,7 +61,7 @@
                 android:id="@+id/startTime"
                 android:layout_width="68dp"
                 android:layout_height="25dp"
-                android:text="开始时间"
+                android:text="@string/start_time"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline43"
                 app:layout_constraintStart_toStartOf="@+id/guideline19"
@@ -69,7 +71,7 @@
                 android:id="@+id/endTime"
                 android:layout_width="62dp"
                 android:layout_height="26dp"
-                android:text="起始时间"
+                android:text="@string/end_time"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline43"
@@ -100,7 +102,7 @@
                 android:id="@+id/weekDay"
                 android:layout_width="50dp"
                 android:layout_height="27dp"
-                android:text="星期几"
+                android:text="@string/weekDay"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/startTime"
                 app:layout_constraintStart_toStartOf="@+id/guideline15"

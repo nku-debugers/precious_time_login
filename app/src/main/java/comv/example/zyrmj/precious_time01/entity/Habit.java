@@ -118,4 +118,5 @@ public class Habit implements Serializable {
     public Habit(){
         this.completion=0.0;
     }
+
 }

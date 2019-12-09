@@ -77,7 +77,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="模板名称"
+        android:text="@string/model_name"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline59"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,11 +92,11 @@
         app:layout_constraintGuide_percent="0.76" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/week_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
-        android:text="周视图"
+        android:text="@string/week_switch"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline59"
         app:layout_constraintEnd_toStartOf="@+id/guideline64"
@@ -111,7 +111,7 @@
         app:layout_constraintGuide_percent="0.87" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -120,7 +120,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline66"
         app:layout_constraintTop_toTopOf="@+id/guideline65"
-        app:srcCompat="@drawable/ic_add_black_96dp" />
+        app:srcCompat="@drawable/ic_add_black_96dp"
+        android:focusable="true" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline65"
@@ -140,6 +141,7 @@
         android:id="@+id/toTemplateView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline59"
         app:layout_constraintStart_toStartOf="@+id/view6"
         app:layout_constraintTop_toTopOf="parent"

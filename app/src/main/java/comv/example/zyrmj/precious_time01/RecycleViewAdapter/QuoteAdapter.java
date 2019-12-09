@@ -48,7 +48,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
             super(itemView);
 //            初始化所有组件
             cardView = itemView.findViewById(R.id.cardview);
-            number = itemView.findViewById(R.id.number);
+            number = itemView.findViewById(R.id.quote_number);
             words = itemView.findViewById(R.id.words);
             author = itemView.findViewById(R.id.author);
             next = itemView.findViewById(R.id.next);

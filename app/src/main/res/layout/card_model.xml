@@ -35,12 +35,12 @@
                 app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
             <TextView
-                android:id="@+id/habitName"
+                android:id="@+id/model_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="标题"
+                android:text="@string/card_title"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline43"
@@ -49,10 +49,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/number"
+                android:id="@+id/model_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="序号"
+                android:text="@string/card_number"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline42"

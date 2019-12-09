@@ -40,11 +40,11 @@
         app:layout_constraintGuide_percent="0.23" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/personcenter_title"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="个人中心"
+        android:text="@string/personcenter_title"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline16"
@@ -85,9 +85,10 @@
     <!--        app:srcCompat="@drawable/timg" />-->
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/person_photo"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline74"
         app:layout_constraintEnd_toStartOf="@+id/guideline48"
         app:layout_constraintStart_toStartOf="@+id/guideline37"
@@ -119,10 +120,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline20" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/person_quote_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="一寸光阴一寸金"
+        android:text="@string/words"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline41"
         app:layout_constraintEnd_toStartOf="@+id/guideline68"
@@ -135,14 +136,15 @@
         android:layout_height="0dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView6"
+        app:layout_constraintEnd_toEndOf="@+id/person_person"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline36" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/person_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline40"
         app:layout_constraintEnd_toStartOf="@+id/guideline48"
         app:layout_constraintHorizontal_bias="1.0"
@@ -152,9 +154,10 @@
     <!--        app:srcCompat="@drawable/cal" />-->
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/person_person"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline40"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline48"
@@ -162,9 +165,10 @@
     <!--        app:srcCompat="@drawable/timg" />-->
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/person_clock"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline40"
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
         app:layout_constraintStart_toStartOf="@+id/view"
@@ -279,9 +283,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline46" />
 
     <ImageView
-        android:id="@+id/imageView15"
+        android:id="@+id/person_model_image"
         android:layout_width="35dp"
         android:layout_height="36dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline45"
         app:layout_constraintEnd_toStartOf="@+id/guideline69"
         app:layout_constraintStart_toStartOf="@+id/guideline18"
@@ -296,10 +301,10 @@
         app:layout_constraintGuide_percent="0.22" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/person_model"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="个人模板"
+        android:text="@string/fragment_template_title"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline45"
@@ -346,9 +351,10 @@
         app:layout_constraintGuide_percent="0.85" />
 
     <ImageView
-        android:id="@+id/imageView16"
+        android:id="@+id/person_to_model"
         android:layout_width="49dp"
         android:layout_height="39dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline45"
         app:layout_constraintEnd_toStartOf="@+id/guideline68"
         app:layout_constraintStart_toStartOf="@+id/guideline73"
@@ -356,9 +362,10 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/person_to_habit"
         android:layout_width="49dp"
         android:layout_height="39dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline46"
         app:layout_constraintEnd_toStartOf="@+id/guideline68"
         app:layout_constraintStart_toStartOf="@+id/guideline73"
@@ -366,9 +373,10 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/person_to_quote"
         android:layout_width="49dp"
         android:layout_height="39dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline47"
         app:layout_constraintEnd_toStartOf="@+id/guideline68"
         app:layout_constraintStart_toStartOf="@+id/guideline73"
@@ -386,7 +394,7 @@
         android:id="@+id/tologin"
         android:layout_width="87dp"
         android:layout_height="41dp"
-        android:text="登录/注册"
+        android:text="@string/tologin"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline71"
         app:layout_constraintEnd_toStartOf="@+id/guideline48"
@@ -396,43 +404,43 @@
         android:id="@+id/logout"
         android:layout_width="87dp"
         android:layout_height="41dp"
-        android:text="退出登录"
+        android:text="@string/logout"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline71"
         app:layout_constraintEnd_toStartOf="@+id/guideline48"
         app:layout_constraintStart_toStartOf="@+id/guideline37" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/person_habit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="个人习惯"
+        android:text="@string/fragment_habit_title"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline46"
-        app:layout_constraintEnd_toStartOf="@+id/guideline67"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="@+id/guideline69"
-        app:layout_constraintTop_toTopOf="@+id/guideline45"
-        app:layout_constraintVertical_bias="0.578" />
+        app:layout_constraintTop_toTopOf="@+id/guideline45" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/person_quote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="个人箴言"
+        android:text="@string/fragment_quote_title"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline47"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="@+id/guideline69"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/guideline46" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/person_habit_image"
         android:layout_width="35dp"
         android:layout_height="36dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline46"
         app:layout_constraintEnd_toStartOf="@+id/guideline69"
         app:layout_constraintStart_toStartOf="@+id/guideline18"
@@ -440,13 +448,14 @@
         app:srcCompat="@drawable/ic_add_alert_black_24dp" />
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/person_quote_image"
         android:layout_width="35dp"
         android:layout_height="36dp"
+        android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline47"
         app:layout_constraintEnd_toStartOf="@+id/guideline69"
         app:layout_constraintStart_toStartOf="@+id/guideline18"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/guideline46"
         app:srcCompat="@drawable/ic_question_answer_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

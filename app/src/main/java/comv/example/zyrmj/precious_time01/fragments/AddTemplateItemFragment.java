@@ -110,8 +110,8 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
     }
 
     private void init() {
-        save = getView().findViewById(R.id.button2);
-        name = getView().findViewById(R.id.editText);
+        save = getView().findViewById(R.id.template_save );
+        name = getView().findViewById(R.id.event_input );
         //取消删除按钮，重写返回键，提醒用户是否返回，“您的数据将不会被保存”
 
         getView().findViewById(R.id.start_time).setOnClickListener(this);
@@ -258,7 +258,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     e.printStackTrace();
                 }
             }
-        }, beginTime, endTime);
+        }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
         mTimePicker1.setCancelable(true);
         // 显示时和分
@@ -297,7 +297,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                 }
             }
 
-        }, beginTime, endTime);
+        }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
         mTimePicker2.setCancelable(true);
         // 显示时和分
@@ -331,7 +331,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     e.printStackTrace();
                 }
             }
-        }, beginTime, endTime);
+        }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
 
         mTimePickerWeek.setCancelable(true);

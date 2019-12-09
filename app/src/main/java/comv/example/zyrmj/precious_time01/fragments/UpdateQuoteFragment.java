@@ -18,7 +18,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.entity.Quote;
-import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
@@ -58,7 +57,7 @@ public class UpdateQuoteFragment extends Fragment {
         words.setText(quote.getWords());
         author = getView().findViewById(R.id.author);
         author.setText(quote.getAuthor());
-        save = getView().findViewById(R.id.save);
+        save = getView().findViewById(R.id.quote_save );
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +77,7 @@ public class UpdateQuoteFragment extends Fragment {
                 }
             }
         });
-        clear = getView().findViewById(R.id.clear);
+        clear = getView().findViewById(R.id.quote_clear );
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

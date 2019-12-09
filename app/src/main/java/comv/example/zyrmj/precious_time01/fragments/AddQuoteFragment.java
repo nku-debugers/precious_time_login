@@ -51,7 +51,7 @@ public class AddQuoteFragment extends Fragment {
         quoteRepository = new QuoteRepository(getContext());
         words = getView().findViewById(R.id.words);
         author = getView().findViewById(R.id.author);
-        save = getView().findViewById(R.id.save);
+        save = getView().findViewById(R.id.quote_save );
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +71,7 @@ public class AddQuoteFragment extends Fragment {
                 }
             }
         });
-        clear = getView().findViewById(R.id.clear);
+        clear = getView().findViewById(R.id.quote_clear );
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

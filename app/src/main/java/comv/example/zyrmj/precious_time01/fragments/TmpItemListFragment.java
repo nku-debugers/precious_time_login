@@ -35,11 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateItemAdapter;
 import comv.example.zyrmj.precious_time01.ViewModel.TemplateItemViewModel;
-import comv.example.zyrmj.precious_time01.ViewModel.TemplateViewModel;
-import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
-import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,7 +73,7 @@ public class TmpItemListFragment extends Fragment {
         }
 
         templateItemRepository = new TemplateItemRepository(getContext());
-        recyclerView = getView().findViewById(R.id.recycleView);
+        recyclerView = getView().findViewById(R.id.tmpitemlist_recycleView);
         final TemplateItemAdapter templateItemAdapter = new TemplateItemAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(templateItemAdapter);
@@ -91,7 +88,7 @@ public class TmpItemListFragment extends Fragment {
                 allTemplateItems = templateItems;
             }
         });
-        chageView = getView().findViewById(R.id.switch1);
+        chageView = getView().findViewById(R.id.week_switch );
         chageView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean ischecked) {
@@ -109,7 +106,7 @@ public class TmpItemListFragment extends Fragment {
         });
         title = getView().findViewById(R.id.title);
         title.setText(templateName);
-        add = getView().findViewById(R.id.floatingActionButton2);
+        add = getView().findViewById(R.id.add );
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
