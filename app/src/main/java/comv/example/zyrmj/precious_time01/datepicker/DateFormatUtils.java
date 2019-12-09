@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.datepicker;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,6 +60,10 @@ public class DateFormatUtils {
         try {
             return new SimpleDateFormat(pattern, Locale.CHINA).parse(dateStr).getTime();
         } catch (Throwable ignored) {
+        }
+        if(dateStr.length() == 5){
+            return 1575820317;
+
         }
         return 0;
     }
