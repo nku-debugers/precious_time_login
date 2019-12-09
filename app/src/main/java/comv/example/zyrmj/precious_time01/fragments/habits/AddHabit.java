@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.donkingliang.labels.LabelsView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,24 +63,30 @@ public class AddHabit extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "");
-            templateName = getArguments().getString("templateName", "");
+            if (getArguments().getSerializable("theHabit") != null) {
+                newHabit = (Habit)getArguments().getSerializable("theHabit");
+            } else {
+                newHabit = new Habit();
+            }
+        } else {
+            newHabit = new Habit();
         }
+
         init();
         enableButtons();
     }
-
-
 
     private void enableButtons() {
         gotoAdvanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setValues();
                 NavController controller = Navigation.findNavController(view);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("theHabit", newHabit);
                 controller.navigate(R.id.action_addHabit1_to_addHabit2);
             }
         });
-
-
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +100,15 @@ public class AddHabit extends Fragment {
                 // habitRepository.insertHabitCategory(categories);
             }
         });
+    }
+
+    private void setValues() {
+        if(name.getText() != null) {
+            newHabit.setName(name.getText().toString());
+        }
+        if(weekTime.getText() != null) {
+            newHabit.setName(weekTime.getText().toString());
+        }
     }
 
     private void init() {
