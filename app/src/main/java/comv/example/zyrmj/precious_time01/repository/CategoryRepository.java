@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.repository;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -32,6 +33,21 @@ public class CategoryRepository {
         protected List<Category> doInBackground(String... strings) {
 
             return categoryDao.getAllCategories(strings[0]);
+        }
+    }
+
+    static class GetSpecificAsyncTask extends  AsyncTask<String ,Void ,Category>
+    {
+        private CategoryDao categoryDao;
+
+        public GetSpecificAsyncTask(CategoryDao categoryDao) {
+            this.categoryDao = categoryDao;
+        }
+
+        @Override
+        protected Category doInBackground(String... strings) {
+
+            return categoryDao.getSpecificCategory(strings[0],strings[1]);
         }
     }
 
@@ -84,6 +100,18 @@ public class CategoryRepository {
         }
         return null;
     }
+
+    public Category getSpecificCategory(String userId,String category_name) {
+        try {
+            return  new GetSpecificAsyncTask(categoryDao).execute(userId,category_name).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d("category","null");
+        return null;
+    }
+
+
     public void insertCategory(Category... categories) {
         new InsertAsyncTask(categoryDao).execute(categories);
     }

@@ -9,11 +9,13 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 @Entity(primaryKeys = {"user_id","habit_name"},
         foreignKeys = @ForeignKey(entity = User.class,
         parentColumns = "id",
         childColumns = "user_id"), indices = @Index(value = "user_id"))
-public class Habit {
+public class Habit implements Serializable {
     @NonNull
     @ColumnInfo(name = "user_id")
     public String userId;

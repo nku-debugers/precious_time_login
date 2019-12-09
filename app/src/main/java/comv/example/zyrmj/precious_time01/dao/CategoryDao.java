@@ -24,4 +24,6 @@ public interface CategoryDao {
 
     @Query("select * from Category where user_id=:userId")
    List<Category> getAllCategories(String userId);
+    @Query("select * from Category where user_id=:userId and name=:category_name")
+    Category getSpecificCategory(String userId,String category_name);
 }
