@@ -258,7 +258,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     e.printStackTrace();
                 }
             }
-        }, beginTime, endTime);
+        }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
         mTimePicker1.setCancelable(true);
         // 显示时和分
@@ -297,7 +297,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                 }
             }
 
-        }, beginTime, endTime);
+        }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
         mTimePicker2.setCancelable(true);
         // 显示时和分
@@ -331,7 +331,7 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
                     e.printStackTrace();
                 }
             }
-        }, beginTime, endTime);
+        }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
 
         mTimePickerWeek.setCancelable(true);

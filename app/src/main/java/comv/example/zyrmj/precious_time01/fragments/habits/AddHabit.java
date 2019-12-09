@@ -97,10 +97,10 @@ public class AddHabit extends Fragment {
     }
 
     private void setValues() {
-        if(name.getText() != null) {
+        if(name!= null) {
             newHabit.setName(name.getText().toString());
         }
-        if(weekTime.getText() != null) {
+        if(weekTime != null) {
             newHabit.setName(weekTime.getText().toString());
         }
     }
