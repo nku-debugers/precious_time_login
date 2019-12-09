@@ -7,19 +7,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.angmarch.views.NiceSpinner;
+import org.angmarch.views.OnSpinnerItemSelectedListener;
 
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.QuoteAdapter;
@@ -36,6 +41,8 @@ public class AddHabit2 extends Fragment {
     private String userId = "offline";
     private Button choseQuote;
     private HabitRepository habitRepository;
+    private Habit newHabit;
+    private NiceSpinner timePeriodSpinner;
 
     public AddHabit2() {
         // Required empty public constructor
@@ -49,11 +56,7 @@ public class AddHabit2 extends Fragment {
         return inflater.inflate(R.layout.add_habit_item2, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        habitRepository=new HabitRepository(getContext());
-        choseQuote = getView().findViewById(R.id.choseQuote);
+    private void enableButtons() {
         choseQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +79,7 @@ public class AddHabit2 extends Fragment {
                                 for (Quote q : selectedQuotes) {
                                     Habit h=new Habit("offline","test","test",0.0);
                                     HabitQuote habitQuote=new HabitQuote(q,h) ;
-                                habitRepository.insertHabitQuote(habitQuote);
+                                    habitRepository.insertHabitQuote(habitQuote);
                                 }
                             }
                         })
@@ -87,10 +90,28 @@ public class AddHabit2 extends Fragment {
                             }
                         })
                         .show();// 显示对话框
-
-
             }
-
         });
+        timePeriodSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Log.d("mytag", "onItemSelected: this is the String: " + item);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getArguments() != null) {
+            newHabit = (Habit)getArguments().getSerializable("theHabit");
+        }
+        habitRepository=new HabitRepository(getContext());
+        choseQuote = getView().findViewById(R.id.choseQuote);
+        timePeriodSpinner = (NiceSpinner) getView().findViewById(R.id.time_period_spinner);
+        List<String> dataset = new LinkedList<>(Arrays.asList("上午", "下午", "晚上"));
+        timePeriodSpinner.attachDataSource(dataset);
+        enableButtons();
     }
 }
