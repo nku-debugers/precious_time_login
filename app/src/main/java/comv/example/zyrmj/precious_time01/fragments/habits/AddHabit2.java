@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -80,6 +81,7 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 List<Quote> quotes = new QuoteRepository(getContext()).getAllQuotes2(userId);
                 final QuoteAdapter quoteAdapter = new QuoteAdapter(quotes);
+                quoteAdapter.setSelectedQuotes(selectedQuotes); //传递之前选择的quote
                 new MaterialDialog.Builder(getContext())
                         .title("选择箴言")// 标题
                         // adapter 方法中第一个参数表示自定义适配器，该适配器必须继承 RecyclerView.Adapter
@@ -92,14 +94,18 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
 
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                selectedQuotes = (ArrayList<Quote>) quoteAdapter.getSelctedQuotes();
+                                selectedQuotes = (ArrayList<Quote>) quoteAdapter.getSelectedQuotes();
+                                Log.d("now quotes1",String.valueOf(selectedQuotes.size()));
+                                if(selectedQuotes.size()!=0)
                                 choseQuote.setText("已选择");
+                                else
+                                    choseQuote.setText("未选择");
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                                  dialog.dismiss();
                             }
                         })
                         .show();// 显示对话框
@@ -122,10 +128,16 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
                 bundle.putString("userId", userId);
                 bundle.putSerializable("theHabit", newHabit);
                 bundle.putSerializable("selectedQuotes", selectedQuotes);
+                Log.d("now size",String.valueOf(selectedQuotes.size()));
                 if (getArguments().getSerializable("labels") != null)
                     bundle.putSerializable("labels", getArguments().getSerializable("labels"));
                 if (getArguments().getSerializable("selectedIndex") != null)
                     bundle.putSerializable("selectedIndex", getArguments().getSerializable("selectedIndex"));
+                if (getArguments().getSerializable("oldHabit") != null)
+                {
+                    bundle.putSerializable("oldHabit",getArguments().getSerializable("oldHabit"));
+                    bundle.putString("isUpdate","2");
+                }
                 controller.navigate(R.id.action_addHabit2_to_addHabit1, bundle);
             }
         });
@@ -133,17 +145,31 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
 
     public void init() {
         choseQuote = getView().findViewById(R.id.choseQuote);
+        if(selectedQuotes.size()!=0)
+            choseQuote.setText("已选择");
         back = getView().findViewById(R.id.advanced_back);
         timePeriodSpinner = getView().findViewById(R.id.time_period_spinner);
-        List<String> dataset = new LinkedList<>(Arrays.asList("上午", "下午", "晚上"));
+        List<String> dataset = new LinkedList<>(Arrays.asList("无","上午", "下午", "晚上"));
         timePeriodSpinner.attachDataSource(dataset);
+        timePeriodSpinner.setSelectedIndex(newHabit.getExpectedTime());
         habitPrioritySpinner = getView().findViewById(R.id.habbit_priority_spinner);
-        List<String> priorities = new LinkedList<>(Arrays.asList("低", "中", "高"));
+        List<String> priorities = new LinkedList<>(Arrays.asList("无","低", "中", "高"));
         habitPrioritySpinner.attachDataSource(priorities);
+        habitPrioritySpinner.setSelectedIndex(newHabit.getPriority());
         habitPlace = getView().findViewById(R.id.habbit_place_input);
+        if(newHabit.getLocation()!=null)
+            habitPlace.setText(newHabit.getLocation());
         advancedMinute = getView().findViewById(R.id.advanceminute);
         timeRemind = getView().findViewById(R.id.time_remind_switch);
+        if(newHabit.getReminder()!=0)
+        {
+            timeRemind.setChecked(true);
+        advancedMinute.setText(String.valueOf(newHabit.getReminder())); //int一定要转换成string 型
+        }
         mTvSelectedTime = getView().findViewById(R.id.tv_selected_end_time_inhabit);
+        if(newHabit.getTime4once()!=null)
+            mTvSelectedTime.setText(newHabit.getTime4once());
+        else mTvSelectedTime.setText("0");
         getView().findViewById(R.id.habit_time).setOnClickListener(this);
         initTimerPicker();
 
@@ -158,8 +184,8 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
                 newHabit.setReminder(Integer.valueOf(advancedMinute.getText().toString()));
             }
         } else newHabit.setReminder(0);
-        newHabit.setExpectedTime(timePeriodSpinner.getSelectedIndex());//0-上午 1-下午 2-晚上
-        newHabit.setPriority(habitPrioritySpinner.getSelectedIndex());//0-低 1-中 2-高
+        newHabit.setExpectedTime(timePeriodSpinner.getSelectedIndex());//0-无 1-上午 2-下午 3-晚上
+        newHabit.setPriority(habitPrioritySpinner.getSelectedIndex());//0-无 1-低 2-中 3-高
         //设置单次时长
         newHabit.setTime4once(mTvSelectedTime.getText().toString());
 
@@ -172,10 +198,17 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "offline");
             newHabit = (Habit) getArguments().getSerializable("theHabit");
+            if(getArguments().getSerializable("selectedQuotes")!=null)
+            {
+                selectedQuotes=(ArrayList<Quote>)getArguments().getSerializable("selectedQuotes");
+            }
+            else  //第一次跳转到高级设置页面
+            {
+                selectedQuotes=new ArrayList<>();
+            }
         } else {
             newHabit = new Habit();
         }
-        selectedQuotes = new ArrayList<>();
         habitRepository = new HabitRepository(getContext());
         init();
         enableButtons();
@@ -190,15 +223,12 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-
-
     private void initTimerPicker() {
         //String beginTime = "00:00";
         String beginTime = df.format(new Date());
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
-        mTvSelectedTime.setText("0");
+
 
         // 通过日期字符串初始化日期，格式请用：yyyy-MM-dd HH:mm
         mTimePicker = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
@@ -227,22 +257,11 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
 
         //boolean k = mTimePicker.setSelectedTime(1575820800, true);
     }
-
     String getTime(String time) {
-        String x = "";
-        if (time.startsWith("0")) {
-            x = x.concat(time.substring(1, 2));
-        } else {
-            x = x.concat(time.substring(0, 2));
-        }
-        x = x.concat("小时");
-        if (time.substring(3, 4).equals("0")) {
-            x = x.concat(time.substring(4));
-        } else {
-            x = x.concat(time.substring(3));
-        }
-        x = x.concat("分钟");
-        return x;
+       String hour=time.substring(0,2);
+       String minute=time.substring(3,5);
+       return hour+":"+minute;
     }
+
 }
 

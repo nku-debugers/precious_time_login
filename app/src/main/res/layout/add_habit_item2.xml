@@ -168,7 +168,8 @@
         android:id="@+id/time_remind_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/time_remind_switch"
+        android:textOff="关"
+        android:textOn="开"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline86"
         app:layout_constraintEnd_toEndOf="parent"
@@ -285,5 +286,15 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline87"
         app:layout_constraintStart_toStartOf="@+id/guideline84"
         app:layout_constraintTop_toTopOf="@+id/guideline88" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="46dp"
+        android:layout_height="26dp"
+        android:text="分钟"
+        app:layout_constraintBottom_toTopOf="@+id/guideline86"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/advanceminute"
+        app:layout_constraintTop_toTopOf="@+id/guideline85" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

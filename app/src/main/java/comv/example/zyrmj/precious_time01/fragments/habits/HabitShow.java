@@ -35,7 +35,9 @@ import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
 import comv.example.zyrmj.precious_time01.ViewModel.HabitViewModel;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
+import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
+import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +70,7 @@ public class HabitShow extends Fragment {
         habitRepository=new HabitRepository(getContext());
         recyclerView=getView().findViewById(R.id.habit_recycleView);
         final HabitAdapter habitAdapter=new HabitAdapter();
+        habitAdapter.setAllRepository(new CategoryRepository(getContext()),new QuoteRepository(getContext()),habitRepository);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(habitAdapter);
         habitViewModel= ViewModelProviders.of(getActivity()).get(HabitViewModel.class);

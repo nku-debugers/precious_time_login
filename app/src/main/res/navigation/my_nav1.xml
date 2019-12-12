@@ -177,6 +177,9 @@
         <action
             android:id="@+id/action_addHabit1_to_addHabit2"
             app:destination="@id/addHabit2" />
+        <action
+            android:id="@+id/action_addHabit1_to_habitShow"
+            app:destination="@id/habitShow" />
     </fragment>
     <fragment
         android:id="@+id/addHabit2"
