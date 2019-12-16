@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.entity.relations;
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -64,5 +66,11 @@ public class HabitCategory {
     }
 
     public HabitCategory() {
+    }
+    public HabitCategory(@NonNull String userId, @NotNull String categoryName,@NonNull String habitName)
+    {
+this.userId=userId;
+this.category=categoryName;
+this.habitName=habitName;
     }
 }

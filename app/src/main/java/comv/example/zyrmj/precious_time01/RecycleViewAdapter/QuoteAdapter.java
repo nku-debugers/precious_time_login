@@ -1,6 +1,7 @@
 package comv.example.zyrmj.precious_time01.RecycleViewAdapter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,13 +98,34 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     if(isChecked){
+                        int flag=0;//是否已存在
+                        for (Quote q:selectedQuotes)
+                        { if(q.getWords().equals(quote.getWords()))
+                        {flag=1;
+                        break;
+                        }
+                        }
+                           if(flag!=1)
                         selectedQuotes.add(quote);
                     }else{
-                        selectedQuotes.remove(quote);
+                        for(Quote q:selectedQuotes) {
+                            if(q.getWords().equals(quote.getWords())) {
+                                selectedQuotes.remove(q);
+                                break;
+                            }
+                        }
                     }
 
                 }
             });
+            for (Quote q:selectedQuotes)
+            {
+                if (holder.words.getText().toString().equals(q.getWords()))
+                {
+                    holder.checked.setChecked(true);
+                    break;
+                }
+            }
         }
 
     }
@@ -112,8 +134,13 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
     public int getItemCount() {
         return allQutoes.size();
     }
-    public List<Quote> getSelctedQuotes()
+    public List<Quote> getSelectedQuotes()
     {
         return selectedQuotes;
+    }
+    public void  setSelectedQuotes(List<Quote> selectedQuotes)
+    {
+        this.selectedQuotes=selectedQuotes;
+
     }
 }

@@ -22,6 +22,9 @@ public interface HabitDao {
 
     @Delete
     void deleteHabit(Habit...habits);
+
+    @Query("select * from Habit where user_id=:userId and habit_name=:habitName")
+    Habit getSpecificHabit(String userId,String habitName);
 }
 
 

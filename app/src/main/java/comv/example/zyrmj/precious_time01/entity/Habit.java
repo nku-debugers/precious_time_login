@@ -115,5 +115,12 @@ public class Habit implements Serializable {
         this.completion = completion;
     }
     @Ignore
-    public Habit(){}
+    public Habit(){
+        this.userId="offline";
+        this.completion=0.0;
+        this.reminder=0;
+        this.priority=0;
+    }
+
+
 }

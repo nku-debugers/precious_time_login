@@ -177,12 +177,19 @@
         <action
             android:id="@+id/action_addHabit1_to_addHabit2"
             app:destination="@id/addHabit2" />
+        <action
+            android:id="@+id/action_addHabit1_to_habitShow"
+            app:destination="@id/habitShow" />
     </fragment>
     <fragment
         android:id="@+id/addHabit2"
         android:name="comv.example.zyrmj.precious_time01.fragments.habits.AddHabit2"
         android:label="add_habit_item2"
-        tools:layout="@layout/add_habit_item2" />
+        tools:layout="@layout/add_habit_item2" >
+        <action
+            android:id="@+id/action_addHabit2_to_addHabit1"
+            app:destination="@id/addHabit1" />
+    </fragment>
     <fragment
         android:id="@+id/habitShow"
         android:name="comv.example.zyrmj.precious_time01.fragments.habits.HabitShow"
