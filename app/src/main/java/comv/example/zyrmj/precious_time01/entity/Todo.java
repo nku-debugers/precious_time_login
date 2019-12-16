@@ -7,7 +7,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-@Entity(primaryKeys = {"user_id", "item_name"})
+@Entity(primaryKeys = {"user_id", "start_time"})
 public class Todo implements Serializable {
     @NonNull
     @ColumnInfo(name = "user_id")
@@ -16,13 +16,12 @@ public class Todo implements Serializable {
     @NonNull
     @ColumnInfo(name = "item_name")
     private String name;
-    @ColumnInfo(name = "category_name")
-    @ForeignKey(entity = Category.class, parentColumns = "name", childColumns = "category_name")
-    private String categoryName;
     @ColumnInfo(name = "end_time")
     private String endTime;
     @ColumnInfo(name = "start_time")
     private String startTime;
+    @ColumnInfo(name = "failure_trigger")
+    public String failureTrigger;
     private String length;
     private Double completion;
 
@@ -42,14 +41,6 @@ public class Todo implements Serializable {
 
     public void setName(@NonNull String name) {
         this.name = name;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 
     public String getEndTime() {
@@ -82,5 +73,13 @@ public class Todo implements Serializable {
 
     public void setCompletion(Double completion) {
         this.completion = completion;
+    }
+
+    public String getFailureTrigger() {
+        return failureTrigger;
+    }
+
+    public void setFailureTrigger(String failureTrigger) {
+        this.failureTrigger = failureTrigger;
     }
 }

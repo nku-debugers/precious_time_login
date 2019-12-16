@@ -1,26 +1,21 @@
 package comv.example.zyrmj.precious_time01.entity.relations;
 
-import org.jetbrains.annotations.NotNull;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 
-import comv.example.zyrmj.precious_time01.entity.Category;
-import comv.example.zyrmj.precious_time01.entity.Habit;
-import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.User;
 
-
-@Entity(primaryKeys = {"user_id","habit_name", "category_name"},
+@Entity(primaryKeys = {"user_id", "category_name", "start_time"},
         foreignKeys = @ForeignKey(entity = User.class,
                                 parentColumns = "id",
                                 childColumns = "user_id"),
         indices = @Index(value = "user_id"))
 
-public class HabitCategory {
+public class TodoCategory {
     @NonNull
     @ColumnInfo(name = "user_id")
     private String userId;
@@ -30,8 +25,8 @@ public class HabitCategory {
     private String category;
 
     @NonNull
-    @ColumnInfo(name = "habit_name")
-    private String habitName;
+    @ColumnInfo(name = "start_time")
+    private String startTime;
 
     @NonNull
     public String getUserId() {
@@ -52,26 +47,17 @@ public class HabitCategory {
     }
 
     @NonNull
-    public String getHabitName() {
-        return habitName;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setHabitName(@NonNull String habitName) {
-        this.habitName = habitName;
+    public void setStartTime(@NonNull String startTime) {
+        this.startTime = startTime;
     }
 
-    public HabitCategory(@NonNull Category category, @NonNull Habit habit) {
-        this.habitName = habit.name;
-        this.userId = category.getUserId();
-        this.category = category.name;
-    }
-
-    public HabitCategory() {
-    }
-
-    public HabitCategory(@NonNull String userId, @NotNull String categoryName,@NonNull String habitName) {
-        this.userId=userId;
-        this.category=categoryName;
-        this.habitName=habitName;
+    public TodoCategory(@NonNull String userId, @NonNull String category, @NonNull String startTime) {
+        this.userId = userId;
+        this.category = category;
+        this.startTime = startTime;
     }
 }
