@@ -16,6 +16,7 @@ import comv.example.zyrmj.precious_time01.dao.TemplateItemDao;
 import comv.example.zyrmj.precious_time01.dao.UserDao;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
@@ -23,10 +24,13 @@ import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitQuote;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
+import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
+import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
 
 //Singleton
-@Database(entities = {Category.class, Habit.class, Quote.class, Template.class, TemplateItem.class,
-        Todo.class, User.class, HabitQuote.class, HabitCategory.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Habit.class, Quote.class, Template.class,
+        TemplateItem.class, Todo.class, User.class, HabitQuote.class, HabitCategory.class,
+        TodoCategory.class, TodoQuote.class, Plan.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
