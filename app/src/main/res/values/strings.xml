@@ -104,4 +104,20 @@
     <string name="model_name">模板名称</string>
     <string name="week_switch">周视图</string>
 
+    <string name="plan_title">生成计划</string>
+    <string name="import_model">导入模板</string>
+    <string name="import_no_model">不导入模板</string>
+
+    <string name="show_todo">显示已有事项</string>
+    <string name="add_todo">添加事项</string>
+    <string name="show_habit">显示已有习惯</string>
+    <string name="add_habit">导入习惯</string>
+
+    <string name="todo_title">待办事项</string>
+    <string name="todo_name">事项名称</string>
+    <string name="todo_name_input_hint">制作寸光</string>
+    <string name="todo_category">事项属性</string>
+    <string name="todo_time">事项时长</string>
+    <string name="todo_time_hint">0</string>
+    <string name="todo_time_hour">小时</string>
 </resources>

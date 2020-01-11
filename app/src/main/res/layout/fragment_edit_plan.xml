@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.82" />
+        app:layout_constraintGuide_percent="0.94" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline64"
@@ -68,67 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="493dp" />
-
-    <com.ddz.floatingactionbutton.FloatingActionMenu
-        android:id="@+id/fab4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        app:fab_addButton_collapsed_rotation="0"
-        app:fab_addButton_expanded_rotation="45"
-        app:fab_addButton_rotation_duration="800"
-        app:fab_labelStyle="@style/lable_style"
-        app:fab_labelsPosition="right"
-        app:layout_constraintBottom_toTopOf="@+id/guideline65"
-        app:layout_constraintStart_toStartOf="@+id/guideline66">
-
-        <com.ddz.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addHabit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/arrow"
-            app:fab_size="normal"
-            app:fab_title="导入习惯" />
-
-        <com.ddz.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addToDo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/arrow"
-            app:fab_size="normal"
-            app:fab_title="添加事项" />
-
-        <com.ddz.floatingactionbutton.FloatingActionButton
-            android:id="@+id/toDoList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/arrow"
-            app:fab_size="normal"
-            app:fab_title="现有事项" />
-
-        <com.ddz.floatingactionbutton.FloatingActionButton
-            android:id="@+id/habitList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/arrow"
-            app:fab_size="normal"
-            app:fab_title="现有习惯" />
-
-    </com.ddz.floatingactionbutton.FloatingActionMenu>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        app:backgroundTint="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/guideline65"
-        app:layout_constraintEnd_toStartOf="@+id/guideline66"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/checkbox_on_background" />
+        app:layout_constraintGuide_begin="534dp" />
 
     <comv.example.zyrmj.weekviewlibrary.WeekView
         android:id="@+id/weekview"
@@ -164,5 +104,67 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline59"
         app:layout_constraintEnd_toStartOf="@+id/guideline63"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.ddz.floatingactionbutton.FloatingActionMenu
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:fab_addButton_icon="@drawable/ic_add_black_24dp"
+        app:fab_labelStyle="@style/lable_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline66">
+
+        <com.ddz.floatingactionbutton.FloatingActionButton
+            android:id="@+id/toDoList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryDark"
+            app:fab_icon="@drawable/icon_follow"
+            app:fab_size="normal"
+            app:fab_title="@string/show_todo" />
+
+        <com.ddz.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addToDo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/icon_like"
+            app:fab_size="normal"
+            app:fab_stroke_visible="false"
+            app:fab_title="@string/add_todo" />
+
+        <com.ddz.floatingactionbutton.FloatingActionButton
+            android:id="@+id/habitList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryDark"
+            app:fab_icon="@drawable/icon_follow"
+            app:fab_size="normal"
+            app:fab_title="@string/show_habit" />
+
+        <com.ddz.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addHabit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/icon_like"
+            app:fab_size="normal"
+            app:fab_title="@string/add_habit" />
+
+    </com.ddz.floatingactionbutton.FloatingActionMenu>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/guideline90"
+        app:layout_constraintEnd_toStartOf="@+id/guideline63"
+        app:srcCompat="@android:drawable/checkbox_on_background" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

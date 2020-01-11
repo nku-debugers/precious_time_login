@@ -61,8 +61,8 @@ public class ChoseTemplate extends Fragment {
     }
     public void init()
     {
-        choseTemplate=getView().findViewById(R.id.choseTemplate);
-        noTemplate=getView().findViewById(R.id.noTemplate);
+        choseTemplate=getView().findViewById(R.id.import_model);
+        noTemplate=getView().findViewById(R.id.import_no_model);
 
     }
     public void enableButtons()

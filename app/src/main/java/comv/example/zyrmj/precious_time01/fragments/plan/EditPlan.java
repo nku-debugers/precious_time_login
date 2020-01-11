@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -34,13 +35,15 @@ import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
 import com.ddz.floatingactionbutton.FloatingActionMenu;
-import com.ddz.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
         WeekView.EmptyViewLongPressListener, WeekView.ScrollListener{
+    private FloatingActionButton confirm;
     private FloatingActionMenu fl_menu;
     private com.ddz.floatingactionbutton.FloatingActionButton addHabit,addToDo,habitList,toDoList;
     private WeekView mWeekView;
@@ -74,7 +77,8 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
 
     }
     private void assignViews() {
-        fl_menu = getView().findViewById(R.id.fab4);
+        confirm=getView().findViewById(R.id.confirm);
+        fl_menu = getView().findViewById(R.id.menu);
         addHabit=getView().findViewById(R.id.addHabit);
         addToDo=getView().findViewById(R.id.addToDo);
         habitList=getView().findViewById(R.id.habitList);
@@ -175,6 +179,26 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(),"ToDoList",Toast.LENGTH_SHORT);
+            }
+        });
+
+        fl_menu.setOnFloatingActionsMenuUpdateListener(new FloatingActionMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                confirm.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                confirm.setVisibility(View.VISIBLE);
+
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //生成最终计划
             }
         });
     }
