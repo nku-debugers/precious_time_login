@@ -174,10 +174,7 @@ public class TemplateShowFragment extends Fragment {
 
             }
         }).attachToRecyclerView(recyclerView);
-
-
     }
-
     private void enableBackButton() {
         Objects.requireNonNull(getView()).setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -235,10 +232,7 @@ public class TemplateShowFragment extends Fragment {
                     }
                 })
                 .autoDismiss(false).show();
-
     }
-
-
 }
 
 

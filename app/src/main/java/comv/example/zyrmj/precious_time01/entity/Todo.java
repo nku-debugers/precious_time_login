@@ -19,6 +19,7 @@ public class Todo implements Serializable {
     @ColumnInfo(name = "end_time")
     private String endTime;
     @ColumnInfo(name = "start_time")
+    @NonNull
     private String startTime;
     @ColumnInfo(name = "failure_trigger")
     public String failureTrigger;

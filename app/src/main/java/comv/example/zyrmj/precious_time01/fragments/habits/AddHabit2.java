@@ -95,7 +95,6 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 selectedQuotes = (ArrayList<Quote>) quoteAdapter.getSelectedQuotes();
-                                Log.d("now quotes1",String.valueOf(selectedQuotes.size()));
                                 if(selectedQuotes.size()!=0)
                                 choseQuote.setText("已选择");
                                 else

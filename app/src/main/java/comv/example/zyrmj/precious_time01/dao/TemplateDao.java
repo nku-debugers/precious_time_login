@@ -25,6 +25,9 @@ public interface TemplateDao {
     @Query("Select * from Template where user_id=:userId")
     LiveData<List<Template>> getAllTemplates(String userId);
 
+    @Query("Select * from Template where user_id=:userId")
+     List<Template>getAllTemplates2(String userId);
+
     //根据字段查询
     @Query("SELECT * FROM Template WHERE user_id=:userId AND name= :name")
     Template getSpecificTemplate(String userId, String name);

@@ -36,6 +36,21 @@ public class TemplateRepository {
         }
     }
 
+    static class getAllTemplates2 extends  AsyncTask<String,Void,List<Template>>
+    {
+        private TemplateDao templateDao;
+
+        public getAllTemplates2(TemplateDao templateDao) {
+            this.templateDao = templateDao;
+        }
+
+        @Override
+        protected List<Template> doInBackground(String... strings) {
+            return  templateDao.getAllTemplates2(strings[0]);
+        }
+    }
+
+
     static class InsertAsyncTask extends AsyncTask<Template, Void, Void> {
         private TemplateDao templateDao;
 
@@ -114,6 +129,16 @@ public class TemplateRepository {
     public LiveData<List<Template>> getAllTemplates(String userId) {
         try {
             return new GetAllTemplatesAsyncTask(templateDao).execute(userId).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Template> getAllTemplates2(String userId)
+    {
+        try {
+            return  new getAllTemplates2(templateDao).execute(userId).get();
         } catch (Exception e) {
             e.printStackTrace();
         }

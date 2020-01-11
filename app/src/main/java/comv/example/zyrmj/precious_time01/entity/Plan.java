@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.entity;
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,6 +15,7 @@ public class Plan {
     @ColumnInfo(name = "plan_name")
     public String planName;
 
+    @NonNull
     @ColumnInfo(name = "start_date")
     public String startDate;
 

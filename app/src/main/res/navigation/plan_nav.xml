@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/plan_nav"
+    app:startDestination="@id/choseTemplate">
+
+    <fragment
+        android:id="@+id/choseTemplate"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.ChoseTemplate"
+        android:label="fragment_chose_template"
+        tools:layout="@layout/fragment_chose_template" >
+        <action
+            android:id="@+id/action_choseTemplate_to_editPlan"
+            app:destination="@id/editPlan" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlan"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.EditPlan"
+        android:label="fragment_edit_plan"
+        tools:layout="@layout/fragment_edit_plan" >
+        <action
+            android:id="@+id/action_editPlan_to_choseTemplate"
+            app:destination="@id/choseTemplate" />
+    </fragment>
+</navigation>
