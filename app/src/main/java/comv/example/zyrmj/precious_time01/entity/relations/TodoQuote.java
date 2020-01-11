@@ -8,14 +8,15 @@ import androidx.room.Index;
 
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
+import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;
 
-@Entity(primaryKeys = {"user_id", "words", "habit_name"},
+@Entity(primaryKeys = {"user_id", "words", "start_time"},
         foreignKeys = @ForeignKey(entity = User.class,
                                 parentColumns = "id",
                                 childColumns = "user_id"),
         indices = @Index(value = "user_id"))
-public class HabitQuote {
+public class TodoQuote {
     @NonNull
     @ColumnInfo(name = "user_id")
     private String userId;
@@ -23,16 +24,16 @@ public class HabitQuote {
     private String words;
 
     @NonNull
-    @ColumnInfo(name = "habit_name")
-    private String habitName;
+    @ColumnInfo(name = "start_time")
+    private String startTime;
 
-    public HabitQuote(@NonNull Quote quote, @NonNull Habit habit) {
-        this.habitName = habit.name;
+    public TodoQuote(@NonNull Quote quote, @NonNull Todo todo) {
+        this.startTime = todo.getStartTime();
         this.userId = quote.getUserId();
         this.words = quote.getWords();
     }
 
-    public HabitQuote() {
+    public TodoQuote() {
     }
 
     @NonNull
@@ -54,11 +55,11 @@ public class HabitQuote {
     }
 
     @NonNull
-    public String getHabitName() {
-        return habitName;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setHabitName(@NonNull String habitName) {
-        this.habitName = habitName;
+    public void setStartTime(@NonNull String startTime) {
+        this.startTime = startTime;
     }
 }
