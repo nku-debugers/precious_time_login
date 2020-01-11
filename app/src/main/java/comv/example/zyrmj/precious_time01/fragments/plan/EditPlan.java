@@ -12,13 +12,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,11 +28,14 @@ import java.util.Objects;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
+import com.ddz.floatingactionbutton.FloatingActionMenu;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +43,9 @@ import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
 public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
         WeekView.EmptyViewLongPressListener, WeekView.ScrollListener{
+    private FloatingActionButton confirm;
+    private FloatingActionMenu fl_menu;
+    private com.ddz.floatingactionbutton.FloatingActionButton addHabit,addToDo,habitList,toDoList;
     private WeekView mWeekView;
     String userId, templateName;
     private ImageView returnImge;
@@ -66,12 +72,19 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             userId = getArguments().getString("userId", "");
             templateName = getArguments().getString("templateName", "");
         }
-        enableBackButton();
         assignViews();
+        enableBackButton();
+
     }
     private void assignViews() {
+        confirm=getView().findViewById(R.id.confirm);
+        fl_menu = getView().findViewById(R.id.menu);
+        addHabit=getView().findViewById(R.id.addHabit);
+        addToDo=getView().findViewById(R.id.addToDo);
+        habitList=getView().findViewById(R.id.habitList);
+        toDoList=getView().findViewById(R.id.toDoList);
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
-        returnImge = getView().findViewById(R.id.toTemplateView);
+        returnImge = getView().findViewById(R.id.toChoseTemplate);
         returnImge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +152,55 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
                 return false;
             }
         });
+
+        addHabit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),"addHabit",Toast.LENGTH_SHORT);
+            }
+        });
+
+        addToDo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_editPlan_to_addToDo2);
+            }
+        });
+
+        habitList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),"HabitList",Toast.LENGTH_SHORT);
+            }
+        });
+
+        toDoList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),"ToDoList",Toast.LENGTH_SHORT);
+            }
+        });
+
+        fl_menu.setOnFloatingActionsMenuUpdateListener(new FloatingActionMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                confirm.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                confirm.setVisibility(View.VISIBLE);
+
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //生成最终计划
+            }
+        });
     }
 
     @Override
@@ -148,8 +210,8 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         Bundle bundle = new Bundle();
         bundle.putSerializable("templateItem", templateItem);
         bundle.putString("viewOption", "0");
-        NavController controller = Navigation.findNavController(getView());
-        controller.navigate(R.id.action_testWeekView_to_updateTemplateItemFragment, bundle);
+//        NavController controller = Navigation.findNavController(getView());
+//        controller.navigate(R.id.action_testWeekView_to_updateTemplateItemFragment, bundle);
 
 
     }
@@ -186,14 +248,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             endTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
             endTime.set(Calendar.MINUTE, Integer.valueOf(endminute));
             WeekViewEvent event = new WeekViewEvent(i, ti.getItemName(), startTime, endTime, index);
-            if (i % 4 == 0)
-                event.setColor(getResources().getColor(R.color.event_color_01));
-            else if (i % 4 == 1)
-                event.setColor(getResources().getColor(R.color.event_color_02));
-            else if (i % 4 == 2)
-                event.setColor(getResources().getColor(R.color.event_color_03));
-            else
-                event.setColor(getResources().getColor(R.color.event_color_04));
+            event.setColor(getResources().getColor(R.color.event_color_05)); //template中事项统一颜色
             index += 1;
             events.add(event);
             i++;

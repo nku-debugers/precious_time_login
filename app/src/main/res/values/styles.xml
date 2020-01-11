@@ -18,4 +18,5 @@
         <item name="android:background">#33ffffff</item>
         <item name="android:textColor">@android:color/holo_blue_light</item>
     </style>
+
 </resources>
