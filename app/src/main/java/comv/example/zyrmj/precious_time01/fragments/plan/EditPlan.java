@@ -55,7 +55,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
         WeekView.EmptyViewLongPressListener, WeekView.ScrollListener{
-    private FloatingActionButton confirm;
+    private Button confirm;
     private FloatingActionMenu fl_menu;
     private com.ddz.floatingactionbutton.FloatingActionButton addHabit,addToDo,habitList,toDoList;
     private WeekView mWeekView;
@@ -92,7 +92,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
 
     }
     private void assignViews() {
-        confirm=getView().findViewById(R.id.confirm);
+        confirm=getView().findViewById(R.id.create_plan);
         fl_menu = getView().findViewById(R.id.menu);
         addHabit=getView().findViewById(R.id.addHabit);
         addToDo=getView().findViewById(R.id.addToDo);
@@ -282,19 +282,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             }
         });
 
-        fl_menu.setOnFloatingActionsMenuUpdateListener(new FloatingActionMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                confirm.hide();
 
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                confirm.show();
-
-            }
-        });
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

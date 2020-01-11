@@ -1,6 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -26,6 +28,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
+import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
@@ -37,6 +40,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class ChoseTemplate extends Fragment {
     private Button choseTemplate,noTemplate,newTemplate;
     private String userId="offline";
+    private ImageView clock,plan,personcenter;
 
 
     public ChoseTemplate() {
@@ -54,6 +58,11 @@ public class ChoseTemplate extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Intent intent=getActivity().getIntent();
+        if(intent!=null&&intent.getStringExtra("userId")!=null)
+        { userId=intent.getStringExtra("userId");
+            Log.d("pass",userId);
+        }
         init();
         enableButtons();
 
@@ -63,6 +72,9 @@ public class ChoseTemplate extends Fragment {
     {
         choseTemplate=getView().findViewById(R.id.import_model);
         noTemplate=getView().findViewById(R.id.import_no_model);
+        clock=getView().findViewById(R.id.clock);
+        plan=getView().findViewById(R.id.plan);
+        personcenter=getView().findViewById(R.id.personcenter);
 
     }
     public void enableButtons()
@@ -113,6 +125,16 @@ public class ChoseTemplate extends Fragment {
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_choseTemplate_to_editPlan);
+            }
+        });
+
+        personcenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("userId",userId);
+                intent.setClass(getContext(), PersonCenterActivity.class);
+                startActivity(intent);
             }
         });
     }

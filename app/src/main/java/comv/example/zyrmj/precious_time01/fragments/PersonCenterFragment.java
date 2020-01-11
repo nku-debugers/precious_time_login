@@ -1,6 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
+import comv.example.zyrmj.precious_time01.activities.PlanActivity;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.User;
@@ -21,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +35,9 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  */
 public class PersonCenterFragment extends Fragment {
-    String userId = "未登录";
+    String userId = "offline";
     private long mExitTime = 0;
-
+    private ImageView clock,plan,personcenter;
     public PersonCenterFragment() {
         // Required empty public constructor
     }
@@ -72,9 +76,15 @@ public class PersonCenterFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Intent intent=getActivity().getIntent();
+        if(intent!=null&&intent.getStringExtra("userId")!=null)
+        { userId=intent.getStringExtra("userId");
+        Log.d("pass",userId);
+        }
+
         enableBackButton();
         if (getArguments() != null) {
-            userId = getArguments().getString("userId", "未登录");
+            userId = getArguments().getString("userId", "offline");
         }
         Button tologin = getView().findViewById(R.id.tologin);
         Button logout = getView().findViewById(R.id.logout);
@@ -82,6 +92,9 @@ public class PersonCenterFragment extends Fragment {
         View toTemplate = getView().findViewById(R.id.toTemplate);
         View toQuote = getView().findViewById(R.id.toQuote);
         View toHabit=getView().findViewById(R.id.toHabit);
+        clock=getView().findViewById(R.id.clock);
+        plan=getView().findViewById(R.id.plan);
+        personcenter=getView().findViewById(R.id.personcenter);
         toTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,9 +131,17 @@ public class PersonCenterFragment extends Fragment {
             }
         });
 
+        plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("userId",userId);
+                intent.setClass(getContext(), PlanActivity.class);
+                startActivity(intent);
+            }
+        });
 
-
-        if (userId.equals("未登录")) {
+        if (userId.equals("offline")) {
             tologin.setVisibility(View.VISIBLE);
         } else {
             logout.setVisibility(View.VISIBLE);
