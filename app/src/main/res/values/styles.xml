@@ -14,6 +14,21 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/date_picker_bg</item>
     </style>
+    <style name="InputBoxStyle">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:background">@drawable/border_input_box</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="EditTextStyle">
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:background">@null</item>
+    </style>
     <style name="lable_style">
         <item name="android:background">#33ffffff</item>
         <item name="android:textColor">@android:color/holo_blue_light</item>
