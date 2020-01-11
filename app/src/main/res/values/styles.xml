@@ -14,4 +14,10 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/date_picker_bg</item>
     </style>
+
+    <style name="lable_style">
+        <item name="android:background">#33ffffff</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
 </resources>

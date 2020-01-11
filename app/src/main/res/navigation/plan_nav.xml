@@ -22,5 +22,17 @@
         <action
             android:id="@+id/action_editPlan_to_choseTemplate"
             app:destination="@id/choseTemplate" />
+        <action
+            android:id="@+id/action_editPlan_to_addToDo2"
+            app:destination="@id/addToDo" />
+    </fragment>
+    <fragment
+        android:id="@+id/addToDo"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.AddToDo"
+        android:label="fragment_add_to_do"
+        tools:layout="@layout/fragment_add_to_do" >
+        <action
+            android:id="@+id/action_addToDo2_to_editPlan"
+            app:destination="@id/editPlan" />
     </fragment>
 </navigation>

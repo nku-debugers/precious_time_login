@@ -16,5 +16,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/my_nav1" />
+        app:navGraph="@navigation/personcenter_nav" />
 </androidx.constraintlayout.widget.ConstraintLayout>

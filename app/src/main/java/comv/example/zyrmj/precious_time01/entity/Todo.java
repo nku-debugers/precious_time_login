@@ -25,6 +25,32 @@ public class Todo implements Serializable {
     public String failureTrigger;
     private String length;
     private Double completion;
+    private Integer type;//0-template 1-habit 2-userItem
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+//    public Todo(@NonNull String userId, @NonNull String name, String endTime, @NonNull String startTime, String failureTrigger, String length, Integer type,Double completion) {
+//        this.userId = userId;
+//        this.name = name;
+//        this.endTime = endTime;
+//        this.startTime = startTime;
+//        this.failureTrigger = failureTrigger;
+//        this.length = length;
+//        this.completion = completion;
+//        this.type = type;
+//    }
+
+    public Todo() {
+        this.completion=0.0;
+        this.userId="offline";
+
+    }
 
     @NonNull
     public String getUserId() {
