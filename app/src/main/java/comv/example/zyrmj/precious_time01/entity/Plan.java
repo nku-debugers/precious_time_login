@@ -15,7 +15,6 @@ public class Plan {
     @ColumnInfo(name = "plan_name")
     public String planName;
 
-    @NonNull
     @ColumnInfo(name = "start_date")
     public String startDate;
 
