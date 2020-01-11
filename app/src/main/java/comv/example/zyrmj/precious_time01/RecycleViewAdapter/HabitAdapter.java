@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,10 +33,22 @@ import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder> {
   private List<Habit> allHabits=new ArrayList<>();
+  private List<Habit> selectedHabits=new ArrayList<>();
   private CategoryRepository categoryRepository;
   private QuoteRepository quoteRepository;
   private HabitRepository habitRepository;
   private String userId="offline";
+  private String option="0";
+
+  public HabitAdapter(List<Habit> allHabits)
+  {
+      this.option="1";
+      this.allHabits=allHabits;
+
+
+  }
+  public HabitAdapter()
+  {}
 
     @NonNull
     @Override
@@ -50,53 +65,69 @@ holder.number.setText(String.valueOf(position+1));
 holder.habitName.setText(habit.getName());
 holder.completion.setProgress((int) habit.getCompletion());
 
+if(option.equals("0")) {
 //        定义itemView点击监听器等触发事件
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //查询关系信息
-                //HabitCategory
-                List<Category> categories=categoryRepository.getAllCateories(userId);
-                List<String> selectedCategories=habitRepository.getCategories(userId,habit.getName());
-                ArrayList<Integer> selectedIndex=new ArrayList<>();
-                for(String sc:selectedCategories)
-                {
-                    for(int i=0;i<categories.size();i++)
-                    {
-                        if(sc.equals(categories.get(i).getName()))
-                        {
-                            selectedIndex.add(i);
-                            break;
-                        }
+    holder.cardView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //查询关系信息
+            //HabitCategory
+            List<Category> categories = categoryRepository.getAllCateories(userId);
+            List<String> selectedCategories = habitRepository.getCategories(userId, habit.getName());
+            ArrayList<Integer> selectedIndex = new ArrayList<>();
+            for (String sc : selectedCategories) {
+                for (int i = 0; i < categories.size(); i++) {
+                    if (sc.equals(categories.get(i).getName())) {
+                        selectedIndex.add(i);
+                        break;
                     }
                 }
-                //HabitQuote
-                List<Quote> quotes=quoteRepository.getAllQuotes2(userId);
-                List<String> selectedQuoteStrings=habitRepository.getQuotes(userId,habit.getName());
-                ArrayList<Quote>  selectedQuotes=new ArrayList<>();
-                for(String sq:selectedQuoteStrings)
-                {
-                    for(Quote q:quotes)
-                    {
-                        if(sq.equals(q.getWords()))
-                        {
-                           selectedQuotes.add(q);
-                            break;
-                        }
-                    }
-
-                }
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("theHabit", habit);
-                bundle.putSerializable("selectedIndex",selectedIndex);
-                bundle.putSerializable("selectedQuotes",selectedQuotes);
-                bundle.putString("isUpdate","1");
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitShow_to_addHabit1, bundle);
             }
-        });
+            //HabitQuote
+            List<Quote> quotes = quoteRepository.getAllQuotes2(userId);
+            List<String> selectedQuoteStrings = habitRepository.getQuotes(userId, habit.getName());
+            ArrayList<Quote> selectedQuotes = new ArrayList<>();
+            for (String sq : selectedQuoteStrings) {
+                for (Quote q : quotes) {
+                    if (sq.equals(q.getWords())) {
+                        selectedQuotes.add(q);
+                        break;
+                    }
+                }
 
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("theHabit", habit);
+            bundle.putSerializable("selectedIndex", selectedIndex);
+            bundle.putSerializable("selectedQuotes", selectedQuotes);
+            bundle.putString("isUpdate", "1");
+            NavController controller = Navigation.findNavController(view);
+            controller.navigate(R.id.action_habitShow_to_addHabit1, bundle);
+        }
+    });
+}
+
+else
+{
+    holder.next.setVisibility(View.GONE);
+    holder.checked.setVisibility(View.VISIBLE);
+    holder.checked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            if (isChecked) {
+        selectedHabits.add(habit);
+            }
+            else
+            {
+                selectedHabits.remove(habit);
+
+            }
+        }
+    });
+
+
+}
 
     }
 
@@ -109,12 +140,16 @@ holder.completion.setProgress((int) habit.getCompletion());
         CardView cardView;
         TextView number,habitName;
         ProgressBar completion;
+        ImageView next;
+        CheckBox checked;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView=itemView.findViewById(R.id.cardview);
             number=itemView.findViewById(R.id.habit_number);
             habitName=itemView.findViewById(R.id.habit_name);
             completion=itemView.findViewById(R.id.completion);
+            next=itemView.findViewById(R.id.next);
+            checked=itemView.findViewById(R.id.checked);
         }
     }
     public void setAllHabits(List<Habit> allHabits)
@@ -131,6 +166,10 @@ holder.completion.setProgress((int) habit.getCompletion());
     {
         this.userId=userId;
     }
+public List<Habit> getSelectedHabits(){
+      return selectedHabits;
+}
+
 
     }
 

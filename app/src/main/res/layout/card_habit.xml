@@ -44,6 +44,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
+            <CheckBox
+                android:id="@+id/checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline43"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/habit_name"
                 android:layout_width="wrap_content"
