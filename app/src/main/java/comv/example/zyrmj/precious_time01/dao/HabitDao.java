@@ -20,6 +20,9 @@ public interface HabitDao {
     @Query("SELECT * FROM Habit WHERE user_id=:userId")
     LiveData<List<Habit>> getAllHabits(String userId);
 
+    @Query("SELECT * FROM Habit WHERE user_id=:userId")
+    List<Habit> getAllHabits2(String userId);
+
     @Delete
     void deleteHabit(Habit...habits);
 

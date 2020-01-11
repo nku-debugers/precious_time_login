@@ -4,7 +4,9 @@ package comv.example.zyrmj.precious_time01.fragments.plan;
 import android.graphics.RectF;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -27,13 +29,23 @@ import java.util.Objects;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
+import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
 import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.entity.Todo;
+import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
+import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ddz.floatingactionbutton.FloatingActionMenu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -47,10 +59,13 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     private FloatingActionMenu fl_menu;
     private com.ddz.floatingactionbutton.FloatingActionButton addHabit,addToDo,habitList,toDoList;
     private WeekView mWeekView;
-    String userId, templateName;
     private ImageView returnImge;
     private List<WeekViewEvent> events;
     private List<TemplateItem> datas;
+    private String userId;
+    private String templateName;
+    private List<Habit> selectedHabits=new ArrayList<>();
+    private List<Todo> addedToDos=new ArrayList<>();
 
 
     public EditPlan() {
@@ -69,7 +84,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            userId = getArguments().getString("userId", "");
+            userId = getArguments().getString("userId", "offline");
             templateName = getArguments().getString("templateName", "");
         }
         assignViews();
@@ -156,7 +171,57 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         addHabit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"addHabit",Toast.LENGTH_SHORT);
+                List<Habit> habits=new HabitRepository(getContext()).getAllHabits2(userId);
+                Log.d("userId",userId);
+                Log.d("habits",String.valueOf(habits==null));
+                if (habits==null) habits=new ArrayList<>();
+                final HabitAdapter habitAdapter=new HabitAdapter(habits);
+                new MaterialDialog.Builder(getContext())
+                        .autoDismiss(false)
+                        .title("选择习惯")
+                        .adapter(habitAdapter,new LinearLayoutManager(getContext()))
+                        .positiveText("确认")
+                        .negativeText("取消")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                List<Habit> currentSelectedHabits=habitAdapter.getSelectedHabits();
+                                if(currentSelectedHabits==null||currentSelectedHabits.size()==0)
+                                {
+                                    Toast.makeText(getContext(),"未选择习惯",Toast.LENGTH_LONG);
+                                    dialog.dismiss();
+                                }
+                                else
+                                {
+                                    dialog.dismiss();
+                                    for(Habit habit:currentSelectedHabits)
+                                    {
+                                       for (Habit h :selectedHabits)
+                                       {
+                                           if (h.getName()==habit.getName()) break;
+                                       }
+                                       selectedHabits.add(habit);
+                                    }
+
+                                }
+                                for (Habit h :selectedHabits)
+                                {
+                                  Log.d("habit",h.getName());
+                                }
+                            }
+
+
+
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .show();
+
             }
         });
 
@@ -171,27 +236,62 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         habitList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"HabitList",Toast.LENGTH_SHORT);
+                int size=selectedHabits.size();
+                String[] items = new String[size];
+                int index=0;
+                for (Habit habit :selectedHabits)
+                {
+                    items[index]=habit.getName();
+                    index++;
+                }
+                new MaterialDialog.Builder(getContext())
+                        .title("已选择习惯")// 标题
+                        .items(items)// 列表数据
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+
+                        }
+                        })
+                        .show();// 显示对话框
             }
         });
 
         toDoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"ToDoList",Toast.LENGTH_SHORT);
+                //int size=addedToDos.size();
+                String[] items = new String[3];
+                // 根据todo的名称，开始时间，结束时间拼接字符串
+                items[0]="test1"+"  "+"8:00-9:00";
+                items[1]="test2"+"  "+"9:00-10:00";
+                items[2]="test3"+"  "+"10:00-11:00";
+                //int index=0;
+                new MaterialDialog.Builder(getContext())
+                        .title("已添加事项")// 标题
+                        .items(items)// 列表数据
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                            //修改用户自己添加的todo
+                                NavController controller = Navigation.findNavController(getView());
+                                controller.navigate(R.id.action_editPlan_to_addToDo2);
+                            }
+                        })
+                        .show();// 显示对话框
             }
         });
 
         fl_menu.setOnFloatingActionsMenuUpdateListener(new FloatingActionMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
-                confirm.setVisibility(View.INVISIBLE);
+                confirm.hide();
 
             }
 
             @Override
             public void onMenuCollapsed() {
-                confirm.setVisibility(View.VISIBLE);
+                confirm.show();
 
             }
         });

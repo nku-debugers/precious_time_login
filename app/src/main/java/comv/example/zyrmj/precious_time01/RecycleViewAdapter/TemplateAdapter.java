@@ -35,13 +35,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.MyView
 
     public TemplateAdapter(List<Template> allTemplates) {
         this.option="1";
-        if(allTemplates!=null)
         this.allTemplates = allTemplates;
-        else
-        {
-            Log.d("template","empty");
-        }
-
     }
 
     public TemplateAdapter() {
