@@ -136,12 +136,18 @@
         android:layout_height="0dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/person_person"
+        app:layout_constraintEnd_toEndOf="@+id/icon_person"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline36" />
 
+    <!--        app:srcCompat="@drawable/cal" />-->
+
+    <!--        app:srcCompat="@drawable/timg" />-->
+
+    <!--        app:srcCompat="@drawable/clock" />-->
+
     <ImageView
-        android:id="@+id/person_main"
+        android:id="@+id/icon_plan"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -150,30 +156,30 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline37"
         app:layout_constraintTop_toTopOf="@+id/guideline39"
-        app:layout_constraintVertical_bias="0.0" />
-    <!--        app:srcCompat="@drawable/cal" />-->
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/plan" />
 
     <ImageView
-        android:id="@+id/person_person"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/desc"
-        app:layout_constraintBottom_toTopOf="@+id/guideline40"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline48"
-        app:layout_constraintTop_toTopOf="@+id/guideline39" />
-    <!--        app:srcCompat="@drawable/timg" />-->
-
-    <ImageView
-        android:id="@+id/person_clock"
+        android:id="@+id/icon_clock"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline40"
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
         app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/guideline39" />
-    <!--        app:srcCompat="@drawable/clock" />-->
+        app:layout_constraintTop_toTopOf="@+id/guideline39"
+        app:srcCompat="@drawable/clock" />
+
+    <ImageView
+        android:id="@+id/icon_person"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/desc"
+        app:layout_constraintBottom_toTopOf="@+id/guideline40"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline48"
+        app:layout_constraintTop_toTopOf="@+id/guideline39"
+        app:srcCompat="@drawable/personcenter" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline41"
