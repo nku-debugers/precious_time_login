@@ -13,6 +13,17 @@ public class Todo implements Serializable {
     @ColumnInfo(name = "plan_date")
     private String planDate;
 
+    public int getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(int reminder) {
+        this.reminder = reminder;
+    }
+
+    @NonNull
+    private int reminder;
+
     @NonNull
     public String getPlanDate() {
         return planDate;
@@ -36,7 +47,7 @@ public class Todo implements Serializable {
     private String startTime;
     @ColumnInfo(name = "failure_trigger")
     public String failureTrigger;
-    private String length; //注意这里单位为小时
+    private String length;
     private Double completion;
     private Integer type;//0-template 1-habit 2-userItem
 

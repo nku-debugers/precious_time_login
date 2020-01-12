@@ -5,6 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Switch
+        android:id="@+id/time_remind_switch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="196dp"
+        android:textOff="关"
+        android:textOn="开"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline109"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/guideline101"
+        app:layout_constraintTop_toTopOf="@+id/guideline110" />
+
+    <EditText
+        android:id="@+id/advanceminute2"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="88dp"
+        android:ems="10"
+        android:hint="@string/advance_time_hint"
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/advance_forward2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toEndOf="@+id/advance_forward"
+        app:layout_constraintTop_toTopOf="@+id/advance_forward2"
+        app:layout_constraintVertical_bias="0.555" />
+
+    <TextView
+        android:id="@+id/advance_forward2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="160dp"
+        android:text="@string/advance_forward"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/time_remind_switch2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/time_remind_switch"
+        app:layout_constraintTop_toTopOf="@+id/time_remind_switch2"
+        app:layout_constraintVertical_bias="1.0" />
+
     <LinearLayout
         android:id="@+id/todo_length"
         android:layout_width="0dp"
@@ -88,20 +133,31 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline112"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline101"
-        app:layout_constraintTop_toTopOf="@+id/guideline104"
+        app:layout_constraintTop_toTopOf="@+id/guideline109"
         app:layout_constraintVertical_bias="0.516" />
 
     <TextView
         android:id="@+id/habbit_quote4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
         android:text="@string/habit_quote"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline112"
-        app:layout_constraintEnd_toStartOf="@+id/guideline84"
+        app:layout_constraintEnd_toStartOf="@+id/guideline101"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline104"
+        app:layout_constraintTop_toTopOf="@+id/guideline109"
+        app:layout_constraintVertical_bias="0.53" />
+
+    <TextView
+        android:id="@+id/reminder_in_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time_remind"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline109"
+        app:layout_constraintEnd_toStartOf="@+id/guideline101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline110"
         app:layout_constraintVertical_bias="0.53" />
 
     <androidx.cardview.widget.CardView
@@ -278,14 +334,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.69" />
+        app:layout_constraintGuide_percent="0.62" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline109"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.77" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="46dp"
+        android:layout_height="26dp"
+        android:text="分钟"
+        app:layout_constraintBottom_toTopOf="@+id/guideline109"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/advanceminute2"
+        app:layout_constraintTop_toTopOf="@+id/guideline110"
+        app:layout_constraintVertical_bias="0.51" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline110"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.67" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline112"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.86" />
 
     <com.donkingliang.labels.LabelsView
         android:id="@+id/todo_category_select"
@@ -353,7 +434,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.98" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline106"
