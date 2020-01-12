@@ -23,8 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -65,7 +67,8 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     private List<Habit> selectedHabits=new ArrayList<>();
     private List<Todo> addedToDos=new ArrayList<>();
     private ArrayList<ArrayList<IdleTime>> idleTimes=new ArrayList<>();
-
+    private static final String START="8:00";
+    private static final String END="23:00";
     private class IdleTime
             //3个string:startTime,endTime,length
     {
@@ -81,7 +84,6 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             this.length = TimeDiff.dateDiff(startTime,endTime,"HH:mm");
         }
 
-        //对两个IdleTime进行比较看是否冲突
     }
 
 
@@ -114,7 +116,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         int i=0;
         for ( i=0;i<=6;i++)
         { idleTimes.add(new ArrayList<>());
-            idleTimes.get(i).add(new IdleTime("8:00","23:00"));}
+            idleTimes.get(i).add(new IdleTime(START,END));}
 
     }
 
@@ -480,25 +482,34 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             todo.setLength(TimeDiff.dateDiff(ti.getStartTime().split("-")[1],ti.getEndTime().split("-")[1],"HH:mm"));
             todo.setType(0);//0表明是templateItem转化而来
             addedToDos.add(todo);
-            System.out.println("idleTimes");
-            int index=0;
-            for(ArrayList<IdleTime> list:idleTimes)
-            {
-                System.out.println(index+":");
-                for (IdleTime idleTime:list)
-                {
-                    System.out.println(idleTime.startTime+" "+idleTime.endTime+" "+idleTime.length);
-                }
-                index++;
-            }
+
         }
 
+        System.out.println("idleTimes");
+        int index=0;
+        for(ArrayList<IdleTime> list:idleTimes)
+        {
+            System.out.println(index+":");
+            for (IdleTime idleTime:list)
+            {
+                System.out.println(idleTime.startTime+" "+idleTime.endTime+" "+idleTime.length);
+            }
+            index++;
+        }
+
+        System.out.println("Monlength "+idleTimes.get(0).size());
 
     }
 
+    //将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
+    public  void habit2ToDo()
+    {
+
+    }
+
+    //每添加一个新的todo便更新空闲时间列表
     public void updateiIdleTimes(String startTime, String endTime)
     {
-        //每添加一个新的todo便更新空闲时间列表
         int index=Integer.valueOf(startTime.split("-")[0]);//确定weekday 0-Mon ...
         startTime=startTime.split("-")[1];
         endTime=endTime.split("-")[1];
@@ -506,8 +517,8 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         for (IdleTime idleTime:idleTimesList)
         {
             //startTime>=空闲时间start  endTime<= 空闲时间end
-            if((TimeDiff.compare(startTime,idleTime.startTime)>=0||TimeDiff.compare("8:00",startTime)>0)
-                    &&(TimeDiff.compare(endTime,idleTime.endTime)<=0||TimeDiff.compare("23:00",endTime)<0))
+            if(((TimeDiff.compare(startTime,idleTime.startTime)>=0)||TimeDiff.compare(START,startTime)>0)
+                    &&((TimeDiff.compare(endTime,idleTime.endTime)<=0)||TimeDiff.compare(END,endTime)<0))
             {
                 idleTimesList.remove(idleTime);
                //拆分空闲时间
@@ -515,29 +526,49 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
                 {
                     idleTimesList.add(new IdleTime(idleTime.startTime,startTime));
                 }
-                else if(TimeDiff.compare("8:00",startTime)>0)
-                {
-                    if(TimeDiff.compare(endTime,idleTime.endTime)<0)
-                        idleTimesList.add(new IdleTime(endTime,idleTime.endTime));
-                }
-                else if(TimeDiff.compare(endTime,idleTime.endTime)<0)
+                if(TimeDiff.compare(endTime,idleTime.endTime)<0)
                 {
                     idleTimesList.add(new IdleTime(endTime,idleTime.endTime));
                 }
-                else if(TimeDiff.compare("23:00",endTime)<0)
-                {
-                    if(TimeDiff.compare(startTime,idleTime.startTime)>0)
-                    {
-                        idleTimesList.add(new IdleTime(idleTime.startTime,startTime));
-                    }
-                }
-
 
             }
 
         }
 
+        Iterator<IdleTime> iterator=idleTimesList.iterator();
+        //删除所有时长为10分钟的空闲段
+        while(iterator.hasNext())
+        {
+            if(TimeDiff.compare(iterator.next().length,"0:10")==0)
+                iterator.remove();
+        }
+
     }
+
+    //根据时长找到适合的所有空闲时间
+    public List<IdleTime> findAllIdleTimes(String weekday,String length)
+    {
+
+        return null;
+    }
+
+   //根据不同偏好选择最佳的空闲时间
+    public IdleTime findTheIdleTime(List<IdleTime> idleTimes)
+    {
+
+        return null;
+    }
+
+    //找到空闲时间后，给todo设置具体时间，并更新空闲时间
+    public Todo updateToDo(Todo todo,IdleTime idleTime)
+    {
+        //
+
+        return todo;
+    }
+
+
+
 
     @Override
     public void onEmptyViewClicked(Calendar time) {
