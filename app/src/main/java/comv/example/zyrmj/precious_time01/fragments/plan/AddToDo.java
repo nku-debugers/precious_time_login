@@ -61,7 +61,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class AddToDo extends Fragment implements View.OnClickListener{
     static String TAG = "mytag";
     private Todo myTodo;
-    private Button choseQuote, confirm;
+    private Button choseQuote, confirm,clear;
     private Switch timeType, timeReminder;
     private boolean timeTypeFlag;
     private EditText todoName, reminder;
@@ -157,7 +157,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
         for(int i=0 ;i < todos.size(); i++) {
             Log.d(TAG, "checkAndInsert: the start time is" + todos.get(i).getStartTime());
             Log.d(TAG, "checkAndInsert: the end time is " + todos.get(i).getEndTime());
-            if(todos.get(i).getStartTime().length() != 0 && todos.get(i).getStartTime().substring(0,1).equals(week)){
+            if(todos.get(i).getStartTime().length() >= 3 && todos.get(i).getStartTime().substring(0,1).equals(week)){
 
                 Log.d(TAG, "checkAndInsert: inside if the week is");
                 alreadyExistStart = todos.get(i).getStartTime().substring(2);
@@ -231,6 +231,27 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
                     controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
                 }
+
+
+
+            }
+        });
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timeType.setChecked(false);
+                timeReminder.setChecked(false);
+                todoName.setText("");
+                reminder.setText("");
+                selectedIndex=new ArrayList<>();
+                selectedLabels=new ArrayList<>();
+                labelsView.setSelects(selectedIndex);
+                mTvSelectedTimeWeek.setText("一");
+                mTvSelectedLength.setText("00:00");
+                mTvSelectedTime1.setText("00:00");
+                mTvSelectedTime2.setText("00:00");
+                selectedQuotes=new ArrayList<>();
+                choseQuote.setText("未选择");
 
 
 
@@ -320,6 +341,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private void assignViews() {
         week = getView().findViewById(R.id.week_card);
         confirm = getView().findViewById(R.id.todo_confirm);
+        clear=getView().findViewById(R.id.clear);
         choseQuote = getView().findViewById(R.id.choseQuoteTodo);
         timeType = getView().findViewById(R.id.todo_time);
         timeReminder = getView().findViewById(R.id.time_remind_switch2);
