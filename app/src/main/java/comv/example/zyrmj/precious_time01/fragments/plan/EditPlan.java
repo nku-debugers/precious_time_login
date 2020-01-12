@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +36,7 @@ import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
@@ -50,38 +53,79 @@ import com.ddz.floatingactionbutton.FloatingActionMenu;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
+public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
-        WeekView.EmptyViewLongPressListener, WeekView.ScrollListener{
+        WeekView.EmptyViewLongPressListener, WeekView.ScrollListener {
     private Button confirm;
     private FloatingActionMenu fl_menu;
-    private com.ddz.floatingactionbutton.FloatingActionButton addHabit,addToDo,habitList,toDoList;
+    private com.ddz.floatingactionbutton.FloatingActionButton addHabit, addToDo, habitList, toDoList;
     private WeekView mWeekView;
     private ImageView returnImge;
     private List<WeekViewEvent> events;
     private List<TemplateItem> datas;
-    private String userId="offline";
+    private String userId = "offline";
     private String templateName;
-    private List<Habit> selectedHabits=new ArrayList<>();
-    private List<Todo> addedToDos=new ArrayList<>();
-    private ArrayList<ArrayList<IdleTime>> idleTimes=new ArrayList<>();
+    private ArrayList<Habit> selectedHabits = new ArrayList<>();
+    private ArrayList<Todo> addedToDos = new ArrayList<>();
+    private ArrayList<ArrayList<IdleTime>> idleTimes = new ArrayList<>();
+    private ArrayList<ToDoExtend> toDoExtends = new ArrayList<>();
+    private static final String START = "8:00";
+    private static final String END = "23:00";
 
     private class IdleTime
             //3个string:startTime,endTime,length
     {
-        private String startTime,endTime,length;
+        private String startTime, endTime, length;
 
         public IdleTime(String startTime, String endTime) {
-            if (Integer.valueOf(startTime.split(":")[0])<10&&!startTime.split(":")[0].contains("0"))
-                startTime="0"+startTime;
-            if (Integer.valueOf(endTime.split(":")[0])<10&&!endTime.split(":")[0].contains("0"))
-                endTime="0"+endTime;
+            if (Integer.valueOf(startTime.split(":")[0]) < 10 && !startTime.split(":")[0].contains("0"))
+                startTime = "0" + startTime;
+            if (Integer.valueOf(endTime.split(":")[0]) < 10 && !endTime.split(":")[0].contains("0"))
+                endTime = "0" + endTime;
             this.startTime = startTime;
             this.endTime = endTime;
-            this.length = TimeDiff.dateDiff(startTime,endTime,"HH:mm");
+            this.length = TimeDiff.dateDiff(startTime, endTime, "HH:mm");
         }
 
-        //对两个IdleTime进行比较看是否冲突
+    }
+
+    private class ToDoExtend implements Serializable {
+        private Todo todo;
+        private ArrayList<String> labels = new ArrayList<>(); //类别
+        private ArrayList<Quote> quotes = new ArrayList<>(); //箴言
+
+        public ToDoExtend(Todo todo, ArrayList<String> labels, ArrayList<Quote> quotes) {
+            this.todo = todo;
+            this.labels = labels;
+            this.quotes = quotes;
+        }
+
+        public ToDoExtend() {
+        }
+
+        public Todo getTodo() {
+            return todo;
+        }
+
+        public void setTodo(Todo todo) {
+            this.todo = todo;
+        }
+
+        public ArrayList<String> getLabels() {
+            return labels;
+        }
+
+        public void setLabels(ArrayList<String> labels) {
+            this.labels = labels;
+        }
+
+        public ArrayList<Quote> getQuotes() {
+            return quotes;
+        }
+
+        public void setQuotes(ArrayList<Quote> quotes) {
+            this.quotes = quotes;
+        }
     }
 
 
@@ -100,32 +144,66 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        dealReceivedData();
+        assignViews();
+        enableBackButton();
+    }
+
+    private void dealReceivedData() {
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "offline");
             templateName = getArguments().getString("templateName", "");
-        }
-        assignViews();
-        initEdleTime();
-        enableBackButton();
+            datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
+            if (datas==null) datas=new ArrayList<>();
+            Todo todo = (Todo) getArguments().getSerializable("mytodo");
+            if (todo != null) {
+                selectedHabits=(ArrayList<Habit>)getArguments().getSerializable("habits");
+                idleTimes=(ArrayList<ArrayList<IdleTime>>)getArguments().getSerializable("idleTimes");
+                toDoExtends=(ArrayList<ToDoExtend>)getArguments().getSerializable("toDoExtends");
+                addedToDos=(ArrayList<Todo>)getArguments().getSerializable("toDos");
+                addedToDos.add(todo);
+                if(todo.getStartTime().contains(":"))
+                {
+                    updateiIdleTimes(todo.getStartTime(),todo.getEndTime());
+                }
+                ArrayList<Quote> quotes = (ArrayList<Quote>) getArguments().getSerializable("quotes");
+                ArrayList<String> labels = (ArrayList<String>) getArguments().getSerializable("labels");
 
+                ToDoExtend toDoExtend = new ToDoExtend();
+                toDoExtend.setTodo(todo);
+                if (quotes != null)
+                    toDoExtend.setQuotes(quotes);
+                if (labels != null)
+                    toDoExtend.setLabels(labels);
+                toDoExtends.add(toDoExtend);
+            }
+            else
+            {
+                initDatas();
+            }
+        }
     }
-    private void initEdleTime()
-    {
-        int i=0;
-        for ( i=0;i<=6;i++)
-        { idleTimes.add(new ArrayList<>());
-            idleTimes.get(i).add(new IdleTime("8:00","23:00"));}
+
+    private void initDatas() {
+        int i = 0;
+        for (i = 0; i <= 6; i++) {
+            idleTimes.add(new ArrayList<>());
+            idleTimes.get(i).add(new IdleTime(START, END));
+        }
+        datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
+        if(datas==null) datas=new ArrayList<>();
+        templateItems2ToDo(datas);
 
     }
 
 
     private void assignViews() {
-        confirm=getView().findViewById(R.id.create_plan);
+        confirm = getView().findViewById(R.id.create_plan);
         fl_menu = getView().findViewById(R.id.menu);
-        addHabit=getView().findViewById(R.id.addHabit);
-        addToDo=getView().findViewById(R.id.addToDo);
-        habitList=getView().findViewById(R.id.habitList);
-        toDoList=getView().findViewById(R.id.toDoList);
+        addHabit = getView().findViewById(R.id.addHabit);
+        addToDo = getView().findViewById(R.id.addToDo);
+        habitList = getView().findViewById(R.id.habitList);
+        toDoList = getView().findViewById(R.id.toDoList);
         mWeekView = (WeekView) getView().findViewById(R.id.weekview);
         returnImge = getView().findViewById(R.id.toChoseTemplate);
         returnImge.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +234,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
             public String interpretDate(Calendar date) {
-              return null;
+                return null;
 
             }
 
@@ -192,47 +270,38 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         addHabit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Habit> habits=new HabitRepository(getContext()).getAllHabits2(userId);
-                Log.d("userId",userId);
-                Log.d("habits",String.valueOf(habits==null));
-                if (habits==null) habits=new ArrayList<>();
-                final HabitAdapter habitAdapter=new HabitAdapter(habits);
+                List<Habit> habits = new HabitRepository(getContext()).getAllHabits2(userId);
+                Log.d("userId", userId);
+                Log.d("habits", String.valueOf(habits == null));
+                if (habits == null) habits = new ArrayList<>();
+                final HabitAdapter habitAdapter = new HabitAdapter(habits);
                 new MaterialDialog.Builder(getContext())
                         .autoDismiss(false)
                         .title("选择习惯")
-                        .adapter(habitAdapter,new LinearLayoutManager(getContext()))
+                        .adapter(habitAdapter, new LinearLayoutManager(getContext()))
                         .positiveText("确认")
                         .negativeText("取消")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                List<Habit> currentSelectedHabits=habitAdapter.getSelectedHabits();
-                                if(currentSelectedHabits==null||currentSelectedHabits.size()==0)
-                                {
-                                    Toast.makeText(getContext(),"未选择习惯",Toast.LENGTH_LONG);
+                                List<Habit> currentSelectedHabits = habitAdapter.getSelectedHabits();
+                                if (currentSelectedHabits == null || currentSelectedHabits.size() == 0) {
+                                    Toast.makeText(getContext(), "未选择习惯", Toast.LENGTH_LONG);
                                     dialog.dismiss();
-                                }
-                                else
-                                {
+                                } else {
                                     dialog.dismiss();
-                                    for(Habit habit:currentSelectedHabits)
-                                    {
-                                       for (Habit h :selectedHabits)
-                                       {
-                                           if (h.getName()==habit.getName()) break;
-                                       }
-                                       selectedHabits.add(habit);
+                                    for (Habit habit : currentSelectedHabits) {
+                                        for (Habit h : selectedHabits) {
+                                            if (h.getName() == habit.getName()) break;
+                                        }
+                                        selectedHabits.add(habit);
                                     }
 
                                 }
-                                for (Habit h :selectedHabits)
-                                {
-                                  Log.d("habit",h.getName());
+                                for (Habit h : selectedHabits) {
+                                    Log.d("habit", h.getName());
                                 }
                             }
-
-
-
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -249,20 +318,26 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         addToDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("templateName", templateName);
+                bundle.putString("userId", userId);
+                bundle.putSerializable("toDos", addedToDos);
+                bundle.putSerializable("habits",selectedHabits);
+                bundle.putSerializable("idleTimes",idleTimes);
+                bundle.putSerializable("toDoExtends",toDoExtends);
                 NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_editPlan_to_addToDo2);
+                controller.navigate(R.id.action_editPlan_to_addToDo2, bundle);
             }
         });
 
         habitList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int size=selectedHabits.size();
+                int size = selectedHabits.size();
                 String[] items = new String[size];
-                int index=0;
-                for (Habit habit :selectedHabits)
-                {
-                    items[index]=habit.getName();
+                int index = 0;
+                for (Habit habit : selectedHabits) {
+                    items[index] = habit.getName();
                     index++;
                 }
                 new MaterialDialog.Builder(getContext())
@@ -272,7 +347,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
                             @Override
                             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
 
-                        }
+                            }
                         })
                         .show();// 显示对话框
             }
@@ -281,20 +356,41 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         toDoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //int size=addedToDos.size();
-                String[] items = new String[3];
-                // 根据todo的名称，开始时间，结束时间拼接字符串
-                items[0]="test1"+"  "+"8:00-9:00";
-                items[1]="test2"+"  "+"9:00-10:00";
-                items[2]="test3"+"  "+"10:00-11:00";
-                //int index=0;
+                int size=0;
+                for (ToDoExtend toDoExtend:toDoExtends)
+                {
+                    if(toDoExtend.todo.getType()==2) size++;
+                }
+                String[] items = new String[size];
+                int index=0;
+                String[] weekdays={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+                for (ToDoExtend toDoExtend:toDoExtends)
+                {
+                    if(toDoExtend.todo.getType()==2) {
+                        items[index] = toDoExtend.todo.getName() + "    " +
+                                weekdays[Integer.valueOf(toDoExtend.todo.getStartTime().split("-")[0])]
+                                + "    ";
+
+                        if (!(toDoExtend.todo.getStartTime().split("-").length==1))
+                            items[index] += ("具体时间：" + toDoExtend.todo.getStartTime().split("-")[1]
+                            +"-"+toDoExtend.todo.getEndTime().split("-")[1]
+                            );
+                        else
+                            items[index] += ("   时长： " +toDoExtend. todo.getLength());
+                        index++;
+                        System.out.println("todoextend");
+                        System.out.println(toDoExtend.getQuotes().size());
+                        System.out.println(toDoExtend.getLabels().size());
+                    }
+                }
+
                 new MaterialDialog.Builder(getContext())
                         .title("已添加事项")// 标题
                         .items(items)// 列表数据
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                            //修改用户自己添加的todo
+                                //修改用户自己添加的todo
                                 NavController controller = Navigation.findNavController(getView());
                                 controller.navigate(R.id.action_editPlan_to_addToDo2);
                             }
@@ -309,7 +405,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             public void onClick(View view) {
                 //生成最终计划
                 //添加计划
-                showDialog("",new PlanRepository(getContext()));
+                showDialog("", new PlanRepository(getContext()));
 
 
             }
@@ -323,19 +419,19 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 //前2个一个是hint一个是预输入的文字
                 .input("计划名称", "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        //判断开始日期是否为空
-                       if (input.toString().equals("")) {
-                         dialog.setContent("开始日期不能为空，请重新输入！");
-                        } else {
-                            String planName = input.toString();
-                          dialog.dismiss();
-                          showDialog2(planName,planRepository);
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                //判断开始日期是否为空
+                                if (input.toString().equals("")) {
+                                    dialog.setContent("开始日期不能为空，请重新输入！");
+                                } else {
+                                    String planName = input.toString();
+                                    dialog.dismiss();
+                                    showDialog2(planName, planRepository);
 
+                                }
+                            }
                         }
-                    }
-                }
 
                 )
 
@@ -359,43 +455,39 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 //判断计划名是否为空
                                 if (input.toString().equals("")) {
-                          dialog.setContent("开始日期不能为空，请重新输入！");
+                                    dialog.setContent("开始日期不能为空，请重新输入！");
                                 } else {
-                                   Plan plan=new Plan();
-                                   plan.startDate=input.toString();
+                                    Plan plan = new Plan();
+                                    plan.startDate = input.toString();
 
-                                   plan.planName=info;
-                                   //计算endDate
+                                    plan.planName = info;
+                                    //计算endDate
                                     Calendar cal = Calendar.getInstance();
-                                    String splieTimes[]=plan.startDate.split("/");
-                                    Date start=new Date((Integer.valueOf(splieTimes[0])-1900),
-                                            (Integer.valueOf(splieTimes[1])-1),(Integer.valueOf(splieTimes[2])));
+                                    String splieTimes[] = plan.startDate.split("/");
+                                    Date start = new Date((Integer.valueOf(splieTimes[0]) - 1900),
+                                            (Integer.valueOf(splieTimes[1]) - 1), (Integer.valueOf(splieTimes[2])));
                                     cal.setTime(start);
-                                        //增加6天
+                                    //增加6天
                                     cal.add(Calendar.DAY_OF_MONTH, 6);
                                     //Calendar转为Date类型
-                                    Date end=cal.getTime();
-                                //将增加后的日期转为字符串
+                                    Date end = cal.getTime();
+                                    //将增加后的日期转为字符串
                                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                                   plan.startDate = formatter.format(start);
-                                   plan.endDate=formatter.format(end);
-                                    int flag=0;
-                                    List<Plan> plans=planRepository.getAllPlans(userId);
-                                    for (Plan p :plans)
-                                    {
-                                        if(p.startDate.equals(plan.startDate))
-                                        {
-                                            flag=1;
+                                    plan.startDate = formatter.format(start);
+                                    plan.endDate = formatter.format(end);
+                                    int flag = 0;
+                                    List<Plan> plans = planRepository.getAllPlans(userId);
+                                    for (Plan p : plans) {
+                                        if (p.startDate.equals(plan.startDate)) {
+                                            flag = 1;
                                             break;
                                         }
 
                                     }
-                                    if(flag==0)
-                                    {planRepository.insertPlan(plan);
-                                   dialog.dismiss();}
-
-                                    else
-                                    {
+                                    if (flag == 0) {
+                                        planRepository.insertPlan(plan);
+                                        dialog.dismiss();
+                                    } else {
 
                                         Log.i("dialog", "存在相同开始时间的计划");
                                         dialog.setContent("存在相同开始时间的计划，请重新输入！");
@@ -414,6 +506,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
                 })
                 .autoDismiss(false).show();
     }
+
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         int index = event.getIndex();
@@ -429,9 +522,9 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        events = new ArrayList<WeekViewEvent>();
         datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
-        templateItems2ToDo(datas);
+        if(datas==null) datas=new ArrayList<>();
+        events = new ArrayList<WeekViewEvent>();
         int i = 1;
         int index = 0;
         for (TemplateItem ti : datas) {
@@ -468,76 +561,111 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     }
 
     //将templateItem转换成toDo
-    public void templateItems2ToDo(List<TemplateItem> templateItems)
-    {
-        for (TemplateItem ti:templateItems)
-        {
-            Todo todo=new Todo();
+    public void templateItems2ToDo(List<TemplateItem> templateItems) {
+        for (TemplateItem ti : templateItems) {
+            Todo todo = new Todo();
             todo.setName(ti.getItemName());
             todo.setStartTime(ti.getStartTime());
             todo.setEndTime(ti.getEndTime());
-            updateiIdleTimes(ti.getStartTime(),ti.getEndTime());
-            todo.setLength(TimeDiff.dateDiff(ti.getStartTime().split("-")[1],ti.getEndTime().split("-")[1],"HH:mm"));
+            updateiIdleTimes(ti.getStartTime(), ti.getEndTime());
+            todo.setLength(TimeDiff.dateDiff(ti.getStartTime().split("-")[1], ti.getEndTime().split("-")[1], "HH:mm"));
             todo.setType(0);//0表明是templateItem转化而来
+            todo.setReminder(0);
             addedToDos.add(todo);
-            System.out.println("idleTimes");
-            int index=0;
-            for(ArrayList<IdleTime> list:idleTimes)
-            {
-                System.out.println(index+":");
-                for (IdleTime idleTime:list)
-                {
-                    System.out.println(idleTime.startTime+" "+idleTime.endTime+" "+idleTime.length);
-                }
-                index++;
+
+        }
+        System.out.println("todoslength");
+        System.out.println(addedToDos.size());
+        System.out.println("idleTimes");
+        int index = 0;
+        for (ArrayList<IdleTime> list : idleTimes) {
+            System.out.println(index + ":");
+            for (IdleTime idleTime : list) {
+                System.out.println(idleTime.startTime + " " + idleTime.endTime + " " + idleTime.length);
             }
+            index++;
         }
 
+        System.out.println("Monlength " + idleTimes.get(0).size());
 
     }
 
-    public void updateiIdleTimes(String startTime, String endTime)
-    {
-        //每添加一个新的todo便更新空闲时间列表
-        int index=Integer.valueOf(startTime.split("-")[0]);//确定weekday 0-Mon ...
-        startTime=startTime.split("-")[1];
-        endTime=endTime.split("-")[1];
-        ArrayList<IdleTime> idleTimesList=idleTimes.get(index);
-        for (IdleTime idleTime:idleTimesList)
+    //所有其他todo安排完后调用
+    // 将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
+    public void habit2ToDo() {
+        for(Habit habit:selectedHabits)
         {
-            //startTime>=空闲时间start  endTime<= 空闲时间end
-            if((TimeDiff.compare(startTime,idleTime.startTime)>=0||TimeDiff.compare("8:00",startTime)>0)
-                    &&(TimeDiff.compare(endTime,idleTime.endTime)<=0||TimeDiff.compare("23:00",endTime)<0))
+            Todo todo=new Todo();
+            todo.setType(1);//1表示习惯
+            todo.setUserId(habit.userId);
+            todo.setName(habit.getName());
+            todo.setReminder(habit.getReminder());
+            if(habit.getTime4once()!=null)
+            todo.setLength(habit.getTime4once());
+            //没有设定每次时长，怎么安排
+            else
             {
-                idleTimesList.remove(idleTime);
-               //拆分空闲时间
-                if(TimeDiff.compare(startTime,idleTime.startTime)>0)
-                {
-                    idleTimesList.add(new IdleTime(idleTime.startTime,startTime));
-                }
-                else if(TimeDiff.compare("8:00",startTime)>0)
-                {
-                    if(TimeDiff.compare(endTime,idleTime.endTime)<0)
-                        idleTimesList.add(new IdleTime(endTime,idleTime.endTime));
-                }
-                else if(TimeDiff.compare(endTime,idleTime.endTime)<0)
-                {
-                    idleTimesList.add(new IdleTime(endTime,idleTime.endTime));
-                }
-                else if(TimeDiff.compare("23:00",endTime)<0)
-                {
-                    if(TimeDiff.compare(startTime,idleTime.startTime)>0)
-                    {
-                        idleTimesList.add(new IdleTime(idleTime.startTime,startTime));
-                    }
-                }
 
+            }
+            //根据剩下的空余时间，habit的priority,expectedTime等安排具体时间
+
+
+        }
+
+
+    }
+
+    //每添加一个新的todo便更新空闲时间列表
+    public void updateiIdleTimes(String startTime, String endTime) {
+        int index = Integer.valueOf(startTime.split("-")[0]);//确定weekday 0-Mon ...
+        startTime = startTime.split("-")[1];
+        endTime = endTime.split("-")[1];
+        ArrayList<IdleTime> idleTimesList = idleTimes.get(index);
+        for (IdleTime idleTime : idleTimesList) {
+            //startTime>=空闲时间start  endTime<= 空闲时间end
+            if (((TimeDiff.compare(startTime, idleTime.startTime) >= 0) || TimeDiff.compare(START, startTime) > 0)
+                    && ((TimeDiff.compare(endTime, idleTime.endTime) <= 0) || TimeDiff.compare(END, endTime) < 0)) {
+                idleTimesList.remove(idleTime);
+                //拆分空闲时间
+                if (TimeDiff.compare(startTime, idleTime.startTime) > 0) {
+                    idleTimesList.add(new IdleTime(idleTime.startTime, startTime));
+                }
+                if (TimeDiff.compare(endTime, idleTime.endTime) < 0) {
+                    idleTimesList.add(new IdleTime(endTime, idleTime.endTime));
+                }
 
             }
 
         }
 
+        Iterator<IdleTime> iterator = idleTimesList.iterator();
+        //删除所有时长为10分钟的空闲段
+        while (iterator.hasNext()) {
+            if (TimeDiff.compare(iterator.next().length, "0:10") == 0)
+                iterator.remove();
+        }
+
     }
+
+    //根据时长找到适合的所有空闲时间
+    public List<IdleTime> findAllIdleTimes(String weekday, String length) {
+
+        return null;
+    }
+
+    //根据不同偏好选择最佳的空闲时间
+    public IdleTime findTheIdleTime(List<IdleTime> idleTimes) {
+
+        return null;
+    }
+
+    //找到空闲时间后，给todo设置具体时间，并更新空闲时间
+    public Todo updateToDo(Todo todo, IdleTime idleTime) {
+        //
+
+        return todo;
+    }
+
 
     @Override
     public void onEmptyViewClicked(Calendar time) {

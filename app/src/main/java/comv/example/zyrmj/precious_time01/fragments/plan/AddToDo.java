@@ -66,7 +66,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private boolean timeTypeFlag;
     private EditText todoName, reminder;
     private LabelsView labelsView;
-    private String userId = "offline";
+    private String userId = "offline",templateName;
     private ArrayList<String> labels, selectedLabels;
     private CategoryRepository categoryRepository;
     private TodoRepository todoRepository;
@@ -98,8 +98,10 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            userId = getArguments().getString("userId", "");
-            todos = (List<Todo>) getArguments().getSerializable("todo");
+            userId = getArguments().getString("userId", "offline");
+            todos = (List<Todo>) getArguments().getSerializable("toDos");
+            System.out.println("todoslength"+String.valueOf(todos.size()));
+            templateName=getArguments().getString("templateName","");
         }
         assignViews();
         init();
@@ -110,10 +112,6 @@ public class AddToDo extends Fragment implements View.OnClickListener{
         selectedLabels = new ArrayList<>();
         for (int index : selectedIndex) {
             selectedLabels.add(labels.get(index));
-        }
-        if (selectedLabels.size() == 0) {
-            PromptDialog promptDialog = new PromptDialog(getActivity());
-            promptDialog.showWarn("请至少选择一个标签！");
         }
     }
 
@@ -155,10 +153,16 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private boolean checkAndInsert(String week, String startFinal, String endFinal) {
         String alreadyExistStart;
         String alreadyExistEnd;
+        Log.d(TAG, "checkAndInsert: the week is" + week);
         for(int i=0 ;i < todos.size(); i++) {
+            Log.d(TAG, "checkAndInsert: the start time is" + todos.get(i).getStartTime());
+            Log.d(TAG, "checkAndInsert: the end time is " + todos.get(i).getEndTime());
             if(todos.get(i).getStartTime().length() != 0 && todos.get(i).getStartTime().substring(0,1).equals(week)){
-                alreadyExistStart = todos.get(i).getStartTime();
-                alreadyExistEnd = todos.get(i).getEndTime();
+
+                Log.d(TAG, "checkAndInsert: inside if the week is");
+                alreadyExistStart = todos.get(i).getStartTime().substring(2);
+                alreadyExistEnd = todos.get(i).getEndTime().substring(2);
+
                 if ( !checkExceedStart(alreadyExistStart, alreadyExistEnd, startFinal)) {
                     return false;
                 }
@@ -201,6 +205,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View view) {
                 saveLabels();
+
                 if (saveTime()) {
                     myTodo.setType(2);
                     if (timeReminder.isChecked()) {
@@ -218,7 +223,17 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     bundle.putSerializable("mytodo", myTodo);
                     bundle.putSerializable("labels", selectedLabels);
                     bundle.putSerializable("quotes", selectedQuotes);
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", templateName);
+                    bundle.putSerializable("habits",getArguments().getSerializable("habits"));
+                    bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
+                    bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
+                    bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                    controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
                 }
+
+
+
             }
         });
 
@@ -564,6 +579,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private String getTime(String time) {
         String hour=time.substring(0,2);
         String minute=time.substring(3,5);
+        System.out.println("timeresult "+hour+" "+minute);
         return hour+":"+minute;
     }
 

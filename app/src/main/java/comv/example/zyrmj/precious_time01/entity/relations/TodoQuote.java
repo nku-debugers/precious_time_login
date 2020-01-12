@@ -27,6 +27,7 @@ public class TodoQuote {
     private String startTime;
 
     public TodoQuote(@NonNull Quote quote, @NonNull Todo todo) {
+        if(todo.getStartTime()==null)
         this.startTime = todo.getStartTime();
         this.userId = quote.getUserId();
         this.words = quote.getWords();
