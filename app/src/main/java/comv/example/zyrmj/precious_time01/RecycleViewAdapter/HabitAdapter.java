@@ -96,7 +96,6 @@ if(option.equals("0")) {
                 }
 
             }
-
             Bundle bundle = new Bundle();
             bundle.putSerializable("theHabit", habit);
             bundle.putSerializable("selectedIndex", selectedIndex);
