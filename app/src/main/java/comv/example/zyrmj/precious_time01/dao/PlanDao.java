@@ -12,6 +12,6 @@ public interface PlanDao {
     @Insert
     void insertPlan(Plan ...plans);
 
-    @Query("select * from `Plan` where user_id=:userId ")
+    @Query("select * from `Plan` where user_id=:userId order by start_date" )
     List<Plan> getAllPlans(String userId);
 }
