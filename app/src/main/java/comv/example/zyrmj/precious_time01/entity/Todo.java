@@ -13,6 +13,17 @@ public class Todo implements Serializable {
     @ColumnInfo(name = "plan_date")
     private String planDate;
 
+    public int getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(int reminder) {
+        this.reminder = reminder;
+    }
+
+    @NonNull
+    private int reminder;
+
     @NonNull
     public String getPlanDate() {
         return planDate;
