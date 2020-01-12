@@ -416,12 +416,45 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 //添加计划(是否在此添加？)
 //                showDialog("", new PlanRepository(getContext()));
                 System.out.println(toDoExtends);
+                //计划最终包含的todo,每个todo的信息均应是完整的
+                ArrayList<ToDoExtend> finalToDos=new ArrayList<>();
+                for(ToDoExtend toDoExtend:toDoExtends)
+                {
+                    Todo todo=toDoExtend.todo;
+                    if(todo.getType()==0)  //templateItem可直接添加
+                    {
+                        finalToDos.add(toDoExtend);
+                    }
+                    else if(todo.getType()==2)//用户自己的toDo,须区分两种类型
+                    {
+                        if(todo.getStartTime().contains(":")) //可直接添加
+                        {
+                            finalToDos.add(toDoExtend);
+                        }
+                        else //须进行时间安排
+                        {
+                            List<IdleTime> idleTimes=findAllIdleTimes(todo.getStartTime().split("-")[0],todo.getLength());
+                            todo=arrangeTimeForUserTodo(todo,idleTimes);
+                            toDoExtend.todo=todo;
+                            finalToDos.add(toDoExtend);
+
+                        }
+                    }
+
+                    //安排习惯
+                    for(Habit habit:selectedHabits)
+                    {
+                        List<ToDoExtend> toDoExtends=arrangeTimeForHabit(habit);
+                    }
+
+                }
+
 
 
             }
         });
     }
-
+//以下两函数供生成真正的plan时使用
     public void showDialog(String info, final PlanRepository planRepository) {
         new MaterialDialog.Builder(getContext())
                 .title("添加新计划")
@@ -681,11 +714,9 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         return todo;
     }
 
-    public Todo arrangeTimeForHabit(Habit habit,Todo todo,List<IdleTime> idleTimes)
+    public List<ToDoExtend> arrangeTimeForHabit(Habit habit)
     {
-        IdleTime chosenIdleTime=null;
-        updateToDo(todo,chosenIdleTime);
-        return todo;
+        return null;
     }
 
     //找到空闲时间后，给todo设置具体时间，并更新空闲时间
