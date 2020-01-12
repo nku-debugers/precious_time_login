@@ -544,7 +544,6 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     }
 
     private void initTimerPicker4() { //时长选择器
-        //String beginTime = "00:00";
         String beginTime = df.format(new Date());
         String endTime = DateFormatUtils.long2Str(System.currentTimeMillis(), 1);
         String endTimeShow = new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(System.currentTimeMillis()));
