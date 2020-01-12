@@ -5,9 +5,8 @@ import java.text.SimpleDateFormat;
 
 public class TimeDiff {
 
-
     public static String dateDiff(String startTime, String endTime,
-                                  String format) {
+                                String format) {
         // 按照传入的格式生成一个simpledateformate对象
         SimpleDateFormat sd = new SimpleDateFormat(format);
         if (Integer.valueOf(startTime.split(":")[0])<10&&!startTime.split(":")[0].contains("0"))
@@ -40,11 +39,11 @@ public class TimeDiff {
         String hourStr=String.valueOf(hour);
         String minuteStr;
         if(min<10)
-            minuteStr ="0"+String.valueOf(min);
+        minuteStr ="0"+String.valueOf(min);
         else
             minuteStr=String.valueOf(min);
 
-        return hourStr+":"+minuteStr;
+       return hourStr+":"+minuteStr;
     }
 
     public static int compare(String time1,String time2)

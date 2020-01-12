@@ -6,7 +6,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;

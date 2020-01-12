@@ -22,6 +22,8 @@ public class Plan {
     @ColumnInfo(name = "end_date")
     public String endDate;
 
-    @ColumnInfo(name = "failure_trigger")
-    public String failureTrigger;
+
+    public Plan() {
+        this.userId="offline";
+    }
 }

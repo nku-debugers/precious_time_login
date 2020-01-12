@@ -88,6 +88,20 @@ public class HabitRepository {
         }
     }
 
+    static class getAllHabitsAsyncTask2 extends  AsyncTask<String ,Void ,List<Habit>>
+    {
+        private HabitDao habitDao;
+
+        public getAllHabitsAsyncTask2(HabitDao habitDao) {
+            this.habitDao = habitDao;
+        }
+
+        @Override
+        protected List<Habit> doInBackground(String... strings) {
+            return habitDao.getAllHabits2(strings[0]);
+        }
+    }
+
     static class getSpecificHabitAsynckTask extends  AsyncTask<String ,Void ,Habit>
     {
         private HabitDao habitDao;
@@ -195,7 +209,16 @@ public class HabitRepository {
         }
         return null;
     }
-
+public List<Habit> getAllHabits2(String userId)
+{
+    try {
+        List<Habit> habits=new getAllHabitsAsyncTask2(habitDao).execute(userId).get();
+        return habits;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+return null;
+}
     public Habit getSpecificHabit(String userId,String habitName)
     {
         try {
