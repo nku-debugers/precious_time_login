@@ -91,13 +91,26 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
 
     private class ToDoExtend implements Serializable {
         private Todo todo;
-        private ArrayList<String> labels = new ArrayList<>(); //类别
-        private ArrayList<Quote> quotes = new ArrayList<>(); //箴言
+        private ArrayList<String> labels ; //类别
+        private ArrayList<Quote> quotes ; //箴言
+        private Integer flag=0;//是否安排完时间？
 
         public ToDoExtend(Todo todo, ArrayList<String> labels, ArrayList<Quote> quotes) {
             this.todo = todo;
             this.labels = labels;
             this.quotes = quotes;
+            if(todo.getStartTime().contains(":"))
+                flag=1;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            String result;
+            result=todo.getName()+" "+todo.getStartTime();
+            if(quotes!=null&&labels!=null)
+                result+="lable num: "+labels.size()+"quotes num: "+quotes.size();
+            return result;
         }
 
         public ToDoExtend() {
@@ -154,17 +167,17 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             userId = getArguments().getString("userId", "offline");
             templateName = getArguments().getString("templateName", "");
             datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
-            if (datas==null) datas=new ArrayList<>();
+            if (datas == null) datas = new ArrayList<>();
             Todo todo = (Todo) getArguments().getSerializable("mytodo");
             if (todo != null) {
-                selectedHabits=(ArrayList<Habit>)getArguments().getSerializable("habits");
-                idleTimes=(ArrayList<ArrayList<IdleTime>>)getArguments().getSerializable("idleTimes");
-                toDoExtends=(ArrayList<ToDoExtend>)getArguments().getSerializable("toDoExtends");
-                addedToDos=(ArrayList<Todo>)getArguments().getSerializable("toDos");
+                selectedHabits = (ArrayList<Habit>) getArguments().getSerializable("habits");
+                idleTimes = (ArrayList<ArrayList<IdleTime>>) getArguments().getSerializable("idleTimes");
+                toDoExtends = (ArrayList<ToDoExtend>) getArguments().getSerializable("toDoExtends");
+                addedToDos = (ArrayList<Todo>) getArguments().getSerializable("toDos");
                 addedToDos.add(todo);
-                if(todo.getStartTime().contains(":"))
+                if (todo.getStartTime().contains(":")) //todo有具体时间需update空闲时间
                 {
-                    updateiIdleTimes(todo.getStartTime(),todo.getEndTime());
+                    updateiIdleTimes(todo.getStartTime(), todo.getEndTime());
                 }
                 ArrayList<Quote> quotes = (ArrayList<Quote>) getArguments().getSerializable("quotes");
                 ArrayList<String> labels = (ArrayList<String>) getArguments().getSerializable("labels");
@@ -176,9 +189,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 if (labels != null)
                     toDoExtend.setLabels(labels);
                 toDoExtends.add(toDoExtend);
-            }
-            else
-            {
+            } else {
                 initDatas();
             }
         }
@@ -191,7 +202,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             idleTimes.get(i).add(new IdleTime(START, END));
         }
         datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
-        if(datas==null) datas=new ArrayList<>();
+        if (datas == null) datas = new ArrayList<>();
         templateItems2ToDo(datas);
 
     }
@@ -322,9 +333,9 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 bundle.putString("templateName", templateName);
                 bundle.putString("userId", userId);
                 bundle.putSerializable("toDos", addedToDos);
-                bundle.putSerializable("habits",selectedHabits);
-                bundle.putSerializable("idleTimes",idleTimes);
-                bundle.putSerializable("toDoExtends",toDoExtends);
+                bundle.putSerializable("habits", selectedHabits);
+                bundle.putSerializable("idleTimes", idleTimes);
+                bundle.putSerializable("toDoExtends", toDoExtends);
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_editPlan_to_addToDo2, bundle);
             }
@@ -356,27 +367,25 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         toDoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int size=0;
-                for (ToDoExtend toDoExtend:toDoExtends)
-                {
-                    if(toDoExtend.todo.getType()==2) size++;
+                int size = 0;
+                for (ToDoExtend toDoExtend : toDoExtends) {
+                    if (toDoExtend.todo.getType() == 2) size++;
                 }
                 String[] items = new String[size];
-                int index=0;
-                String[] weekdays={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
-                for (ToDoExtend toDoExtend:toDoExtends)
-                {
-                    if(toDoExtend.todo.getType()==2) {
+                int index = 0;
+                String[] weekdays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+                for (ToDoExtend toDoExtend : toDoExtends) {
+                    if (toDoExtend.todo.getType() == 2) {
                         items[index] = toDoExtend.todo.getName() + "    " +
                                 weekdays[Integer.valueOf(toDoExtend.todo.getStartTime().split("-")[0])]
                                 + "    ";
 
-                        if (!(toDoExtend.todo.getStartTime().split("-").length==1))
+                        if (!(toDoExtend.todo.getStartTime().split("-").length == 1))
                             items[index] += ("具体时间：" + toDoExtend.todo.getStartTime().split("-")[1]
-                            +"-"+toDoExtend.todo.getEndTime().split("-")[1]
+                                    + "-" + toDoExtend.todo.getEndTime().split("-")[1]
                             );
                         else
-                            items[index] += ("   时长： " +toDoExtend. todo.getLength());
+                            items[index] += ("   时长： " + toDoExtend.todo.getLength());
                         index++;
                         System.out.println("todoextend");
                         System.out.println(toDoExtend.getQuotes().size());
@@ -404,8 +413,9 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             @Override
             public void onClick(View view) {
                 //生成最终计划
-                //添加计划
-                showDialog("", new PlanRepository(getContext()));
+                //添加计划(是否在此添加？)
+//                showDialog("", new PlanRepository(getContext()));
+                System.out.println(toDoExtends);
 
 
             }
@@ -523,7 +533,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
-        if(datas==null) datas=new ArrayList<>();
+        if (datas == null) datas = new ArrayList<>();
         events = new ArrayList<WeekViewEvent>();
         int i = 1;
         int index = 0;
@@ -572,6 +582,11 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             todo.setType(0);//0表明是templateItem转化而来
             todo.setReminder(0);
             addedToDos.add(todo);
+            ToDoExtend toDoExtend=new ToDoExtend();
+            toDoExtend.setTodo(todo);
+            toDoExtend.setQuotes(null);
+            toDoExtend.setLabels(null);
+            toDoExtends.add(toDoExtend);
 
         }
         System.out.println("todoslength");
@@ -593,18 +608,16 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
     //所有其他todo安排完后调用
     // 将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
     public void habit2ToDo() {
-        for(Habit habit:selectedHabits)
-        {
-            Todo todo=new Todo();
+        for (Habit habit : selectedHabits) {
+            Todo todo = new Todo();
             todo.setType(1);//1表示习惯
             todo.setUserId(habit.userId);
             todo.setName(habit.getName());
             todo.setReminder(habit.getReminder());
-            if(habit.getTime4once()!=null)
-            todo.setLength(habit.getTime4once());
-            //没有设定每次时长，怎么安排
-            else
-            {
+            if (habit.getTime4once() != null)
+                todo.setLength(habit.getTime4once());
+                //没有设定每次时长，怎么安排
+            else {
 
             }
             //根据剩下的空余时间，habit的priority,expectedTime等安排具体时间
@@ -649,20 +662,35 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
 
     //根据时长找到适合的所有空闲时间
     public List<IdleTime> findAllIdleTimes(String weekday, String length) {
-
-        return null;
+        List<IdleTime> idleTimeList=idleTimes.get(Integer.valueOf(weekday));
+        List<IdleTime> idleTimes=new ArrayList<>();
+        for(IdleTime idleTime:idleTimeList)
+        {
+            if (TimeDiff.compare(idleTime.length,length)>0)
+            {
+                idleTimes.add(idleTime);
+            }
+        }
+        return idleTimes;
     }
 
     //根据不同偏好选择最佳的空闲时间
-    public IdleTime findTheIdleTime(List<IdleTime> idleTimes) {
+    public Todo arrangeTimeForUserTodo(Todo todo,List<IdleTime> idleTimes) {
+        IdleTime chosenIdleTime=null;
+        updateToDo(todo,chosenIdleTime);
+        return todo;
+    }
 
-        return null;
+    public Todo arrangeTimeForHabit(Habit habit,Todo todo,List<IdleTime> idleTimes)
+    {
+        IdleTime chosenIdleTime=null;
+        updateToDo(todo,chosenIdleTime);
+        return todo;
     }
 
     //找到空闲时间后，给todo设置具体时间，并更新空闲时间
     public Todo updateToDo(Todo todo, IdleTime idleTime) {
         //
-
         return todo;
     }
 
