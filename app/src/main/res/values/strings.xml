@@ -122,4 +122,5 @@
     <string name="todo_timelength">事项时长</string>
     <string name="todo_time_hint">0</string>
     <string name="todo_time_hour">小时</string>
+    <string name="weekNum">每周至少完成次数</string>
 </resources>
