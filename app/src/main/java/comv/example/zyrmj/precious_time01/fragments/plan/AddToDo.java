@@ -62,9 +62,9 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     static String TAG = "mytag";
     private Todo myTodo;
     private Button choseQuote, confirm;
-    private Switch timeType;
+    private Switch timeType, timeReminder;
     private boolean timeTypeFlag;
-    private EditText todoName;
+    private EditText todoName, reminder;
     private LabelsView labelsView;
     private String userId = "offline",templateName;
     private ArrayList<String> labels, selectedLabels;
@@ -79,6 +79,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private boolean timeReverse;
     private ArrayList<Quote> selectedQuotes;
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
+    private SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.CANADA);
     private String[] weekString = {"日", "一", "二", "三", "四", "五", "六"};
     private LinearLayout timeLength;
     private List<Todo> todos;
@@ -161,6 +162,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                 Log.d(TAG, "checkAndInsert: inside if the week is");
                 alreadyExistStart = todos.get(i).getStartTime().substring(2);
                 alreadyExistEnd = todos.get(i).getEndTime().substring(2);
+
                 if ( !checkExceedStart(alreadyExistStart, alreadyExistEnd, startFinal)) {
                     return false;
                 }
@@ -203,8 +205,14 @@ public class AddToDo extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View view) {
                 saveLabels();
-                myTodo.setType(2);
-                if(saveTime()) {
+
+                if (saveTime()) {
+                    myTodo.setType(2);
+                    if (timeReminder.isChecked()) {
+                        myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
+                    } else {
+                        myTodo.setReminder(0);
+                    }
                     if (todoName.getText().length() != 0) {
                         myTodo.setName(todoName.getText().toString());
                     } else {
@@ -223,6 +231,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
                     controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
                 }
+
+
 
             }
         });
@@ -262,6 +272,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     end.setVisibility(View.VISIBLE);
                 } else {
                     timeTypeFlag = false;
+                    startDate = null;
+                    endDate = null;
                     timeLength.setVisibility(View.VISIBLE);
                     start.setVisibility(View.GONE);
                     end.setVisibility(View.GONE);
@@ -310,6 +322,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
         confirm = getView().findViewById(R.id.todo_confirm);
         choseQuote = getView().findViewById(R.id.choseQuoteTodo);
         timeType = getView().findViewById(R.id.todo_time);
+        timeReminder = getView().findViewById(R.id.time_remind_switch2);
+        reminder = getView().findViewById(R.id.advanceminute2);
         todoName = getView().findViewById(R.id.todo_name_input);
         labelsView = getView().findViewById(R.id.todo_category_select);
         categoryRepository = new CategoryRepository(getContext());
@@ -432,6 +446,14 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                if (startDate != null && endDate != null && startDateModified) {
+                    if (endDate.before(startDate)) {
+                        mTvSelectedTime1.setText(R.string.end_time_exceed_warning);
+                        timeReverse = true;
+                    } else {
+                        mTvSelectedTime2.setText(hourFormat.format(endDate));
+                    }
+                }
             }
         }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
@@ -468,6 +490,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     if (endDate.before(startDate)) {
                         mTvSelectedTime2.setText(R.string.end_time_exceed_warning);
                         timeReverse = true;
+                    } else {
+                        mTvSelectedTime1.setText(hourFormat.format(startDate));
                     }
                 }
             }
@@ -560,7 +584,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     }
 
     private String getWeek(String selected) {
-        String week = "";
+        String week;
         switch (selected) {
             case "日":
                 week = "6";

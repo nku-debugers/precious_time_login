@@ -570,6 +570,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             updateiIdleTimes(ti.getStartTime(), ti.getEndTime());
             todo.setLength(TimeDiff.dateDiff(ti.getStartTime().split("-")[1], ti.getEndTime().split("-")[1], "HH:mm"));
             todo.setType(0);//0表明是templateItem转化而来
+            todo.setReminder(0);
             addedToDos.add(todo);
 
         }
@@ -598,6 +599,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             todo.setType(1);//1表示习惯
             todo.setUserId(habit.userId);
             todo.setName(habit.getName());
+            todo.setReminder(habit.getReminder());
             if(habit.getTime4once()!=null)
             todo.setLength(habit.getTime4once());
             //没有设定每次时长，怎么安排
