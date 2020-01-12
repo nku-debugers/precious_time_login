@@ -5,7 +5,107 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/todo_length"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline104"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline101"
+        app:layout_constraintTop_toTopOf="@+id/card_start">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="61dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_selected_length"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/week_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guideline107"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline108"
+        app:layout_constraintVertical_bias="0.050000012">
+
+        <LinearLayout
+            android:id="@+id/week_time_in_todo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:text="@string/week"
+                android:textSize="15sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_selected_week"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+
+        android:id="@+id/choseQuoteTodo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chosequote"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline112"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline101"
+        app:layout_constraintTop_toTopOf="@+id/guideline104"
+        app:layout_constraintVertical_bias="0.516" />
+
+    <TextView
+        android:id="@+id/habbit_quote4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:text="@string/habit_quote"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline112"
+        app:layout_constraintEnd_toStartOf="@+id/guideline84"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline104"
+        app:layout_constraintVertical_bias="0.53" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_start"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -15,7 +115,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline107">
 
         <LinearLayout
-            android:id="@+id/end_time"
+            android:id="@+id/end_time_in_todo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:clickable="true"
@@ -38,7 +138,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/tv_selected_end_time"
+                android:id="@+id/tv_selected_end_time_in_todo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="15dp"
@@ -50,7 +150,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/card_end"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -60,7 +160,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline103">
 
         <LinearLayout
-            android:id="@+id/start_time"
+            android:id="@+id/start_time_in_todo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:clickable="true"
@@ -83,7 +183,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/tv_selected_start_time"
+                android:id="@+id/tv_selected_start_time_in_todo"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="15dp"
@@ -153,7 +253,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline108"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.47" />
 
     <TextView
         android:id="@+id/todo_category"
@@ -161,7 +268,7 @@
         android:layout_height="wrap_content"
         android:text="@string/todo_category"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline103"
+        app:layout_constraintBottom_toTopOf="@+id/guideline108"
         app:layout_constraintEnd_toStartOf="@+id/guideline101"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline102" />
@@ -171,7 +278,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.69" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline112"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
 
     <com.donkingliang.labels.LabelsView
         android:id="@+id/todo_category_select"
@@ -182,7 +296,7 @@
         app:labelTextPaddingLeft="10dp"
         app:labelTextPaddingRight="10dp"
         app:labelTextPaddingTop="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline103"
+        app:layout_constraintBottom_toTopOf="@+id/guideline108"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline101"
         app:layout_constraintTop_toTopOf="@+id/guideline102"
@@ -220,30 +334,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/guideline104"
         app:layout_constraintStart_toStartOf="@+id/guideline101"
-        app:layout_constraintTop_toTopOf="@+id/guideline103">
-
-        <EditText
-            android:id="@+id/todo_time_input"
-            style="@style/EditTextStyle"
-            android:layout_width="148dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/todo_time_hint"
-            android:importantForAutofill="no"
-            android:inputType="numberSigned"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/todo_time_hour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/todo_time_hour"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline104"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/todo_time_linear"
-        app:layout_constraintTop_toTopOf="@+id/guideline103" />
+        app:layout_constraintTop_toTopOf="@+id/guideline103"/>
 
     <Button
         android:id="@+id/todo_confirm"
@@ -255,7 +346,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline105"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline104" />
+        app:layout_constraintTop_toTopOf="@+id/guideline112" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline105"
@@ -287,6 +378,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.58" />
+        app:layout_constraintGuide_percent="0.56" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
