@@ -7,7 +7,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-@Entity(primaryKeys = {"user_id", "start_time","plan_date"})
+@Entity(primaryKeys = {"user_id", "start_time", "plan_date"})
 public class Todo implements Serializable {
     @NonNull
     @ColumnInfo(name = "plan_date")
@@ -36,7 +36,7 @@ public class Todo implements Serializable {
     private String startTime;
     @ColumnInfo(name = "failure_trigger")
     public String failureTrigger;
-    private String length;
+    private String length; //注意这里单位为小时
     private Double completion;
     private Integer type;//0-template 1-habit 2-userItem
 
