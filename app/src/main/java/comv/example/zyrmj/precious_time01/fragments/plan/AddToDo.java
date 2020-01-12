@@ -63,9 +63,10 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private Todo myTodo;
     private Button choseQuote, confirm;
     private Switch timeType;
+    private boolean timeTypeFlag;
     private EditText todoName;
     private LabelsView labelsView;
-    private String userId = "offline";
+    private String userId = "offline",templateName;
     private ArrayList<String> labels, selectedLabels;
     private CategoryRepository categoryRepository;
     private TodoRepository todoRepository;
@@ -96,8 +97,10 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            userId = getArguments().getString("userId", "");
-            todos = (List<Todo>) getArguments().getSerializable("todo");
+            userId = getArguments().getString("userId", "offline");
+            todos = (List<Todo>) getArguments().getSerializable("toDos");
+            System.out.println("todoslength"+String.valueOf(todos.size()));
+            templateName=getArguments().getString("templateName","");
         }
         assignViews();
         init();
@@ -109,24 +112,22 @@ public class AddToDo extends Fragment implements View.OnClickListener{
         for (int index : selectedIndex) {
             selectedLabels.add(labels.get(index));
         }
-        if (selectedLabels.size() == 0) {
-            PromptDialog promptDialog = new PromptDialog(getActivity());
-            promptDialog.showWarn("请至少选择一个标签！");
-        }
     }
 
-    private void saveTime() {
-        if (startDate != null) {
+    private boolean saveTime() {
+        if (timeTypeFlag) {
             String startTime = mTvSelectedTime1.getText().toString();
             String endTime = mTvSelectedTime2.getText().toString();
 
             String week = getWeek(mTvSelectedTimeWeek.getText().toString());
+            boolean canInsert = checkAndInsert(week, startTime, endTime);
             String startFinal = week + "-" + startTime;
             String endFinal = week + "-" + endTime;
-            boolean canInsert = checkAndInsert(week, startFinal, endFinal);
+            Log.d(TAG, "saveTime: the caninserte is " + canInsert);
             if (canInsert) {
                 myTodo.setStartTime(startFinal);
                 myTodo.setEndTime(endFinal);
+                return true;
             } else {
                 //提示有重复项
                 PromptDialog promptDialog = new PromptDialog (getActivity ());
@@ -136,34 +137,39 @@ public class AddToDo extends Fragment implements View.OnClickListener{
 
                     }
                 } ) );
+                return false;
             }
         } else if (mTvSelectedLength.getText().length() != 0) {
+            myTodo.setStartTime(getWeek(mTvSelectedTimeWeek.getText().toString()) + "-");
             myTodo.setLength(mTvSelectedLength.getText().toString());
+            return true;
         } else {
             //提示没有写日期
+            return false;
         }
     }
 
     private boolean checkAndInsert(String week, String startFinal, String endFinal) {
         String alreadyExistStart;
         String alreadyExistEnd;
-        boolean canInsert = false;
-        boolean flag = false;
+        Log.d(TAG, "checkAndInsert: the week is" + week);
         for(int i=0 ;i < todos.size(); i++) {
-            if(todos.get(i).getStartTime().length() != 0){
-                flag = true;
-                alreadyExistStart = todos.get(i).getStartTime();
-                alreadyExistEnd = todos.get(i).getEndTime();
-                canInsert = checkExceedStart(alreadyExistStart, alreadyExistEnd, startFinal) &&
-                        checkExceedEnd(alreadyExistStart, alreadyExistEnd, endFinal);
+            Log.d(TAG, "checkAndInsert: the start time is" + todos.get(i).getStartTime());
+            Log.d(TAG, "checkAndInsert: the end time is " + todos.get(i).getEndTime());
+            if(todos.get(i).getStartTime().length() != 0 && todos.get(i).getStartTime().substring(0,1).equals(week)){
+
+                Log.d(TAG, "checkAndInsert: inside if the week is");
+                alreadyExistStart = todos.get(i).getStartTime().substring(2);
+                alreadyExistEnd = todos.get(i).getEndTime().substring(2);
+                if ( !checkExceedStart(alreadyExistStart, alreadyExistEnd, startFinal)) {
+                    return false;
+                }
+                if ( !checkExceedEnd(alreadyExistStart, alreadyExistEnd, endFinal)) {
+                    return false;
+                }
             }
         }
-        if (flag) {
-            return canInsert;
-        }
-        else {
-            return true;
-        }
+        return true;
     }
 
     private boolean checkExceedStart(String start, String end, String ready) {
@@ -197,18 +203,27 @@ public class AddToDo extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View view) {
                 saveLabels();
-                saveTime();
                 myTodo.setType(2);
-                if(todoName.getText().length() != 0) {
-                    myTodo.setName(todoName.getText().toString());
-                } else {
-                    //提示没有写名字
+                if(saveTime()) {
+                    if (todoName.getText().length() != 0) {
+                        myTodo.setName(todoName.getText().toString());
+                    } else {
+                        //提示没有写名字
+                    }
+                    NavController controller = Navigation.findNavController(getView());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("mytodo", myTodo);
+                    bundle.putSerializable("labels", selectedLabels);
+                    bundle.putSerializable("quotes", selectedQuotes);
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", templateName);
+                    bundle.putSerializable("habits",getArguments().getSerializable("habits"));
+                    bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
+                    bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
+                    bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                    controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
                 }
-                NavController controller = Navigation.findNavController(getView());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("mytodo", myTodo);
-                bundle.putSerializable("labels", selectedLabels);
-                bundle.putSerializable("quotes", selectedQuotes);
+
             }
         });
 
@@ -241,10 +256,12 @@ public class AddToDo extends Fragment implements View.OnClickListener{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
+                    timeTypeFlag = true;
                     timeLength.setVisibility(View.GONE);
                     start.setVisibility(View.VISIBLE);
                     end.setVisibility(View.VISIBLE);
                 } else {
+                    timeTypeFlag = false;
                     timeLength.setVisibility(View.VISIBLE);
                     start.setVisibility(View.GONE);
                     end.setVisibility(View.GONE);
@@ -306,6 +323,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     }
 
     private void init() {
+        timeTypeFlag = false;
         myTodo = new Todo();
         startDateModified = false;
         endDateModified = false;
@@ -537,6 +555,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private String getTime(String time) {
         String hour=time.substring(0,2);
         String minute=time.substring(3,5);
+        System.out.println("timeresult "+hour+" "+minute);
         return hour+":"+minute;
     }
 
