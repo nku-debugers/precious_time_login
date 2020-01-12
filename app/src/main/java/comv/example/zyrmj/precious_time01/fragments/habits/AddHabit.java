@@ -50,7 +50,7 @@ public class AddHabit extends Fragment {
     private TextView totalTime, title, habitName, gotoAdvanced;
     private String userId = "offline";
     private Button save;
-    private EditText name, weekTime;
+    private EditText name, weekTime,numPerWeek;
     private LabelsView labelsView;
     private ImageView back;
     private Habit newHabit;
@@ -234,7 +234,10 @@ public class AddHabit extends Fragment {
         }
         if (weekTime.getText() != null) {
             newHabit.setLength(weekTime.getText().toString());
-
+        if(numPerWeek.getText()!=null)
+        {
+            newHabit.setNumPerWeek(Integer.valueOf(numPerWeek.getText().toString()));
+        }
         }
     }
 
@@ -249,6 +252,9 @@ public class AddHabit extends Fragment {
         weekTime = getView().findViewById(R.id.week_time_input);
         if (newHabit.getLength() != null)
             weekTime.setText(newHabit.getLength());
+        numPerWeek=getView().findViewById(R.id.numPerWeek);
+        if(newHabit.getNumPerWeek()!=0)
+            numPerWeek.setText(String.valueOf(newHabit.getNumPerWeek()));
         gotoAdvanced = getView().findViewById(R.id.advanced_option);
         gotoAdvanced.setClickable(true);
         labelsView = getView().findViewById(R.id.category);

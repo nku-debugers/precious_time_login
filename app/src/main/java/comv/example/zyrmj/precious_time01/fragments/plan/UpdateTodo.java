@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -54,6 +57,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class UpdateTodo extends Fragment implements View.OnClickListener {
     static String TAG = "mytag";
     private Todo myTodo;
+    private ImageView back;
     private Button choseQuote, confirm,delete;
     private Switch timeType, timeReminder;
     private boolean timeTypeFlag;
@@ -202,6 +206,38 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.todo_length).setOnClickListener(this);
         week.setOnClickListener(this);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PromptDialog promptDialog = new PromptDialog(getActivity());
+                PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        NavController controller = Navigation.findNavController(getView());
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("mytodo", myTodo);
+                        bundle.putSerializable("labels", selectedLabels);
+                        bundle.putSerializable("quotes", selectedQuotes);
+                        bundle.putString("userId", userId);
+                        bundle.putString("templateName", getArguments().getString("templateName"));
+                        bundle.putSerializable("habits",getArguments().getSerializable("habits"));
+                        bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
+                        bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
+                        bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                        controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                    }
+                });
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        //Nothing
+                    }
+                });
+                confirm.setTextColor(Color.parseColor("#DAA520"));
+                confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+            }
+        });
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -333,6 +369,7 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
 
     private void assignViews() {
         week = getView().findViewById(R.id.week_card);
+        back=getView().findViewById(R.id.back);
         confirm = getView().findViewById(R.id.todo_confirm);
         delete=getView().findViewById(R.id.clear);
         if(getArguments().getString("option").equals("update"))

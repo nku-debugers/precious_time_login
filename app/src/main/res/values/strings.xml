@@ -33,7 +33,7 @@
     <string name="habit_title">习惯属性</string>
     <string name="habit_name">习惯名称</string>
     <string name="habit_category">习惯属性</string>
-    <string name="week_time">每周预计用时</string>
+    <string name="week_time">总时长</string>
     <string name="week_time_hour">小时</string>
     <string name="advanced_option">高级选项</string>
     <string name="habit_complete"> 完 成</string>
@@ -123,4 +123,6 @@
     <string name="todo_time_hint">0</string>
     <string name="todo_time_hour">小时</string>
     <string name="clear">清空</string>
+    <string name="weekNum">每周至少完成次数</string>
+>>>>>>> 85fcfafd9c7b35e3996bdb57bf5e7d079a136385
 </resources>

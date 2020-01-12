@@ -100,6 +100,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.58" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline111"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.69" />
+
     <Button
         android:id="@+id/habbit_complete"
         android:layout_width="wrap_content"
@@ -109,9 +116,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="0.93" />
 
     <TextView
         android:id="@+id/habit_title"
@@ -133,9 +141,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/habbit_complete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.844"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline79" />
+        app:layout_constraintTop_toTopOf="@+id/guideline111"
+        app:layout_constraintVertical_bias="0.809" />
 
     <com.donkingliang.labels.LabelsView
         android:id="@+id/category"
@@ -180,5 +189,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/week_time_input"
         app:layout_constraintTop_toTopOf="@+id/guideline58" />
+
+    <TextView
+        android:id="@+id/week_num"
+        android:layout_width="123dp"
+        android:layout_height="56dp"
+        android:text="@string/weekNum"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline111"
+        app:layout_constraintEnd_toStartOf="@+id/guideline57"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline79" />
+
+    <EditText
+        android:id="@+id/numPerWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/guideline111"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline57"
+        app:layout_constraintTop_toTopOf="@+id/guideline79" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

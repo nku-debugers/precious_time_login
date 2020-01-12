@@ -64,6 +64,15 @@ public class Habit implements Serializable {
     public int priority;        //优先级
     public int reminder;        //提醒
     private String time4once;     //单次时长
+    private int numPerWeek;      //每周次数
+
+    public int getNumPerWeek() {
+        return numPerWeek;
+    }
+
+    public void setNumPerWeek(int numPerWeek) {
+        this.numPerWeek = numPerWeek;
+    }
 
     public String getLocation() {
         return location;
