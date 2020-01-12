@@ -6,24 +6,23 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RestrictTo;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,14 +31,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
-import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
+import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.entity.Habit;
-import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
+import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
-import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
@@ -47,7 +46,6 @@ import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ddz.floatingactionbutton.FloatingActionMenu;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,10 +60,29 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     private ImageView returnImge;
     private List<WeekViewEvent> events;
     private List<TemplateItem> datas;
-    private String userId;
+    private String userId="offline";
     private String templateName;
     private List<Habit> selectedHabits=new ArrayList<>();
     private List<Todo> addedToDos=new ArrayList<>();
+    private ArrayList<ArrayList<IdleTime>> idleTimes=new ArrayList<>();
+
+    private class IdleTime
+            //3个string:startTime,endTime,length
+    {
+        private String startTime,endTime,length;
+
+        public IdleTime(String startTime, String endTime) {
+            if (Integer.valueOf(startTime.split(":")[0])<10&&!startTime.split(":")[0].contains("0"))
+                startTime="0"+startTime;
+            if (Integer.valueOf(endTime.split(":")[0])<10&&!endTime.split(":")[0].contains("0"))
+                endTime="0"+endTime;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.length = TimeDiff.dateDiff(startTime,endTime,"HH:mm");
+        }
+
+        //对两个IdleTime进行比较看是否冲突
+    }
 
 
     public EditPlan() {
@@ -88,9 +105,20 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             templateName = getArguments().getString("templateName", "");
         }
         assignViews();
+        initEdleTime();
         enableBackButton();
 
     }
+    private void initEdleTime()
+    {
+        int i=0;
+        for ( i=0;i<=6;i++)
+        { idleTimes.add(new ArrayList<>());
+            idleTimes.get(i).add(new IdleTime("8:00","23:00"));}
+
+    }
+
+
     private void assignViews() {
         confirm=getView().findViewById(R.id.create_plan);
         fl_menu = getView().findViewById(R.id.menu);
@@ -105,7 +133,6 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_editPlan_to_choseTemplate);
-
             }
         });
 
@@ -129,13 +156,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
             public String interpretDate(Calendar date) {
-//                SimpleDateFormat weekdayNameFormat = new SimpleDateFormat("EEE", Locale.getDefault());
-//                String weekday = weekdayNameFormat.format(date.getTime());
-//                SimpleDateFormat format = new SimpleDateFormat("d", Locale.getDefault());
-//                //return format.format(date.getTime());
-//                int index = date.get(Calendar.DAY_OF_WEEK) - 1;
-//                return weekLabels[index];
-                return null;
+              return null;
 
             }
 
@@ -287,10 +308,112 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
             @Override
             public void onClick(View view) {
                 //生成最终计划
+                //添加计划
+                showDialog("",new PlanRepository(getContext()));
+
+
             }
         });
     }
 
+    public void showDialog(String info, final PlanRepository planRepository) {
+        new MaterialDialog.Builder(getContext())
+                .title("添加新计划")
+                .content(info)
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                //前2个一个是hint一个是预输入的文字
+                .input("计划名称", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        //判断开始日期是否为空
+                       if (input.toString().equals("")) {
+                         dialog.setContent("开始日期不能为空，请重新输入！");
+                        } else {
+                            String planName = input.toString();
+                          dialog.dismiss();
+                          showDialog2(planName,planRepository);
+
+                        }
+                    }
+                }
+
+                )
+
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
+                .autoDismiss(false).show();
+    }
+
+    public void showDialog2(String info, final PlanRepository planRepository) {
+        new MaterialDialog.Builder(getContext())
+                .title("添加新计划")
+                .content(info)
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                //前2个一个是hint一个是预输入的文字
+                .input("开始日期", "", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                //判断计划名是否为空
+                                if (input.toString().equals("")) {
+                          dialog.setContent("开始日期不能为空，请重新输入！");
+                                } else {
+                                   Plan plan=new Plan();
+                                   plan.startDate=input.toString();
+
+                                   plan.planName=info;
+                                   //计算endDate
+                                    Calendar cal = Calendar.getInstance();
+                                    String splieTimes[]=plan.startDate.split("/");
+                                    Date start=new Date((Integer.valueOf(splieTimes[0])-1900),
+                                            (Integer.valueOf(splieTimes[1])-1),(Integer.valueOf(splieTimes[2])));
+                                    cal.setTime(start);
+                                        //增加6天
+                                    cal.add(Calendar.DAY_OF_MONTH, 6);
+                                    //Calendar转为Date类型
+                                    Date end=cal.getTime();
+                                //将增加后的日期转为字符串
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                   plan.startDate = formatter.format(start);
+                                   plan.endDate=formatter.format(end);
+                                    int flag=0;
+                                    List<Plan> plans=planRepository.getAllPlans(userId);
+                                    for (Plan p :plans)
+                                    {
+                                        if(p.startDate.equals(plan.startDate))
+                                        {
+                                            flag=1;
+                                            break;
+                                        }
+
+                                    }
+                                    if(flag==0)
+                                    {planRepository.insertPlan(plan);
+                                   dialog.dismiss();}
+
+                                    else
+                                    {
+
+                                        Log.i("dialog", "存在相同开始时间的计划");
+                                        dialog.setContent("存在相同开始时间的计划，请重新输入！");
+                                    }
+                                }
+                            }
+                        }
+
+                )
+
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
+                .autoDismiss(false).show();
+    }
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         int index = event.getIndex();
@@ -308,7 +431,7 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         events = new ArrayList<WeekViewEvent>();
         datas = new TemplateItemRepository(getContext()).getSpecificList(templateName, userId);
-        Log.d("templateitem",String.valueOf(datas.size()));
+        templateItems2ToDo(datas);
         int i = 1;
         int index = 0;
         for (TemplateItem ti : datas) {
@@ -344,6 +467,77 @@ public class EditPlan extends Fragment  implements WeekView.MonthChangeListener,
         return events;
     }
 
+    //将templateItem转换成toDo
+    public void templateItems2ToDo(List<TemplateItem> templateItems)
+    {
+        for (TemplateItem ti:templateItems)
+        {
+            Todo todo=new Todo();
+            todo.setName(ti.getItemName());
+            todo.setStartTime(ti.getStartTime());
+            todo.setEndTime(ti.getEndTime());
+            updateiIdleTimes(ti.getStartTime(),ti.getEndTime());
+            todo.setLength(TimeDiff.dateDiff(ti.getStartTime().split("-")[1],ti.getEndTime().split("-")[1],"HH:mm"));
+            todo.setType(0);//0表明是templateItem转化而来
+            addedToDos.add(todo);
+            System.out.println("idleTimes");
+            int index=0;
+            for(ArrayList<IdleTime> list:idleTimes)
+            {
+                System.out.println(index+":");
+                for (IdleTime idleTime:list)
+                {
+                    System.out.println(idleTime.startTime+" "+idleTime.endTime+" "+idleTime.length);
+                }
+                index++;
+            }
+        }
+
+
+    }
+
+    public void updateiIdleTimes(String startTime, String endTime)
+    {
+        //每添加一个新的todo便更新空闲时间列表
+        int index=Integer.valueOf(startTime.split("-")[0]);//确定weekday 0-Mon ...
+        startTime=startTime.split("-")[1];
+        endTime=endTime.split("-")[1];
+        ArrayList<IdleTime> idleTimesList=idleTimes.get(index);
+        for (IdleTime idleTime:idleTimesList)
+        {
+            //startTime>=空闲时间start  endTime<= 空闲时间end
+            if((TimeDiff.compare(startTime,idleTime.startTime)>=0||TimeDiff.compare("8:00",startTime)>0)
+                    &&(TimeDiff.compare(endTime,idleTime.endTime)<=0||TimeDiff.compare("23:00",endTime)<0))
+            {
+                idleTimesList.remove(idleTime);
+               //拆分空闲时间
+                if(TimeDiff.compare(startTime,idleTime.startTime)>0)
+                {
+                    idleTimesList.add(new IdleTime(idleTime.startTime,startTime));
+                }
+                else if(TimeDiff.compare("8:00",startTime)>0)
+                {
+                    if(TimeDiff.compare(endTime,idleTime.endTime)<0)
+                        idleTimesList.add(new IdleTime(endTime,idleTime.endTime));
+                }
+                else if(TimeDiff.compare(endTime,idleTime.endTime)<0)
+                {
+                    idleTimesList.add(new IdleTime(endTime,idleTime.endTime));
+                }
+                else if(TimeDiff.compare("23:00",endTime)<0)
+                {
+                    if(TimeDiff.compare(startTime,idleTime.startTime)>0)
+                    {
+                        idleTimesList.add(new IdleTime(idleTime.startTime,startTime));
+                    }
+                }
+
+
+            }
+
+        }
+
+    }
 
     @Override
     public void onEmptyViewClicked(Calendar time) {

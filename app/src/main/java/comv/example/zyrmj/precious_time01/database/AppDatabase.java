@@ -10,6 +10,7 @@ import comv.example.zyrmj.precious_time01.dao.CategoryDao;
 import comv.example.zyrmj.precious_time01.dao.HabitCategoryDao;
 import comv.example.zyrmj.precious_time01.dao.HabitDao;
 import comv.example.zyrmj.precious_time01.dao.HabitQuoteDao;
+import comv.example.zyrmj.precious_time01.dao.PlanDao;
 import comv.example.zyrmj.precious_time01.dao.QuoteDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateDao;
 import comv.example.zyrmj.precious_time01.dao.TemplateItemDao;
@@ -57,4 +58,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract HabitQuoteDao habitQuoteDao();
 
     public abstract HabitCategoryDao habitCategoryDao();
+
+    public abstract PlanDao planDao();
 }

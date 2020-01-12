@@ -95,17 +95,6 @@
         app:textSize="12sp"
         app:todayBackgroundColor="#1848adff" />
 
-    <EditText
-        android:id="@+id/planName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/guideline59"
-        app:layout_constraintEnd_toStartOf="@+id/guideline63"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.ddz.floatingactionbutton.FloatingActionMenu
         android:id="@+id/menu"
         android:layout_width="wrap_content"
