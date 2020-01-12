@@ -36,7 +36,7 @@ public class Todo implements Serializable {
     private String startTime;
     @ColumnInfo(name = "failure_trigger")
     public String failureTrigger;
-    private String length; //注意这里单位为小时
+    private String length;
     private Double completion;
     private Integer type;//0-template 1-habit 2-userItem
 

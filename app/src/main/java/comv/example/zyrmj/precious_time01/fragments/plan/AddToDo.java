@@ -78,6 +78,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private boolean timeReverse;
     private ArrayList<Quote> selectedQuotes;
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
+    private SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.CANADA);
     private String[] weekString = {"日", "一", "二", "三", "四", "五", "六"};
     private LinearLayout timeLength;
     private List<Todo> todos;
@@ -245,6 +246,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     start.setVisibility(View.VISIBLE);
                     end.setVisibility(View.VISIBLE);
                 } else {
+                    startDate = null;
+                    endDate = null;
                     timeLength.setVisibility(View.VISIBLE);
                     start.setVisibility(View.GONE);
                     end.setVisibility(View.GONE);
@@ -414,6 +417,14 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                if (startDate != null && endDate != null && startDateModified) {
+                    if (endDate.before(startDate)) {
+                        mTvSelectedTime1.setText(R.string.end_time_exceed_warning);
+                        timeReverse = true;
+                    } else {
+                        mTvSelectedTime2.setText(hourFormat.format(endDate));
+                    }
+                }
             }
         }, beginTime, endTime, 1);
         // 允许点击屏幕或物理返回键关闭
@@ -450,6 +461,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     if (endDate.before(startDate)) {
                         mTvSelectedTime2.setText(R.string.end_time_exceed_warning);
                         timeReverse = true;
+                    } else {
+                        mTvSelectedTime1.setText(hourFormat.format(startDate));
                     }
                 }
             }
