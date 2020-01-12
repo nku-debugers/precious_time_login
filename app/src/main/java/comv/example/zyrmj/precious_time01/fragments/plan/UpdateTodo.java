@@ -94,7 +94,6 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             myTodo = (Todo) getArguments().getSerializable("mytodo");
             selectedLabels = (ArrayList<String>)getArguments().getSerializable("selectedLabels");
             selectedQuotes = (ArrayList<Quote>)getArguments().getSerializable("selectedQuotes");
-            reminderValue = getArguments().getInt("reminder");
         }
         assignViews();
         init();
@@ -336,8 +335,8 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         endDateModified = false;
         timeReverse = false;
         //初始化reminder 值
-        reminder.setText(reminderValue);
-        if(reminderValue > 0) {
+        reminder.setText(myTodo.getReminder());
+        if(myTodo.getReminder() > 0) {
             timeReminder.setChecked(true);
         } else {
             timeReminder.setChecked(false);
