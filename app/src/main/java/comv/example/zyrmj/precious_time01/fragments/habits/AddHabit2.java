@@ -96,7 +96,7 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 selectedQuotes = (ArrayList<Quote>) quoteAdapter.getSelectedQuotes();
                                 if(selectedQuotes.size()!=0)
-                                choseQuote.setText("已选择");
+                                    choseQuote.setText("已选择");
                                 else
                                     choseQuote.setText("未选择");
                             }
@@ -127,7 +127,6 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
                 bundle.putString("userId", userId);
                 bundle.putSerializable("theHabit", newHabit);
                 bundle.putSerializable("selectedQuotes", selectedQuotes);
-                Log.d("now size",String.valueOf(selectedQuotes.size()));
                 if (getArguments().getSerializable("labels") != null)
                     bundle.putSerializable("labels", getArguments().getSerializable("labels"));
                 if (getArguments().getSerializable("selectedIndex") != null)
