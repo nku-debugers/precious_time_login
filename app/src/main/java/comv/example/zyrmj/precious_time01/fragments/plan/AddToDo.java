@@ -147,13 +147,22 @@ public class AddToDo extends Fragment implements View.OnClickListener{
     private boolean checkAndInsert(String week, String startFinal, String endFinal) {
         String alreadyExistStart;
         String alreadyExistEnd;
+        boolean canInsert = false;
+        boolean flag = false;
         for(int i=0 ;i < todos.size(); i++) {
             if(todos.get(i).getStartTime().length() != 0){
+                flag = true;
                 alreadyExistStart = todos.get(i).getStartTime();
                 alreadyExistEnd = todos.get(i).getEndTime();
-                return checkExceedStart(alreadyExistStart, alreadyExistEnd, startFinal) &&
+                canInsert = checkExceedStart(alreadyExistStart, alreadyExistEnd, startFinal) &&
                         checkExceedEnd(alreadyExistStart, alreadyExistEnd, endFinal);
             }
+        }
+        if (flag) {
+            return canInsert;
+        }
+        else {
+            return true;
         }
     }
 
