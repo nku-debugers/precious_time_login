@@ -7,8 +7,21 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-@Entity(primaryKeys = {"user_id", "start_time"})
+@Entity(primaryKeys = {"user_id", "start_time","plan_date"})
 public class Todo implements Serializable {
+    @NonNull
+    @ColumnInfo(name = "plan_date")
+    private String planDate;
+
+    @NonNull
+    public String getPlanDate() {
+        return planDate;
+    }
+
+    public void setPlanDate(@NonNull String planDate) {
+        this.planDate = planDate;
+    }
+
     @NonNull
     @ColumnInfo(name = "user_id")
     @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
@@ -49,7 +62,6 @@ public class Todo implements Serializable {
     public Todo() {
         this.completion=0.0;
         this.userId="offline";
-
     }
 
     @NonNull
