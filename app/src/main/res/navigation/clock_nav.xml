@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clock_nav"
+    app:startDestination="@id/choseClock">
+    <fragment
+        android:id="@+id/choseClock"
+        android:name="comv.example.zyrmj.precious_time01.fragments.clock.ChoseClock"
+        android:label="frament_chose_clock">
+        <action
+            android:id="@+id/action_choseClock_to_addTime"
+            app:destination="@id/addTime" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTime"
+        android:name="comv.example.zyrmj.precious_time01.fragments.clock.AddTime"
+        android:label="clock_time"
+        tools:layout="@layout/clock_time" >
+        <action
+            android:id="@+id/action_addTime_to_choseClock"
+            app:destination="@id/choseClock" />
+    </fragment>
+</navigation>

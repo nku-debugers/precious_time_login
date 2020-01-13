@@ -161,4 +161,13 @@
     <string name="week_modify_title">计划名称</string>
     <string name="week_modify_switch">显示修改列表</string>
     <string name="week_modify_confirm">生成计划</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="spalsh_mid_notes">提高效率\n远离手机</string>
+    <string name="monitor_mid_notes">不用不能活</string>
+    <string name="monitor_mid_sign">(?_?)</string>
+
+    <string name="spalsh_bottom_rights"><b>@</b>一个叫gun的app</string>
 </resources>
