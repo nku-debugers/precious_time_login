@@ -117,6 +117,7 @@ public class TemplateItemRepository {
                                 && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
                             return 0;
                         }
+
                     }
                 } else {
                     for (int i = 0; i < items.size(); i++) {
