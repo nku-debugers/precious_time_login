@@ -129,6 +129,7 @@ public class Habit implements Serializable {
         this.completion=0.0;
         this.reminder=0;
         this.priority=0;
+        this.expectedTime = 0;
     }
 
 
