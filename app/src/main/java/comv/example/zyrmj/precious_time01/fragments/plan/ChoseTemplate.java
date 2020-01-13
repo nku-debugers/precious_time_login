@@ -125,8 +125,10 @@ public class ChoseTemplate extends Fragment {
         noTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle=new Bundle();
+                bundle.putString("userId",userId);
                 NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_choseTemplate_to_editPlan);
+                controller.navigate(R.id.action_choseTemplate_to_editPlan,bundle);
             }
         });
 

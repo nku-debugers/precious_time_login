@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -54,13 +57,13 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class UpdateTodo extends Fragment implements View.OnClickListener {
     static String TAG = "mytag";
     private Todo myTodo;
-    private Button choseQuote, confirm;
+    private ImageView back;
+    private Button choseQuote, confirm,delete;
     private Switch timeType, timeReminder;
     private boolean timeTypeFlag;
     private EditText todoName, reminder;
-    private int reminderValue;
     private LabelsView labelsView;
-    private String userId = "offline", templateName;
+    private String userId = "offline";
     private ArrayList<String> labels, selectedLabels;
     private CategoryRepository categoryRepository;
     private TodoRepository todoRepository;
@@ -75,6 +78,7 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
     private SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.CANADA);
     private String[] weekString = {"日", "一", "二", "三", "四", "五", "六"};
+    private String[] weekString2 = {"一", "二", "三", "四", "五", "六", "日"};
     private LinearLayout timeLength;
     private List<Todo> todos;
 
@@ -90,10 +94,14 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "");
-            todos = (List<Todo>) getArguments().getSerializable("todo");
+            todos = (List<Todo>) getArguments().getSerializable("toDos");
             myTodo = (Todo) getArguments().getSerializable("mytodo");
-            selectedLabels = (ArrayList<String>)getArguments().getSerializable("selectedLabels");
-            selectedQuotes = (ArrayList<Quote>)getArguments().getSerializable("selectedQuotes");
+            selectedLabels = (ArrayList<String>)getArguments().getSerializable("selectedlabels");
+            selectedQuotes = (ArrayList<Quote>)getArguments().getSerializable("selectedquotes");
+            for(int i=0; i < selectedQuotes.size(); i++)
+            {
+                Log.d(TAG, "onActivityCreated: the labels selected are " + selectedQuotes.get(i).getWords());
+            }
         }
         assignViews();
         init();
@@ -198,11 +206,43 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.todo_length).setOnClickListener(this);
         week.setOnClickListener(this);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PromptDialog promptDialog = new PromptDialog(getActivity());
+                PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        NavController controller = Navigation.findNavController(getView());
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("mytodo", myTodo);
+                        bundle.putSerializable("labels", selectedLabels);
+                        bundle.putSerializable("quotes", selectedQuotes);
+                        bundle.putString("userId", userId);
+                        bundle.putString("templateName", getArguments().getString("templateName"));
+                        bundle.putSerializable("habits",getArguments().getSerializable("habits"));
+                        bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
+                        bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
+                        bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                        controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                    }
+                });
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        //Nothing
+                    }
+                });
+                confirm.setTextColor(Color.parseColor("#DAA520"));
+                confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+            }
+        });
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveLabels();
-
+                myTodo.setLength(mTvSelectedTimeWeek.getText().toString());
                 if (saveTime()) {
                     myTodo.setType(2);
                     if (timeReminder.isChecked()) {
@@ -221,13 +261,29 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                     bundle.putSerializable("labels", selectedLabels);
                     bundle.putSerializable("quotes", selectedQuotes);
                     bundle.putString("userId", userId);
-                    bundle.putString("templateName", templateName);
+                    bundle.putString("templateName", getArguments().getString("templateName"));
                     bundle.putSerializable("habits",getArguments().getSerializable("habits"));
                     bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
                     bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
                     bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
-                    controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
+                    controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
                 }
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(getView());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("delete", "true");
+                bundle.putString("userId", userId);
+                bundle.putString("templateName", getArguments().getString("templateName"));
+                bundle.putSerializable("habits",getArguments().getSerializable("habits"));
+                bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
+                bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
+                bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                System.out.println("删除!!");
+                controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
             }
         });
 
@@ -313,7 +369,11 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
 
     private void assignViews() {
         week = getView().findViewById(R.id.week_card);
+        back=getView().findViewById(R.id.back);
         confirm = getView().findViewById(R.id.todo_confirm);
+        delete=getView().findViewById(R.id.clear);
+        if(getArguments().getString("option").equals("update"))
+            delete.setText("删除");
         choseQuote = getView().findViewById(R.id.choseQuoteTodo);
         timeType = getView().findViewById(R.id.todo_time);
         timeReminder = getView().findViewById(R.id.time_remind_switch2);
@@ -334,8 +394,9 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         startDateModified = false;
         endDateModified = false;
         timeReverse = false;
+
         //初始化reminder 值
-        reminder.setText(myTodo.getReminder());
+        reminder.setText(String.valueOf(myTodo.getReminder()));
         if(myTodo.getReminder() > 0) {
             timeReminder.setChecked(true);
         } else {
@@ -353,38 +414,81 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                 selectedIndex.add(i++);
             }
         }
+//        for(int m=0; i < selectedLabels.size(); m++)
+//        {
+//            Log.d(TAG, "onActivityCreated: the labels selected are " + selectedLabels.get(m));
+//        }
+        for (int k = 0; k < selectedLabels.size(); k++) {
+            Log.d(TAG, "init: This is the i " + i);
+            Log.d(TAG, "init: This is k " + k);
+            labels.add(selectedLabels.get(k));
+            selectedIndex.add(i + k);
+        }
         labels.add("+");
         labelsView.setLabels(labels); //给labelView设置字符串数组。
         labelsView.setSelects(selectedIndex);
+        initTimerPicker1();
+        initTimerPicker2();
+        initTimerPicker3();
+        initTimerPicker4();
+        //初始化quote
+        if(selectedQuotes.size() != 0) {
+            choseQuote.setText("已选择");
+        }
         //初始化时间选择
-        mTvSelectedTimeWeek.setText(weekString[Integer.valueOf(myTodo.getStartTime().substring(0, 1))]);
-        if (myTodo.getStartTime().length() != 0) {
+        Log.d(TAG, "init: the weekstring is " + weekString2[Integer.valueOf(myTodo.getStartTime().substring(0, 1))]);
+        mTvSelectedTimeWeek.setText(weekString2[Integer.valueOf(myTodo.getStartTime().substring(0, 1))]);
+        if (myTodo.getStartTime().length() >= 3) {
             try {
                 startDate = new SimpleDateFormat("HH:mm", Locale.CHINA).parse(myTodo.getStartTime());
                 endDate = new SimpleDateFormat("HH:mm", Locale.CHINA).parse(myTodo.getEndTime());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            timeType.setChecked(false);
-            mTvSelectedTime1.setText(myTodo.getStartTime());
-            mTvSelectedTime2.setText(myTodo.getEndTime());
-
-        } else {
             timeType.setChecked(true);
+            Log.d(TAG, "init: This is the startTime: " + myTodo.getStartTime());
+            Log.d(TAG, "init: This is the endTime: " + myTodo.getEndTime());
+            mTvSelectedTime1.setText(myTodo.getStartTime().substring(2));
+            mTvSelectedTime2.setText(myTodo.getEndTime().substring(2));
+            timeTypeFlag = true;
+            timeLength.setVisibility(View.GONE);
+            start.setVisibility(View.VISIBLE);
+            end.setVisibility(View.VISIBLE);
+        } else {
+            timeType.setChecked(false);
+            Log.d(TAG, "init: this is saved length " + myTodo.getLength());
             mTvSelectedLength.setText(myTodo.getLength());
+            timeTypeFlag = false;
+            timeLength.setVisibility(View.VISIBLE);
+            start.setVisibility(View.GONE);
+            end.setVisibility(View.GONE);
         }
         endDate = new Date();
         //初始化quote选择界面
-
-        initTimerPicker1();
-        initTimerPicker2();
-        initTimerPicker3();
-        initTimerPicker4();
-        mTvSelectedLength.setText("0");
     }
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.start_time_in_todo:
+                // 日期格式为yyyy-MM-dd
+                mTimePicker1.show(mTvSelectedTime1.getText().toString());
+                break;
+
+            case R.id.end_time_in_todo:
+                // 日期格式为yyyy-MM-dd HH:mm
+                mTimePicker2.show(mTvSelectedTime2.getText().toString());
+                break;
+
+            case R.id.week_time_in_todo:
+                // 日期格式为yyyy-MM-dd HH:mm
+                mTimePickerWeek.show(mTvSelectedTimeWeek.getText().toString());
+                break;
+
+            case R.id.todo_length:
+                // 日期格式为yyyy-MM-dd HH:mm
+                mLengthPicker.show(mTvSelectedLength.getText().toString());
+        }
 
     }
 
@@ -525,6 +629,7 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         mTimePickerWeek = new CustomDatePicker(this.getActivity(), new CustomDatePicker.Callback() {
             @Override
             public void onTimeSelected(long timestamp) {
+                startDateModified = true;
                 mTvSelectedTimeWeek.setText(DateFormatUtils.long2Str(timestamp, 4));
                 try {
                     startDate = new SimpleDateFormat("HH:mm", Locale.CHINA)
