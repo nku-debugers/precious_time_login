@@ -16,6 +16,7 @@ import comv.example.zyrmj.precious_time01.dao.HabitQuoteDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitQuote;
 
@@ -156,6 +157,27 @@ public class HabitRepository {
         }
     }
 
+    static class getAllQuotes extends  AsyncTask<String ,Void ,List<Quote>>
+    {
+        private HabitQuoteDao habitQuoteDao;
+
+        public getAllQuotes(HabitQuoteDao habitQuoteDao) {
+            this.habitQuoteDao = habitQuoteDao;
+        }
+
+        @Override
+        protected List<Quote> doInBackground(String... strings) {
+            List<Quote> quotes=new ArrayList<>();
+            List<HabitQuote> habitQuote=habitQuoteDao.getQuotesForHabit(strings[0],strings[1]);
+            for(HabitQuote hq:habitQuote)
+            {
+                Quote quote = new Quote(hq.getUserId(), hq.getWords(), "-1");
+                quotes.add(quote);
+            }
+            return quotes;
+        }
+    }
+
     static class deleteCategories extends AsyncTask<String ,Void,Void>
     {
         private HabitCategoryDao habitCategoryDao;
@@ -242,8 +264,7 @@ return null;
 return null;
     }
 
-    public List<String> getQuotes(String userId,String habitName)
-    {
+    public List<String> getQuotes(String userId,String habitName) {
 
         try {
             return new getQuotes(habitQuoteDao).execute(userId,habitName).get();
@@ -253,6 +274,14 @@ return null;
         return null;
     }
 
+    public List<Quote> getAllQuotes(String userId, String habitName) {
+        try {
+            return new getAllQuotes(habitQuoteDao).execute(userId, habitName).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void insertHabitCategory(HabitCategory...habitCategories) {
         new InsertHabitCategoryTask(habitCategoryDao).execute(habitCategories);

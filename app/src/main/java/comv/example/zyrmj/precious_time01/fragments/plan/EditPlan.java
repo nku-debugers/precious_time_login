@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
 import android.graphics.RectF;
+import android.media.TimedMetaData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -36,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
+import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
@@ -89,6 +92,36 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             this.length = TimeDiff.dateDiff(startTime, endTime, "HH:mm");
         }
 
+    }
+
+    public interface Period {
+        String morningStart = "08:00";
+        String morningEnd = "11:00";
+        String afternoonStart = "01:30";
+        String afternoonEnd = "18:00";
+        String nightStart = "18:00";
+        String nightEnd = "23:00";
+    }
+
+    //返回值：
+    //0：不属于任何时间段
+    //1：上午
+    //2：下午
+    //3：晚上
+    public int whichPeroid(IdleTime idleTime) {
+        if (TimeDiff.compare(idleTime.startTime, Period.morningStart) >= 0
+                && TimeDiff.compare(Period.morningEnd, idleTime.endTime) >= 0) {
+            return 1;
+        }
+        else if (TimeDiff.compare(idleTime.startTime, Period.afternoonStart) >= 0
+                && TimeDiff.compare(Period.afternoonEnd, idleTime.endTime) >= 0) {
+            return 2;
+        }
+        else if (TimeDiff.compare(idleTime.startTime, Period.nightStart) >= 0
+                && TimeDiff.compare(Period.nightEnd, idleTime.endTime) >= 0) {
+            return 3;
+        }
+        return 0;
     }
 
     private class ToDoExtend implements Serializable {
@@ -696,29 +729,64 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         }
     }
 
+    private void setDefaultHabitOnceTime() {
+        for (Habit habit : selectedHabits)
+            if (habit.getTime4once() == null)
+                habit.setTime4once("00:45");
+    }
+
     //所有其他todo安排完后调用
     // 将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
-    public void habit2ToDo() {
-        int n = selectedHabits.size();
+    public List<ToDoExtend> habit2ToDo() {
+        HabitRepository habitRepository = new HabitRepository(getContext());
+        List<ToDoExtend>alltodo = new ArrayList<>();
+        List<String>labels;
+        List<Quote>quotes;
+        Random ran = new Random();
+        setDefaultHabitOnceTime();
         Collections.sort(selectedHabits, new HabitComparator());
         for (Habit habit : selectedHabits) {
+            labels = habitRepository.getCategories(habit.userId, habit.name);
+            quotes = habitRepository.getAllQuotes(habit.userId, habit.name);
             Todo todo = new Todo();
             todo.setType(1);//1表示习惯
             todo.setUserId(habit.userId);
             todo.setName(habit.getName());
             todo.setReminder(habit.getReminder());
-            if (habit.getTime4once() != null)
-                todo.setLength(habit.getTime4once());
-                //没有设定每次时长，怎么安排
-            else {
+            todo.setLength(habit.getTime4once());
 
+            int n = habit.getNumPerWeek();
+            int k = ran.nextInt(7);
+            labelOUT:
+            while (n != 0) { //给一个习惯安排 n 次
+                int oldK = k;
+                labelK:
+                for( ;; k = (k + 1) % 7) { // 随机从一周的某一天开始安排
+                    if(k == (oldK + 7 - 1)%7) {
+                        break labelOUT;
+                    }
+                    List<IdleTime> allIdle = findAllIdleTimes(Integer.toString(k), habit.getTime4once());
+                    for(IdleTime idleTime : allIdle) {
+                        if(idleTime.length.compareTo(habit.getTime4once()) >= 0) {
+                            if (whichPeroid(idleTime) >= habit.getExpectedTime()) {
+                                updateToDo(todo, idleTime);
+                                ToDoExtend item = new ToDoExtend(todo, (ArrayList)labels, (ArrayList)quotes);
+                                alltodo.add(item);
+                                n--;
+                                break labelK;
+                            }
+                        }
+                    }
+                }
+            }
+            if (n != 0) {
+                todo.setStartTime(n + "times");
+                ToDoExtend item = new ToDoExtend(todo, (ArrayList)labels, (ArrayList)quotes);
+                alltodo.add(item);
             }
             //根据剩下的空余时间，habit的priority,expectedTime等安排具体时间
-
-
         }
-
-
+        return alltodo;
     }
 
     //每添加一个新的todo便更新空闲时间列表
