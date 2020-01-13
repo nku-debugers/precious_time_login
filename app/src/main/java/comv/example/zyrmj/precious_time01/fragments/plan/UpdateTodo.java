@@ -142,6 +142,9 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                 if ( !checkExceedEnd(alreadyExistStart, alreadyExistEnd, endFinal)) {
                     return false;
                 }
+                if ( !checkIfContained(alreadyExistStart, alreadyExistEnd, startFinal, endFinal)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -165,6 +168,10 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             return false;
         }
         return true;
+    }
+
+    private boolean checkIfContained(String start, String end, String realStart, String realEnd) {
+        return TimeDiff.compare(start, realStart) < 0 || TimeDiff.compare(end, realEnd) > 0;
     }
 
     private void saveLabels() {

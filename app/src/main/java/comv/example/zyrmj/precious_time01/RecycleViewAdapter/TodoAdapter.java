@@ -178,6 +178,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MyViewHolder> 
                 if (!checkExceedEnd(alreadyExistStart, alreadyExistEnd, endTime)) {
                     return false;
                 }
+                if ( !checkIfContained(alreadyExistStart, alreadyExistEnd, startTime, endTime)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -201,6 +204,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MyViewHolder> 
             return false;
         }
         return true;
+    }
+
+    private boolean checkIfContained(String start, String end, String realStart, String realEnd) {
+        return TimeDiff.compare(start, realStart) < 0 || TimeDiff.compare(end, realEnd) > 0;
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
