@@ -67,8 +67,6 @@ public class ChoseTemplate extends Fragment {
         }
         init();
         enableButtons();
-
-
     }
     public void init()
     {

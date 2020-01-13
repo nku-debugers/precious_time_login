@@ -490,6 +490,8 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                     index++;
                 }
 
+                System.out.println(finalToDos);
+
 
             }
         });
@@ -706,22 +708,34 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         startTime = startTime.split("-")[1];
         endTime = endTime.split("-")[1];
         ArrayList<IdleTime> idleTimesList = idleTimes.get(index);
-        for (IdleTime idleTime : idleTimesList) {
+        //        Iterator<IdleTime> iterator = idleTimesList.iterator();
+//        //删除所有时长为10分钟的空闲段
+//        while (iterator.hasNext()) {
+//            if (TimeDiff.compare(iterator.next().length, "0:10") == 0)
+//                iterator.remove();
+//        }
+        //建一个集合，记录需要删除,添加的元素，之后统一删除，添加
+        ArrayList<IdleTime> deletes=new ArrayList<>();
+        ArrayList<IdleTime> adds=new ArrayList<>();
+        for(IdleTime idleTime:idleTimesList) {
             //startTime>=空闲时间start  endTime<= 空闲时间end
             if (((TimeDiff.compare(startTime, idleTime.startTime) >= 0) || TimeDiff.compare(START, startTime) > 0)
                     && ((TimeDiff.compare(endTime, idleTime.endTime) <= 0) || TimeDiff.compare(END, endTime) < 0)) {
-                idleTimesList.remove(idleTime);
+                //idleTimesList.remove(idleTime);
+                deletes.add(idleTime);
                 //拆分空闲时间
                 if (TimeDiff.compare(startTime, idleTime.startTime) > 0) {
-                    idleTimesList.add(new IdleTime(idleTime.startTime, startTime));
+                   adds.add(new IdleTime(idleTime.startTime, startTime));
                 }
                 if (TimeDiff.compare(endTime, idleTime.endTime) < 0) {
-                    idleTimesList.add(new IdleTime(endTime, idleTime.endTime));
+                    adds.add(new IdleTime(endTime, idleTime.endTime));
                 }
 
             }
 
         }
+        idleTimesList.removeAll(deletes);
+        idleTimesList.addAll(adds);
 //        Iterator<IdleTime> iterator = idleTimesList.iterator();
 //        //删除所有时长为10分钟的空闲段
 //        while (iterator.hasNext()) {
@@ -813,7 +827,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         List<IdleTime> theIdleTimes=new ArrayList<>();
         for(IdleTime idleTime:idleTimeList)
         {
-            if (TimeDiff.compare(idleTime.length,length)>0)
+            if (TimeDiff.compare(idleTime.length,length)>0&&TimeDiff.compare(idleTime.length,"0:10")>0)
             {
                 theIdleTimes.add(idleTime);
             }
@@ -823,11 +837,20 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
 
     //根据不同偏好选择最佳的空闲时间
     public Todo arrangeTimeForUserTodo(Todo todo,List<IdleTime> idleTimes) {
-        IdleTime chosenIdleTime=null;
+        if(idleTimes.size()==0)  //没有适当时间，安排不了
+        {
+            todo.setStartTime(todo.getStartTime()+"1 times");
+            System.out.println(todo.getStartTime() );
+            return todo;
+        }
+        IdleTime chosenIdleTime=new IdleTime("0:00","0:00");
         //worst fit 选择时长最大的空闲时间段
         for (IdleTime idleTime:idleTimes)
-
-
+        {
+            if (TimeDiff.compare(idleTime.length,chosenIdleTime.length)>0)
+                chosenIdleTime=idleTime;
+        }
+        System.out.println("chosenTime "+chosenIdleTime.startTime+" "+chosenIdleTime.length);
         updateToDo(todo,chosenIdleTime);
         return todo;
     }
@@ -840,6 +863,13 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
     //找到空闲时间后，给todo设置具体时间，并更新空闲时间
     public Todo updateToDo(Todo todo, IdleTime idleTime) {
         //
+        String newStartTime=TimeDiff.timeAdd(idleTime.startTime,"00:10");
+        todo.setStartTime(todo.getStartTime()+newStartTime);
+        System.out.println("new Start time "+todo.getStartTime() );
+        String newEndTime=TimeDiff.timeAdd(newStartTime,todo.getLength());
+        todo.setEndTime(todo.getStartTime().split("-")[0]+"-"+newEndTime);
+        System.out.println("new End time "+todo.getEndTime() );
+        updateIdleTimes1(todo.getStartTime(),todo.getEndTime());
         return todo;
     }
 
