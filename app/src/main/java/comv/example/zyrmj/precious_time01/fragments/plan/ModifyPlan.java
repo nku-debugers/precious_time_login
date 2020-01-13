@@ -19,10 +19,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TodoAdapter;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
@@ -42,8 +46,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     private RecyclerView bottomList;
     private WeekView mWeekView;
     List<WeekViewEvent> weekViewEvents;
-    private int positions[];//记录weekViewEvent与todo的对应关系
-    private int YEAR=-1,MONTH=-1;//记录第一次调用onMonthChange时的参数
+    MutableLiveData<List<EditPlan.ToDoExtend>> listdatas;
 
 
     public ModifyPlan() {
@@ -91,13 +94,14 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
         System.out.println("divide result");
         System.out.println(satisfiedTodos);
         System.out.println(unsatisfiedTodos);
+
     }
 
 
     private void assignViews()
     {
+        initList();
         showList=getView().findViewById(R.id.week_modify_switch);
-        bottomList=getView().findViewById(R.id.plan_modify);
         confirm=getView().findViewById(R.id.week_modify_confirm);
         if(unsatisfiedTodos.size()==0)
         {
@@ -120,6 +124,32 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
         };
         mWeekView.setEmptyViewClickListener(emptyViewClickListener);
         setupDateTimeInterpreter();
+
+    }
+
+    private void initList()
+    {
+        bottomList=getView().findViewById(R.id.plan_modify);
+        final TodoAdapter todoAdapter=new TodoAdapter(getActivity());
+        todoAdapter.setUserId(userId);
+        todoAdapter.setUnsatisfiedTodos(unsatisfiedTodos);
+        todoAdapter.setSatisfiedTodos(satisfiedTodos);
+        bottomList.setLayoutManager(new LinearLayoutManager(getContext()));
+        bottomList.setAdapter(todoAdapter);
+//        listdatas = new MutableLiveData<>();
+//        listdatas.setValue(unsatisfiedTodos);
+//        System.out.println("list size "+unsatisfiedTodos.size());
+//        listdatas.observe(getActivity(), new Observer<List<EditPlan.ToDoExtend>>() {
+//            @Override
+//            public void onChanged(List<EditPlan.ToDoExtend> toDoExtends) {
+//                todoAdapter.setSatisfiedTodos(satisfiedTodos);
+//                todoAdapter.setUnsatisfiedTodos(unsatisfiedTodos);
+//                System.out.println("list size "+unsatisfiedTodos.size());
+//                todoAdapter.setUserId(userId);
+//                todoAdapter.notifyDataSetChanged();
+//            }
+//        });
+
     }
 
     private void enableButtons()
@@ -248,16 +278,18 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         int index = event.getIndex();
         EditPlan.ToDoExtend toDoExtend=satisfiedTodos.get(index);
-        satisfiedTodos.remove(toDoExtend);
-        unsatisfiedTodos.add(toDoExtend);
-        System.out.println("sort results");
-        System.out.println(satisfiedTodos);
-        System.out.println(unsatisfiedTodos);
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("satisfiedTodos",satisfiedTodos);
-        bundle.putSerializable("unsatisfiedTodos",unsatisfiedTodos);
-        NavController controller = Navigation.findNavController(getView());
-        controller.navigate(R.id.action_modifyPlan_self,bundle);
+        if(!(toDoExtend.getTodo().getType()==0)) {
+            satisfiedTodos.remove(toDoExtend);
+            unsatisfiedTodos.add(toDoExtend);
+            System.out.println("sort results");
+            System.out.println(satisfiedTodos);
+            System.out.println(unsatisfiedTodos);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("satisfiedTodos", satisfiedTodos);
+            bundle.putSerializable("unsatisfiedTodos", unsatisfiedTodos);
+            NavController controller = Navigation.findNavController(getView());
+            controller.navigate(R.id.action_modifyPlan_self, bundle);
+        }
 
     }
 

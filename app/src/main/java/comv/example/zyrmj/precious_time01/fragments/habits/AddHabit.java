@@ -283,7 +283,6 @@ public class AddHabit extends Fragment {
         labelsView.setLabels(labels); //给labelView设置字符串数组。
         labelsView.setSelects(selectedIndex);
         labelsView.setOnLabelClickListener(new LabelsView.OnLabelClickListener() {
-
             @Override
             public void onLabelClick(TextView label, Object data, int position) {
                 data = (String) data;

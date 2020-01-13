@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_updateTodo_to_editPlan"
             app:destination="@id/editPlan" />
+        <action
+            android:id="@+id/action_updateTodo_to_modifyPlan"
+            app:destination="@id/modifyPlan" />
     </fragment>
     <fragment
         android:id="@+id/modifyPlan"
@@ -58,5 +61,8 @@
         <action
             android:id="@+id/action_modifyPlan_self"
             app:destination="@id/modifyPlan" />
+        <action
+            android:id="@+id/action_modifyPlan_to_updateTodo"
+            app:destination="@id/updateTodo" />
     </fragment>
 </navigation>

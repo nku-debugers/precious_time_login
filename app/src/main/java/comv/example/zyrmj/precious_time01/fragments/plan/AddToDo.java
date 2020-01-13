@@ -237,8 +237,8 @@ public class AddToDo extends Fragment implements View.OnClickListener{
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveLabels();
 
+                saveLabels();
                 if (saveTime()) {
                     myTodo.setType(2);
                     if (timeReminder.isChecked()) {
@@ -249,7 +249,13 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     if (todoName.getText().length() != 0) {
                         myTodo.setName(todoName.getText().toString());
                     } else {
-                        //提示没有写名字
+                        PromptDialog promptDialog = new PromptDialog(getActivity());
+                        promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
+                            @Override
+                            public void onClick(PromptButton button) {
+
+                            }
+                        }));
                     }
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
@@ -258,15 +264,12 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     bundle.putSerializable("quotes", selectedQuotes);
                     bundle.putString("userId", userId);
                     bundle.putString("templateName", templateName);
-                    bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                    bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                    bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                    bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                    bundle.putSerializable("habits", getArguments().getSerializable("habits"));
+                    bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
+                    bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
+                    bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
                     controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
                 }
-
-
-
             }
         });
         clear.setOnClickListener(new View.OnClickListener() {
@@ -331,6 +334,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                     timeLength.setVisibility(View.VISIBLE);
                     start.setVisibility(View.GONE);
                     end.setVisibility(View.GONE);
+                    mTvSelectedLength.setText(" ");
                 }
             }
         });
