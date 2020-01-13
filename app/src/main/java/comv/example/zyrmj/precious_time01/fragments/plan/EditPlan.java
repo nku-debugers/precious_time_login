@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -679,9 +681,26 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
 
     }
 
+    class HabitComparator implements Comparator<Habit> {
+        public int compare (Habit h1, Habit h2){
+            int result;
+            if (h1.getPriority() > h2.getPriority()) {
+                result = 1;
+            } else if (h1.getPriority() == h2.getPriority()) {
+                return h1.getTime4once().compareTo(h2.getTime4once());
+            } else {
+                result = 1;
+            }
+            return result;
+
+        }
+    }
+
     //所有其他todo安排完后调用
     // 将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
     public void habit2ToDo() {
+        int n = selectedHabits.size();
+        Collections.sort(selectedHabits, new HabitComparator());
         for (Habit habit : selectedHabits) {
             Todo todo = new Todo();
             todo.setType(1);//1表示习惯
@@ -855,8 +874,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         return todo;
     }
 
-    public List<ToDoExtend> arrangeTimeForHabit(Habit habit)
-    {
+    public List<ToDoExtend> arrangeTimeForHabit(Habit habit) {
         return null;
     }
 
