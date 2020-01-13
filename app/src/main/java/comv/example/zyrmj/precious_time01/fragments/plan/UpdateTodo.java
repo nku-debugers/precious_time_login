@@ -350,15 +350,44 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(getView());
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("delete", "true");
-                bundle.putString("userId", userId);
-                bundle.putString("templateName", getArguments().getString("templateName"));
-                bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
-                System.out.println("删除!!");
-                controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                if(!(getArguments().getString("card")==null))
+                {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            unsatisfiedTodos.remove(myTodoExtend);
+                            bundle.putString("userId",userId);
+                            bundle.putSerializable("satisfiedTodos", satisfiedTodos);
+                            bundle.putSerializable("unsatisfiedTodos",unsatisfiedTodos);
+                            controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
+
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("确认删除？", cancel, confirm);
+
+                }
+
+                else
+                {
+                    bundle.putSerializable("delete", "true");
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", getArguments().getString("templateName"));
+                    bundle.putSerializable("habits", getArguments().getSerializable("habits"));
+                    bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
+                    bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
+                    bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
+                    System.out.println("删除!!");
+                    controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                }
             }
         });
 

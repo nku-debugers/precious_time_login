@@ -1,10 +1,16 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -15,6 +21,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -23,10 +31,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TodoAdapter;
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
@@ -134,21 +144,83 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
         todoAdapter.setUserId(userId);
         todoAdapter.setUnsatisfiedTodos(unsatisfiedTodos);
         todoAdapter.setSatisfiedTodos(satisfiedTodos);
+        todoAdapter.notifyDataSetChanged();
         bottomList.setLayoutManager(new LinearLayoutManager(getContext()));
         bottomList.setAdapter(todoAdapter);
-//        listdatas = new MutableLiveData<>();
-//        listdatas.setValue(unsatisfiedTodos);
-//        System.out.println("list size "+unsatisfiedTodos.size());
-//        listdatas.observe(getActivity(), new Observer<List<EditPlan.ToDoExtend>>() {
-//            @Override
-//            public void onChanged(List<EditPlan.ToDoExtend> toDoExtends) {
-//                todoAdapter.setSatisfiedTodos(satisfiedTodos);
-//                todoAdapter.setUnsatisfiedTodos(unsatisfiedTodos);
-//                System.out.println("list size "+unsatisfiedTodos.size());
-//                todoAdapter.setUserId(userId);
-//                todoAdapter.notifyDataSetChanged();
-//            }
-//        });
+
+        /*
+        MutableLiveData<String> nameEvent = mTestViewModel.getNameEvent();
+nameEvent.observe(this, new Observer<String>() {
+    @Override
+    public void onChanged(@Nullable String s) {
+        Log.i(TAG, "onChanged: s = " + s);
+        mTvName.setText(s);
+    }
+});
+        */
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final EditPlan.ToDoExtend toDoExtendToDelete = unsatisfiedTodos.get(viewHolder.getAdapterPosition());
+               unsatisfiedTodos.remove(toDoExtendToDelete);
+               initList();
+                Snackbar.make(getView(), "删除了一个待办事项", Snackbar.LENGTH_SHORT).
+                        setAction("撤销", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                       unsatisfiedTodos.add(toDoExtendToDelete);
+                                       initList();
+                                    }
+                                }
+                        ).show();
+
+            }
+            //在滑动的时候，画出浅灰色背景和垃圾桶图标，增强删除的视觉效果
+
+            Drawable icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_delete_black_24dp);
+            Drawable background = new ColorDrawable(Color.LTGRAY);
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                View itemView = viewHolder.itemView;
+                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+
+                int iconLeft, iconRight, iconTop, iconBottom;
+                int backTop, backBottom, backLeft, backRight;
+                backTop = itemView.getTop();
+                backBottom = itemView.getBottom();
+                iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                iconBottom = iconTop + icon.getIntrinsicHeight();
+                if (dX > 0) {
+                    backLeft = itemView.getLeft();
+                    backRight = itemView.getLeft() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconLeft = itemView.getLeft() + iconMargin;
+                    iconRight = iconLeft + icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else if (dX < 0) {
+                    backRight = itemView.getRight();
+                    backLeft = itemView.getRight() + (int) dX;
+                    background.setBounds(backLeft, backTop, backRight, backBottom);
+                    iconRight = itemView.getRight() - iconMargin;
+                    iconLeft = iconRight - icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else {
+                    background.setBounds(0, 0, 0, 0);
+                    icon.setBounds(0, 0, 0, 0);
+                }
+                background.draw(c);
+                icon.draw(c);
+            }
+        }).attachToRecyclerView(bottomList);
 
     }
 
@@ -288,7 +360,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
             bundle.putSerializable("satisfiedTodos", satisfiedTodos);
             bundle.putSerializable("unsatisfiedTodos", unsatisfiedTodos);
             NavController controller = Navigation.findNavController(getView());
-            controller.navigate(R.id.action_modifyPlan_self, bundle);
+          controller.navigate(R.id.action_modifyPlan_self, bundle);
         }
 
     }
