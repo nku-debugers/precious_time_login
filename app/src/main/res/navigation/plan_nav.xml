@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_editPlan_to_updateTodo"
             app:destination="@id/updateTodo" />
+        <action
+            android:id="@+id/action_editPlan_to_modifyPlan"
+            app:destination="@id/modifyPlan" />
     </fragment>
     <fragment
         android:id="@+id/addToDo"
@@ -46,5 +49,14 @@
         <action
             android:id="@+id/action_updateTodo_to_editPlan"
             app:destination="@id/editPlan" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyPlan"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.ModifyPlan"
+        android:label="fragment_modify_plan"
+        tools:layout="@layout/fragment_modify_plan" >
+        <action
+            android:id="@+id/action_modifyPlan_self"
+            app:destination="@id/modifyPlan" />
     </fragment>
 </navigation>

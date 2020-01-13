@@ -128,10 +128,11 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/listTitle"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="#FFFFFF"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline112"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,6 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#FFFFFF"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +199,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline112"
         app:layout_constraintEnd_toStartOf="@+id/guideline114"
-        app:layout_constraintStart_toStartOf="@+id/view4"
+        app:layout_constraintStart_toStartOf="@id/listTitle"
         app:layout_constraintTop_toTopOf="@+id/guideline113" />
 
     <TextView
@@ -259,6 +261,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1px"
         android:background="#000000"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline112"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

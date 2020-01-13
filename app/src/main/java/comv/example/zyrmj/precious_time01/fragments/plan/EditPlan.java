@@ -89,7 +89,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
 
     }
 
-    private class ToDoExtend implements Serializable {
+    public  class ToDoExtend implements Serializable {
         private Todo todo;
         private ArrayList<String> labels ; //类别
         private ArrayList<Quote> quotes ; //箴言
@@ -491,6 +491,11 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 }
 
                 System.out.println(finalToDos);
+                Bundle bundle=new Bundle();
+                bundle.putString("userId",userId);
+                bundle.putSerializable("toDoExtends",finalToDos);
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_editPlan_to_modifyPlan,bundle);
 
 
             }
@@ -613,16 +618,13 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         int i = 1;
         int index = 0;
         for (TemplateItem ti : datas) {
-            Log.d("列表2", ti.getItemName());
             String weekday = ti.getStartTime().split("-")[0];
             int diff = Integer.valueOf(weekday);//与周一的距离
             String starttime = ti.getStartTime().split("-")[1];
-            Log.d("列表2", starttime);
             String starthour = starttime.split(":")[0];
             String startminute = starttime.split(":")[1];
             String endtime = ti.getEndTime().split("-")[1];
             String endminute = endtime.split(":")[1];
-            Log.d("列表2", starthour);
             String endhour = endtime.split(":")[0];
             Calendar startTime = Calendar.getInstance();
             int currdiff = startTime.get(Calendar.DAY_OF_WEEK) - 2;
@@ -708,12 +710,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         startTime = startTime.split("-")[1];
         endTime = endTime.split("-")[1];
         ArrayList<IdleTime> idleTimesList = idleTimes.get(index);
-        //        Iterator<IdleTime> iterator = idleTimesList.iterator();
-//        //删除所有时长为10分钟的空闲段
-//        while (iterator.hasNext()) {
-//            if (TimeDiff.compare(iterator.next().length, "0:10") == 0)
-//                iterator.remove();
-//        }
+
         //建一个集合，记录需要删除,添加的元素，之后统一删除，添加
         ArrayList<IdleTime> deletes=new ArrayList<>();
         ArrayList<IdleTime> adds=new ArrayList<>();
