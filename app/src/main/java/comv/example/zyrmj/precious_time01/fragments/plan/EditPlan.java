@@ -61,6 +61,7 @@ import com.ddz.floatingactionbutton.FloatingActionMenu;
 public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
         WeekView.EmptyViewLongPressListener, WeekView.ScrollListener {
+    private static String TAG = "myTag";
     private Button confirm;
     private FloatingActionMenu fl_menu;
     private com.ddz.floatingactionbutton.FloatingActionButton addHabit, addToDo, habitList, toDoList;
@@ -278,7 +279,6 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         };
         mWeekView.setEmptyViewClickListener(emptyViewClickListener);
         setupDateTimeInterpreter();
-
     }
 
     private void setupDateTimeInterpreter(/*final boolean shortDate*/) {
@@ -487,6 +487,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 ArrayList<ToDoExtend> finalToDos=new ArrayList<>();
                 for(ToDoExtend toDoExtend:toDoExtends)
                 {
+                    Log.d(TAG, "onClick: first in all for");
                     Todo todo=toDoExtend.todo;
                     if(todo.getType()==0)  //templateItem可直接添加
                     {
@@ -504,17 +505,10 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                             todo=arrangeTimeForUserTodo(todo,allIdleTimes);
                             toDoExtend.todo=todo;
                             finalToDos.add(toDoExtend);
-
                         }
                     }
-
-                    //安排习惯
-                    for(Habit habit:selectedHabits)
-                    {
-                        List<ToDoExtend> toDoExtends=arrangeTimeForHabit(habit);
-                    }
-
                 }
+                finalToDos.addAll(habit2ToDo());
                 int index=0;
                 System.out.println("final result");
                 for (ArrayList<IdleTime> list : idleTimes) {
@@ -524,7 +518,6 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                     }
                     index++;
                 }
-
                 System.out.println(finalToDos);
 
 
@@ -738,6 +731,7 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
     //所有其他todo安排完后调用
     // 将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
     public List<ToDoExtend> habit2ToDo() {
+        System.out.println("SDFKJSDKSD************************");
         HabitRepository habitRepository = new HabitRepository(getContext());
         List<ToDoExtend>alltodo = new ArrayList<>();
         List<String>labels;
@@ -745,34 +739,45 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         Random ran = new Random();
         setDefaultHabitOnceTime();
         Collections.sort(selectedHabits, new HabitComparator());
+        Log.d(TAG, "habit2ToDo: wo zhi xing le ma?");
         for (Habit habit : selectedHabits) {
             labels = habitRepository.getCategories(habit.userId, habit.name);
             quotes = habitRepository.getAllQuotes(habit.userId, habit.name);
-            Todo todo = new Todo();
-            todo.setType(1);//1表示习惯
-            todo.setUserId(habit.userId);
-            todo.setName(habit.getName());
-            todo.setReminder(habit.getReminder());
-            todo.setLength(habit.getTime4once());
-
             int n = habit.getNumPerWeek();
             int k = ran.nextInt(7);
             labelOUT:
             while (n != 0) { //给一个习惯安排 n 次
+                Log.d(TAG, "This is while loop and n is "+ n);
                 int oldK = k;
                 labelK:
                 for( ;; k = (k + 1) % 7) { // 随机从一周的某一天开始安排
+                    Log.d(TAG, "habit2ToDo: this for k loog and k is now: " + k);
                     if(k == (oldK + 7 - 1)%7) {
                         break labelOUT;
                     }
                     List<IdleTime> allIdle = findAllIdleTimes(Integer.toString(k), habit.getTime4once());
+                    Collections.sort(allIdle, new idleTimeSelection());
                     for(IdleTime idleTime : allIdle) {
+                        Log.d(TAG, "habit2ToDo: this is the selected idle length " + idleTime.length);
+                        Log.d(TAG, "habit2ToDo: this is the todo to be arranged length " + habit.getTime4once());
+                        Log.d(TAG, "habit2ToDo: this is the peroid type of idle " + whichPeroid(idleTime));
+                        Log.d(TAG, "habit2ToDo: this is the period of the hablit " + habit.getExpectedTime());
                         if(idleTime.length.compareTo(habit.getTime4once()) >= 0) {
-                            if (whichPeroid(idleTime) >= habit.getExpectedTime()) {
+                            if (whichPeroid(idleTime)==0 || habit.getExpectedTime()==0 || whichPeroid(idleTime) == habit.getExpectedTime()) {
+                                Todo todo = new Todo();
+                                todo.setType(1);//1表示习惯
+                                todo.setUserId(habit.userId);
+                                todo.setName(habit.getName());
+                                todo.setReminder(habit.getReminder());
+                                todo.setLength(habit.getTime4once());
+                                todo.setStartTime(Integer.toString(k)+"-");
                                 updateToDo(todo, idleTime);
+
                                 ToDoExtend item = new ToDoExtend(todo, (ArrayList)labels, (ArrayList)quotes);
+                                System.out.println("the item is " + item);
                                 alltodo.add(item);
                                 n--;
+                                k = (k + 2) % 7;
                                 break labelK;
                             }
                         }
@@ -780,13 +785,27 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 }
             }
             if (n != 0) {
-                todo.setStartTime(n + "times");
+                Todo todo = new Todo();
+                todo.setType(1);//1表示习惯
+                todo.setUserId(habit.userId);
+                todo.setName(habit.getName());
+                todo.setReminder(habit.getReminder());
+                todo.setLength(habit.getTime4once());
+                todo.setStartTime(n + " times");
                 ToDoExtend item = new ToDoExtend(todo, (ArrayList)labels, (ArrayList)quotes);
                 alltodo.add(item);
             }
             //根据剩下的空余时间，habit的priority,expectedTime等安排具体时间
         }
         return alltodo;
+    }
+
+    public class idleTimeSelection implements Comparator<IdleTime> {
+
+        @Override
+        public int compare(IdleTime idleTime, IdleTime t1) {
+            return t1.length.compareTo(idleTime.length);
+        }
     }
 
     //每添加一个新的todo便更新空闲时间列表
@@ -956,6 +975,8 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         todo.setEndTime(todo.getStartTime().split("-")[0]+"-"+newEndTime);
         System.out.println("new End time "+todo.getEndTime() );
         updateIdleTimes1(todo.getStartTime(),todo.getEndTime());
+
+
         return todo;
     }
 
