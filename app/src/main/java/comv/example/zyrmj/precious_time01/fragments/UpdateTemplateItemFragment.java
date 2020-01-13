@@ -158,7 +158,8 @@ public class UpdateTemplateItemFragment extends Fragment implements View.OnClick
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
         int s = t.ifTimeConfilict(week, start, templateItem.getTemplateName(), templateItem.getUserId(), "start", templateItem.getStartTime());
         int e = t.ifTimeConfilict(week, end, templateItem.getTemplateName(), templateItem.getUserId(), "end", templateItem.getStartTime());
-        if (s == 0 || e == 0) {
+        int k = t.ifTimeConfilict(week, start, templateItem.getTemplateName(), templateItem.getUserId(), "whole", templateItem.getStartTime(), "useless", end);
+        if (s == 0 || e == 0 || k == 0) {
             return false;
         } else {
             t.updateTemplateItems(templateItem.getTemplateName(), templateItem.getUserId(), templateItem.getStartTime(),

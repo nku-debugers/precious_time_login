@@ -297,10 +297,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline103"
+        app:layout_constraintBottom_toBottomOf="@+id/card_length"
+        app:layout_constraintBottom_toTopOf="@+id/guideline110"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline101"
-        app:layout_constraintTop_toTopOf="@+id/guideline107">
+        app:layout_constraintTop_toTopOf="@+id/guideline103">
 
         <LinearLayout
             android:id="@+id/end_time_in_todo"
@@ -342,10 +343,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline110"
+        app:layout_constraintBottom_toTopOf="@+id/guideline103"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline101"
-        app:layout_constraintTop_toTopOf="@+id/guideline103">
+        app:layout_constraintTop_toTopOf="@+id/guideline107">
 
         <LinearLayout
             android:id="@+id/start_time_in_todo"
