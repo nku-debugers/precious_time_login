@@ -122,7 +122,43 @@
     <string name="todo_timelength">事项时长</string>
     <string name="todo_time_hint">0</string>
     <string name="todo_time_hour">小时</string>
+
     <string name="clear">清空</string>
     <string name="weekNum">每周至少完成次数</string>
->>>>>>> 85fcfafd9c7b35e3996bdb57bf5e7d079a136385
+
+    <string name="modify_number">序号</string>
+    <string name="modify_name">名称</string>
+    <string name="modify_week">星期</string>
+    <string name="modify_start_time">开始</string>
+    <string name="modify_end_time">结束</string>
+    <string name="modify_count">次数</string>
+
+    <string name="card_modify_number">序号</string>
+    <string name="card_modify_name">名称</string>
+    <string name="card_modify_week">星期</string>
+    <string name="card_modify_start_time">开始</string>
+    <string name="card_modify_end_time">结束</string>
+    <string name="card_modify_count">次数</string>
+
+    <string name="clock_title">自控力闹钟</string>
+    <string name="button_accord">自觉模式</string>
+    <string name="button_force">强制模式</string>
+    <string name="button_boring">无趣模式</string>
+
+    <string name="clock_time_title">选择时长</string>
+    <string name="button_time_begin">开始计时</string>
+    <string name="hint_hour">0</string>
+    <string name="hint_minute">0</string>
+    <string name="clock_hour_text">小时</string>
+    <string name="clock_minute_text">分钟</string>
+
+    <string name="white_title">白名单</string>
+    <string name="card_white_number">序号</string>
+    <string name="card_white_name">名称</string>
+
+    <string name="main_mid_start">开始</string>
+
+    <string name="week_modify_title">计划名称</string>
+    <string name="week_modify_switch">显示修改列表</string>
+    <string name="week_modify_confirm">生成计划</string>
 </resources>
