@@ -293,7 +293,6 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             @Override
             public String interpretTime(int hour) {
                 return String.format("%02d:00", hour);
-
             }
 
             @Override
@@ -728,6 +727,66 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                 habit.setTime4once("00:45");
     }
 
+    private Todo isPeroidFit(int ExpectedTime, IdleTime idleTime, Habit habit, int week) {
+        Todo todo = new Todo();
+        todo.setType(1);//1表示习惯
+        todo.setUserId(habit.userId);
+        todo.setName(habit.getName());
+        todo.setReminder(habit.getReminder());
+        todo.setLength(habit.getTime4once());
+        todo.setStartTime(week + "-");
+        if (ExpectedTime == 0) {
+            updateToDo(todo, idleTime);
+            return todo;
+        }
+
+        else if (ExpectedTime == 1 && TimeDiff.compare(idleTime.startTime, Period.morningEnd) < 0) {
+            updateToDo(todo, idleTime);
+            return todo;
+        }
+        else if (ExpectedTime == 2) {
+            if (TimeDiff.compare(idleTime.startTime, Period.afternoonStart) >= 0 && TimeDiff.compare(idleTime.startTime, Period.afternoonEnd) < 0) {
+                updateToDo(todo, idleTime);
+                return todo;
+            }
+            else if (TimeDiff.compare(idleTime.startTime, Period.afternoonEnd) >= 0) {
+                todo.setReminder(-1);
+                return todo;
+            }
+            else if (TimeDiff.compare(idleTime.startTime, Period.afternoonStart) < 0 && TimeDiff.compare(TimeDiff.timeAdd(Period.afternoonStart, habit.getTime4once()), idleTime.endTime) <= 0){
+                todo.setStartTime(week + "-" + Period.afternoonStart);
+                todo.setEndTime(week + "-" +  TimeDiff.timeAdd(Period.afternoonStart, habit.getTime4once()));
+                updateIdleTimes1(todo.getStartTime(), todo.getEndTime());
+                return todo;
+            } else {
+                todo.setReminder(-1);
+                return todo;
+            }
+        }
+        else if (ExpectedTime == 3) {
+            if (TimeDiff.compare(idleTime.startTime, Period.nightStart) >= 0){
+                updateToDo(todo, idleTime);
+                return todo;
+            }
+            else if (TimeDiff.compare(TimeDiff.timeAdd(Period.nightStart, habit.getTime4once()), idleTime.endTime) <= 0) {
+                //shoudong ding zhi
+                todo.setStartTime(week + "-" + Period.nightStart);
+                todo.setEndTime(week + "-" + TimeDiff.timeAdd(Period.nightStart, habit.getTime4once()));
+                updateIdleTimes1(todo.getStartTime(), todo.getEndTime());
+                return todo;
+
+            }
+            else {
+                todo.setReminder(-1);
+                return todo;
+            }
+        }
+        else {
+            todo.setReminder(-1);
+            return todo;
+        }
+    }
+
     //所有其他todo安排完后调用
     // 将习惯列表中各个元素转化为toDo:此时的toDo没有具体时间，只有相应时长
     public List<ToDoExtend> habit2ToDo() {
@@ -739,7 +798,6 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         Random ran = new Random();
         setDefaultHabitOnceTime();
         Collections.sort(selectedHabits, new HabitComparator());
-        Log.d(TAG, "habit2ToDo: wo zhi xing le ma?");
         for (Habit habit : selectedHabits) {
             labels = habitRepository.getCategories(habit.userId, habit.name);
             quotes = habitRepository.getAllQuotes(habit.userId, habit.name);
@@ -763,18 +821,9 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                         Log.d(TAG, "habit2ToDo: this is the peroid type of idle " + whichPeroid(idleTime));
                         Log.d(TAG, "habit2ToDo: this is the period of the hablit " + habit.getExpectedTime());
                         if(idleTime.length.compareTo(habit.getTime4once()) >= 0) {
-                            if (whichPeroid(idleTime)==0 || habit.getExpectedTime()==0 || whichPeroid(idleTime) == habit.getExpectedTime()) {
-                                Todo todo = new Todo();
-                                todo.setType(1);//1表示习惯
-                                todo.setUserId(habit.userId);
-                                todo.setName(habit.getName());
-                                todo.setReminder(habit.getReminder());
-                                todo.setLength(habit.getTime4once());
-                                todo.setStartTime(Integer.toString(k)+"-");
-                                updateToDo(todo, idleTime);
-
-                                ToDoExtend item = new ToDoExtend(todo, (ArrayList)labels, (ArrayList)quotes);
-                                System.out.println("the item is " + item);
+                            Todo thisTodo = isPeroidFit(habit.getExpectedTime(), idleTime, habit, k);
+                            if (thisTodo.getReminder()>=0) {
+                                ToDoExtend item = new ToDoExtend(thisTodo, (ArrayList)labels, (ArrayList)quotes);
                                 alltodo.add(item);
                                 n--;
                                 k = (k + 2) % 7;
