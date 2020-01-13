@@ -184,7 +184,9 @@ public class AddTemplateItemFragment extends Fragment implements View.OnClickLis
         TemplateItemRepository t = new TemplateItemRepository(getActivity());
         int s = t.ifTimeConfilict(week, start, templateName, userId, "start");
         int e = t.ifTimeConfilict(week, end, templateName, userId, "end");
-        if (s == 0 || e == 0) {
+        int k = t.ifTimeConfilict(week, start ,templateName, userId, "insert", "useless", end);
+        Log.d("mytag", "checkAndInsert: the k is " + k);
+        if (s == 0 || e == 0 || k == 0) {
             return false;
         } else {
             t.insertTemplateItems(item);
