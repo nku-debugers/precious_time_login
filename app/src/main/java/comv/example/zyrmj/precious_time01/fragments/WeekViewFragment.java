@@ -194,16 +194,13 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
         int i = 1;
         int index = 0;
         for (TemplateItem ti : datas) {
-            Log.d("列表2", ti.getItemName());
             String weekday = ti.getStartTime().split("-")[0];
             int diff = Integer.valueOf(weekday);//与周一的距离
             String starttime = ti.getStartTime().split("-")[1];
-            Log.d("列表2", starttime);
             String starthour = starttime.split(":")[0];
             String startminute = starttime.split(":")[1];
             String endtime = ti.getEndTime().split("-")[1];
             String endminute = endtime.split(":")[1];
-            Log.d("列表2", starthour);
             String endhour = endtime.split(":")[0];
             Calendar startTime = Calendar.getInstance();
             int currdiff = startTime.get(Calendar.DAY_OF_WEEK) - 2;

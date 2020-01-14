@@ -151,15 +151,13 @@
         app:layout_constraintStart_toStartOf="@+id/view6"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="152dp"
-        android:layout_height="80dp"
-        android:text="列表视图！！！"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline124"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="413dp"
+        android:layout_height="639dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view6" />
+        app:layout_constraintTop_toTopOf="@+id/guideline59" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

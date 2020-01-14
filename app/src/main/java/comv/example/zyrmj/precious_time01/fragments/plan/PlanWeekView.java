@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,10 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
+import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
+import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
@@ -52,6 +56,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
     int modify=0; //0表示不可修改 1便是可修改
     private String userId = "offline";
     private Plan showedPlan;
+    List<Todo> todos;
 
 
     public PlanWeekView() {
@@ -115,6 +120,19 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                 bundle.putString("weekView", "ture");
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_planWeekView_to_planShow, bundle);
+
+            }
+        });
+
+        //添加todo,跳转到添加页面
+        addTodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //传递当前plan
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("plan",showedPlan);
+                bundle.putString("userId",userId);
+
 
             }
         });
@@ -250,15 +268,85 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         });
     }
 
+    //点击event,如果是更改模式，则跳转到更新页面，否则进到倒计时页面
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        int index=event.getIndex();
+        Todo todo=todos.get(index);
+
+        //倒计时
+        if(modify==0)
+        {
+
+        }
+        //更新todo
+        else
+        {
+
+
+        }
 
     }
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        return new ArrayList<>();
+
+        return todosToEvents(newYear,newMonth);
+
     }
+
+    private ArrayList<WeekViewEvent> todosToEvents(int newYear,int newMonth)
+    {
+        ArrayList<WeekViewEvent> events=new ArrayList<>();
+        todos=new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
+        System.out.println("todos size: "+todos.size());
+        int i=1;
+        int index=0;
+        for (Todo todo : todos) {
+            String weekday = todo.getStartTime().split("-")[0];
+            int diff = Integer.valueOf(weekday);//与周一的距离
+            String starttime = todo.getStartTime().split("-")[1];
+            String starthour = starttime.split(":")[0];
+            String startminute = starttime.split(":")[1];
+            String endtime = todo.getEndTime().split("-")[1];
+            String endminute = endtime.split(":")[1];
+            String endhour = endtime.split(":")[0];
+            Calendar startTime = Calendar.getInstance();
+            int currdiff = startTime.get(Calendar.DAY_OF_WEEK) - 2;
+            if (currdiff < 0) currdiff = 6;
+            int distance = diff - currdiff;
+            startTime.set(Calendar.DATE, startTime.get(Calendar.DATE) + distance);
+            startTime.set(Calendar.MONTH, newMonth - 1);
+            startTime.set(Calendar.YEAR, newYear);
+            startTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(starthour));
+            startTime.set(Calendar.MINUTE, Integer.valueOf(startminute));
+            Calendar endTime = (Calendar) startTime.clone();
+            endTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
+            endTime.set(Calendar.MINUTE, Integer.valueOf(endminute));
+            WeekViewEvent event = new WeekViewEvent(i, todo.getName(), startTime, endTime, index);
+            if(todo.getType()==0 )
+            {
+                event.setColor(getResources().getColor(R.color.event_color_05));
+            }
+
+            else
+            {
+                if (i % 4 == 0)
+                    event.setColor(getResources().getColor(R.color.event_color_01));
+                else if (i % 4 == 1)
+                    event.setColor(getResources().getColor(R.color.event_color_02));
+                else if (i % 4 == 2)
+                    event.setColor(getResources().getColor(R.color.event_color_03));
+                else
+                    event.setColor(getResources().getColor(R.color.event_color_04));
+            }
+            index += 1;
+            events.add(event);
+            i++;
+        }
+        return events;
+    }
+
 
     @Override
     public void onEmptyViewClicked(Calendar time) {
