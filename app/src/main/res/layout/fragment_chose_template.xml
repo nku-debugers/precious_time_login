@@ -26,6 +26,51 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline94" />
+
+    <ImageView
+        android:id="@+id/plan"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/desc"
+        app:layout_constraintBottom_toTopOf="@+id/guideline99"
+        app:layout_constraintEnd_toStartOf="@+id/guideline102"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline101"
+        app:layout_constraintTop_toTopOf="@+id/guideline98"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/plan" />
+
+    <ImageView
+        android:id="@+id/clock"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/desc"
+        app:layout_constraintBottom_toTopOf="@+id/guideline99"
+        app:layout_constraintEnd_toStartOf="@+id/guideline101"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/guideline98"
+        app:srcCompat="@drawable/clock" />
+
+    <ImageView
+        android:id="@+id/personcenter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/desc"
+        app:layout_constraintBottom_toTopOf="@+id/guideline99"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline102"
+        app:layout_constraintTop_toTopOf="@+id/guideline98"
+        app:srcCompat="@drawable/personcenter" />
+
     <Button
         android:id="@+id/import_model"
         android:layout_width="0dp"

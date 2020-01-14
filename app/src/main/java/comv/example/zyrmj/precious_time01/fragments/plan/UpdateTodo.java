@@ -303,10 +303,21 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                     String week = getWeek(mTvSelectedTimeWeek.getText().toString());
                     String startFinal = week + "-" + startTime;
                     String endFinal = week + "-" + endTime;
+
+                    if(getArguments().getInt("remainedTimes")>1)
+                    {
+                        int times=getArguments().getInt("remainedTimes");
+                        EditPlan editPlan=new EditPlan();
+                        EditPlan.ToDoExtend newTodoExtend=editPlan.new ToDoExtend();
+                        newTodoExtend.copy(myTodoExtend);
+                        newTodoExtend.getTodo().setStartTime(String.valueOf(times-1)+" times");
+                        unsatisfiedTodos.add(newTodoExtend);
+                    }
                     myTodo.setStartTime(startFinal);
                     myTodo.setEndTime(endFinal);
                     myTodoExtend.setTodo(myTodo);
                     unsatisfiedTodos.set(Integer.valueOf(getArguments().getString("index")),myTodoExtend);
+
                     Bundle bundle=new Bundle();
                     bundle.putString("userId",userId);
                     bundle.putSerializable("satisfiedTodos", satisfiedTodos);
@@ -560,8 +571,15 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             timeType.setChecked(true);
             Log.d(TAG, "init: This is the startTime: " + myTodo.getStartTime());
             Log.d(TAG, "init: This is the endTime: " + myTodo.getEndTime());
-            mTvSelectedTime1.setText(myTodo.getStartTime().substring(2));
-            mTvSelectedTime2.setText(myTodo.getEndTime().substring(2));
+            if(myTodo.getEndTime()==null)
+            {
+                mTvSelectedTime1.setText(" ");
+                mTvSelectedTime2.setText(" ");
+            }
+            else {
+                mTvSelectedTime1.setText(myTodo.getStartTime().substring(2));
+                mTvSelectedTime2.setText(myTodo.getEndTime().substring(2));
+            }
             timeTypeFlag = true;
             timeLength.setVisibility(View.GONE);
             start.setVisibility(View.VISIBLE);

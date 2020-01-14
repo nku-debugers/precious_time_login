@@ -1,6 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
+import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 
@@ -37,6 +39,7 @@ import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 public class ChoseTemplate extends Fragment {
     private Button choseTemplate, noTemplate, newTemplate;
     private ImageView back;
+    private ImageView clock, plan, personcenter;
     private String userId = "offline";
 
 
@@ -66,6 +69,9 @@ public class ChoseTemplate extends Fragment {
         choseTemplate = getView().findViewById(R.id.import_model);
         noTemplate = getView().findViewById(R.id.import_no_model);
         back=getView().findViewById(R.id.back);
+        clock = getView().findViewById(R.id.clock);
+        plan = getView().findViewById(R.id.plan);
+        personcenter = getView().findViewById(R.id.personcenter);
 
 
     }
@@ -132,6 +138,15 @@ public class ChoseTemplate extends Fragment {
                     controller.navigate(R.id.action_choseTemplate_to_planShow, bundle);
                 }
 
+            }
+        });
+        personcenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("userId", userId);
+                intent.setClass(getContext(), PersonCenterActivity.class);
+                startActivity(intent);
             }
         });
 
