@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/plan_nav"
-    app:startDestination="@id/choseTemplate">
+    app:startDestination="@id/planWeekView">
 
     <fragment
         android:id="@+id/choseTemplate"
@@ -64,5 +64,17 @@
         <action
             android:id="@+id/action_modifyPlan_to_updateTodo"
             app:destination="@id/updateTodo" />
+        <action
+            android:id="@+id/action_modifyPlan_to_planWeekView"
+            app:destination="@id/planWeekView" />
+    </fragment>
+    <fragment
+        android:id="@+id/planWeekView"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanWeekView"
+        android:label="fragment_plan_week_view"
+        tools:layout="@layout/fragment_plan_week_view" >
+        <action
+            android:id="@+id/action_planWeekView_to_choseTemplate"
+            app:destination="@id/choseTemplate" />
     </fragment>
 </navigation>

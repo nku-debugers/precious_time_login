@@ -35,6 +35,21 @@ public class PlanRepository {
         }
     }
 
+    static class DeletePlanAsyncTask extends AsyncTask<Plan, Void, Void> {
+        private PlanDao planDao;
+
+        public DeletePlanAsyncTask(PlanDao planDao) {
+            this.planDao = planDao;
+        }
+
+        @Override
+        protected Void doInBackground(Plan ...plans) {
+            planDao.deletePlan(plans);
+            return null;
+        }
+    }
+
+
     static class getAllPlansAsyncTask extends  AsyncTask<String,Void, List<Plan>>
     {
         private PlanDao planDao;
@@ -54,6 +69,10 @@ public class PlanRepository {
     public void insertPlan(Plan...plans)
     {
         new InsertPlanAsyncTask(planDao).execute(plans);
+    }
+    public void deletePlan(Plan...plans)
+    {
+        new DeletePlanAsyncTask(planDao).execute(plans);
     }
 
     public List<Plan> getAllPlans(String userId)
