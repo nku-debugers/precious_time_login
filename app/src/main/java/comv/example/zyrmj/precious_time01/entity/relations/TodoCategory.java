@@ -9,7 +9,7 @@ import androidx.room.Index;
 
 import comv.example.zyrmj.precious_time01.entity.User;
 
-@Entity(primaryKeys = {"user_id", "category_name", "start_time"},
+@Entity(primaryKeys = {"user_id", "category_name", "start_time", "plan_date"},
         foreignKeys = @ForeignKey(entity = User.class,
                                 parentColumns = "id",
                                 childColumns = "user_id"),
@@ -27,6 +27,19 @@ public class TodoCategory {
     @NonNull
     @ColumnInfo(name = "start_time")
     private String startTime;
+
+    @NonNull
+    @ColumnInfo(name = "plan_date")
+    private String planDate;
+
+    @NonNull
+    public String getPlanDate() {
+        return planDate;
+    }
+
+    public void setPlanDate(@NonNull String planDate) {
+        this.planDate = planDate;
+    }
 
     @NonNull
     public String getUserId() {
@@ -55,9 +68,10 @@ public class TodoCategory {
         this.startTime = startTime;
     }
 
-    public TodoCategory(@NonNull String userId, @NonNull String category, @NonNull String startTime) {
+    public TodoCategory(@NonNull String userId, @NonNull String category, @NonNull String startTime, @NonNull String planDate) {
         this.userId = userId;
         this.category = category;
         this.startTime = startTime;
+        this.planDate = planDate;
     }
 }
