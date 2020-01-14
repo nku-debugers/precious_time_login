@@ -10,12 +10,25 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;
 
-@Entity(primaryKeys = {"user_id", "words", "start_time"},
+@Entity(primaryKeys = {"user_id", "words", "start_time", "plan_date"},
         foreignKeys = @ForeignKey(entity = User.class,
                                 parentColumns = "id",
                                 childColumns = "user_id"),
         indices = @Index(value = "user_id"))
 public class TodoQuote {
+    @NonNull
+    public String getPlanDate() {
+        return planDate;
+    }
+
+    public void setPlanDate(@NonNull String planDate) {
+        this.planDate = planDate;
+    }
+
+    @NonNull
+    @ColumnInfo(name = "plan_date")
+    private String planDate;
+
     @NonNull
     @ColumnInfo(name = "user_id")
     private String userId;
@@ -30,6 +43,7 @@ public class TodoQuote {
         this.startTime = todo.getStartTime();
         this.userId = quote.getUserId();
         this.words = quote.getWords();
+        this.planDate = todo.getPlanDate();
     }
 
     public TodoQuote() {

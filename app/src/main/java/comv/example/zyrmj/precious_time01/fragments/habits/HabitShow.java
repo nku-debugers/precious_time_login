@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,6 +101,20 @@ public class HabitShow extends Fragment {
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitShow_to_personCenterFragment);
+            }
+        });
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_habitShow_to_personCenterFragment);
+                    return true;
+                }
+                return false;
             }
         });
 
