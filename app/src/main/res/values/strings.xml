@@ -162,4 +162,9 @@
     <string name="week_modify_switch">显示修改列表</string>
     <string name="week_modify_confirm">生成计划</string>
     <string name="Is_modify">更改模式</string>
+    <string name="planlist_title">所有计划</string>
+    <string name="card_plan_name">计划名称</string>
+    <string name="card_plan_number">序号</string>
+    <string name="card_plan_start">开始日期</string>
+    <string name="card_plan_end">结束日期</string>
 </resources>

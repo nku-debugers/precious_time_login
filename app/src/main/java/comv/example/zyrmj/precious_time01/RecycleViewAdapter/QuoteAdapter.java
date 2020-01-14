@@ -85,6 +85,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.MyViewHolder
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("quote", quote);
+                bundle.putString("userId",quote.getUserId());
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_quoteFragment_to_updateQuoteFragment, bundle);
 
