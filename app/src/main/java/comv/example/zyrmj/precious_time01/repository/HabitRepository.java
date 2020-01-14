@@ -121,7 +121,7 @@ public class HabitRepository {
     {
         private HabitCategoryDao habitCategoryDao;
 
-        public getCategories(HabitCategoryDao habitCategoryDao) {
+        getCategories(HabitCategoryDao habitCategoryDao) {
             this.habitCategoryDao = habitCategoryDao;
         }
 
@@ -231,16 +231,14 @@ public class HabitRepository {
         }
         return null;
     }
-public List<Habit> getAllHabits2(String userId)
-{
-    try {
-        List<Habit> habits=new getAllHabitsAsyncTask2(habitDao).execute(userId).get();
-        return habits;
-    } catch (Exception e) {
-        e.printStackTrace();
+    public List<Habit> getAllHabits2(String userId) {
+        try {
+            return new getAllHabitsAsyncTask2(habitDao).execute(userId).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    return null;
     }
-return null;
-}
     public Habit getSpecificHabit(String userId,String habitName)
     {
         try {
@@ -254,14 +252,13 @@ return null;
         return null;
     }
 
-    public List<String> getCategories(String userId,String habitName)
-    {
+    public List<String> getCategories(String userId,String habitName) {
         try {
             return new getCategories(habitCategoryDao).execute(userId,habitName).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
-return null;
+        return null;
     }
 
     public List<String> getQuotes(String userId,String habitName) {

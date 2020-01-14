@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -43,10 +44,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TodoAdapter;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
+import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
+import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
+import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
+import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
+import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
@@ -64,6 +71,9 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     private Switch showList;
     private RecyclerView bottomList;
     private WeekView mWeekView;
+    private PlanRepository planRepository;
+    private TodoRepository todoRepository;
+    private CategoryRepository categoryRepository;
     List<WeekViewEvent> weekViewEvents;
     private String plandate;
 
@@ -125,7 +135,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog("",new PlanRepository(getContext()));
+                showDialog("");
 
 
             }
@@ -156,6 +166,9 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
 
     private void initList()
     {
+        todoRepository = new TodoRepository(getContext());
+        categoryRepository = new CategoryRepository(getContext());
+        planRepository = new PlanRepository(getContext());
         bottomList=getView().findViewById(R.id.plan_modify);
         final TodoAdapter todoAdapter=new TodoAdapter(getActivity());
         todoAdapter.setUserId(userId);
@@ -383,7 +396,7 @@ nameEvent.observe(this, new Observer<String>() {
     }
 
     //以下两函数供生成真正的plan时使用
-    public void showDialog(String info, final PlanRepository planRepository) {
+    public void showDialog(String info) {
         new MaterialDialog.Builder(getContext())
                 .title("添加新计划")
                 .content(info)
@@ -398,7 +411,7 @@ nameEvent.observe(this, new Observer<String>() {
                                 } else {
                                     String planName = input.toString();
                                     dialog.dismiss();
-                                    showDialog2(planName, planRepository);
+                                    showDialog2(planName);
 
                                 }
                             }
@@ -415,7 +428,7 @@ nameEvent.observe(this, new Observer<String>() {
                 .autoDismiss(false).show();
     }
 
-    public void showDialog2(String info, final PlanRepository planRepository) {
+    public void showDialog2(String info) {
         new MaterialDialog.Builder(getContext())
                 .title("添加新计划")
                 .content(info)
@@ -460,6 +473,45 @@ nameEvent.observe(this, new Observer<String>() {
                                         plandate=plan.getStartDate();
                                         planRepository.insertPlan(plan);
                                         dialog.dismiss();
+                                        List<Category> oldCategories = categoryRepository.getAllCateories(userId);
+
+                                        List<String> alllabels = new ArrayList<>();
+                                        for(EditPlan.ToDoExtend toDoExtend: satisfiedTodos) {
+                                            for(String s: toDoExtend.getLabels()) {
+                                                if (!alllabels.contains(s)) {
+                                                    alllabels.add(s);
+                                                }
+                                            }
+                                        }
+
+                                        for(String s : alllabels) {
+                                            Category category = new Category(userId, s);
+                                            int flagLabel = 0;
+                                            for(Category c:oldCategories) {
+                                                if (c.getName().equals(category.getName())&& c.getUserId().equals(category.getUserId()))
+                                                   flagLabel = 1;
+                                            }
+                                            if (flagLabel == 0){
+                                                categoryRepository.insertCategory(category);
+                                            }
+                                        }
+
+                                        for(EditPlan.ToDoExtend toDoExtend: satisfiedTodos) {
+                                            if(plandate != null) {
+                                                toDoExtend.getTodo().setPlanDate(plandate);
+                                            }
+                                            todoRepository.insertTodo(toDoExtend.getTodo());
+
+                                            for(String s : toDoExtend.getLabels() ) {
+                                                TodoCategory todoCategory = new TodoCategory(userId, s, toDoExtend.getTodo().getStartTime(), toDoExtend.getTodo().getPlanDate());
+                                                todoRepository.insertTodoCategory(todoCategory);
+                                            }
+
+                                            for(Quote s : toDoExtend.getQuotes()) {
+                                                TodoQuote todoQuote = new TodoQuote(s, toDoExtend.getTodo());
+                                                todoRepository.insertTodoQuote(todoQuote);
+                                            }
+                                        }
                                         //将todos插入数据库
 
                                         Bundle bundle=new Bundle();
