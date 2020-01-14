@@ -172,18 +172,22 @@
 
     <string name="spalsh_bottom_rights"><b>@</b>一个叫gun的app</string>
 
-    <string name="Is_modify">修改模式</string>
+    <string name="Is_modify">更改模式</string>
     <string name="plan_final_title">计划名称</string>
 
     <string name="plan_show_title">计划列表</string>
 
     <string name="card_plan_number">序号</string>
-    <string name="card_plan_name">名称</string>
-    <string name="card_plan_start">开始时间</string>
-    <string name="card_plan_end">结束时间</string>
+    <string name="card_plan_name">计划名称</string>
+    <string name="card_plan_start">开始日期</string>
+    <string name="card_plan_end">结束日期</string>
+    <string name="start_end_time">起止时间</string>
 
     <string name="plan_finish_title">计划完成度反馈</string>
     <string name="plan_finish_name">事项名称</string>
     <string name="plan_finish_time">事项用时</string>
     <string name="plan_finish_button">确认</string>
+
+    <string name="planlist_title">所有计划</string>
+
 </resources>

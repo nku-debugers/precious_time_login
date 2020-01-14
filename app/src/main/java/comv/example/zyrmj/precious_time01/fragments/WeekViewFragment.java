@@ -130,7 +130,7 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
     }
 
     private void setupDateTimeInterpreter(/*final boolean shortDate*/) {
-        final String[] weekLabels = {"一", "二", "三", "四", "五", "六", "日"};
+        final String[] weekLabels = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
             public String interpretDate(Calendar date) {
@@ -194,16 +194,13 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
         int i = 1;
         int index = 0;
         for (TemplateItem ti : datas) {
-            Log.d("列表2", ti.getItemName());
             String weekday = ti.getStartTime().split("-")[0];
             int diff = Integer.valueOf(weekday);//与周一的距离
             String starttime = ti.getStartTime().split("-")[1];
-            Log.d("列表2", starttime);
             String starthour = starttime.split(":")[0];
             String startminute = starttime.split(":")[1];
             String endtime = ti.getEndTime().split("-")[1];
             String endminute = endtime.split(":")[1];
-            Log.d("列表2", starthour);
             String endhour = endtime.split(":")[0];
             Calendar startTime = Calendar.getInstance();
             int currdiff = startTime.get(Calendar.DAY_OF_WEEK) - 2;

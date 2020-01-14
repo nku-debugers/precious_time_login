@@ -110,6 +110,27 @@ public class TemplateItemRepository {
             if (items.size() == 0) {
                 return 1;
             }
+            if (strings.length == 7) {
+                Log.d("mytag", "inside 7");
+                for (int i = 0; i < items.size(); i++) {
+                    if (strings[1].compareTo(items.get(i).getStartTime()) < 0
+                            && strings[6].compareTo(items.get(i).getEndTime()) >= 0) {
+                        return 0;
+                    }
+                }
+            }
+            if (strings.length == 8) {
+                for (int i = 0; i < items.size(); i++) {
+                    if (strings[5].equals(items.get(i).getStartTime())) {
+                        continue;
+                    }
+                    if (strings[1].compareTo(items.get(i).getStartTime()) < 0
+                            && strings[7].compareTo(items.get(i).getEndTime()) >= 0) {
+                        return 0;
+                    }
+                }
+
+            }
             if (strings[4].equals("start")) {
                 if (strings.length == 5) {
                     for (int i = 0; i < items.size(); i++) {
@@ -117,10 +138,11 @@ public class TemplateItemRepository {
                                 && strings[1].compareTo(items.get(i).getEndTime()) < 0) {
                             return 0;
                         }
+
                     }
                 } else {
                     for (int i = 0; i < items.size(); i++) {
-                        if (strings[4].equals(items.get(i).getStartTime())) {
+                        if (strings[5].equals(items.get(i).getStartTime())) {
                             continue;
                         }
                         if (strings[1].compareTo(items.get(i).getStartTime()) > 0
@@ -140,7 +162,7 @@ public class TemplateItemRepository {
                     }
                 } else {
                     for (int i = 0; i < items.size(); i++) {
-                        if (strings[4].equals(items.get(i).getStartTime())) {
+                        if (strings[5].equals(items.get(i).getStartTime())) {
                             continue;
                         }
                         if (strings[1].compareTo(items.get(i).getStartTime()) > 0
@@ -152,6 +174,7 @@ public class TemplateItemRepository {
                 }
 
             }
+
             return 1;
         }
     }

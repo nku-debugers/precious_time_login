@@ -83,4 +83,24 @@ public class TimeDiff {
         System.out.println(reStr);
         return reStr;
     }
+
+    public static int daysBetween(String dateString1,String dateString2){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date date1= null;
+        Date date2=null;
+        try {
+            date1 = sdf.parse(dateString1);
+            date2=sdf.parse(dateString2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date1);
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(date2);
+        long time2 = cal.getTimeInMillis();
+        long between_days=(time2-time1)/(1000*3600*24);
+
+        return Math.abs(Integer.parseInt(String.valueOf(between_days)));
+    }
 }

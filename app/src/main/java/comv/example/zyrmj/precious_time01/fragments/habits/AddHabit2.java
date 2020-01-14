@@ -185,7 +185,9 @@ public class AddHabit2 extends Fragment implements View.OnClickListener {
         newHabit.setExpectedTime(timePeriodSpinner.getSelectedIndex());//0-无 1-上午 2-下午 3-晚上
         newHabit.setPriority(habitPrioritySpinner.getSelectedIndex());//0-无 1-低 2-中 3-高
         //设置单次时长
-        newHabit.setTime4once(mTvSelectedTime.getText().toString());
+        String length=mTvSelectedTime.getText().toString();
+//        if(length.startsWith("0")) length=length.substring(1);
+        newHabit.setTime4once(length);
 
 
     }

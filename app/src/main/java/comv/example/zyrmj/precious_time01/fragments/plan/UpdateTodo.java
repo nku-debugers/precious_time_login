@@ -81,6 +81,9 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
     private String[] weekString2 = {"一", "二", "三", "四", "五", "六", "日"};
     private LinearLayout timeLength;
     private List<Todo> todos;
+    private ArrayList<EditPlan.ToDoExtend> satisfiedTodos;
+    private ArrayList<EditPlan.ToDoExtend> unsatisfiedTodos;
+    private EditPlan.ToDoExtend myTodoExtend;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,15 +96,27 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
-            userId = getArguments().getString("userId", "");
-            todos = (List<Todo>) getArguments().getSerializable("toDos");
-            myTodo = (Todo) getArguments().getSerializable("mytodo");
-            selectedLabels = (ArrayList<String>)getArguments().getSerializable("selectedlabels");
-            selectedQuotes = (ArrayList<Quote>)getArguments().getSerializable("selectedquotes");
-            for(int i=0; i < selectedQuotes.size(); i++)
+            if(getArguments().getString("index")!=null)
             {
-                Log.d(TAG, "onActivityCreated: the labels selected are " + selectedQuotes.get(i).getWords());
+                userId = getArguments().getString("userId", "offline");
+                satisfiedTodos= (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("satisfiedTodos");
+                System.out.println("satisfied:"+String.valueOf(satisfiedTodos.size()));
+                unsatisfiedTodos= (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("unsatisfiedTodos");
+                System.out.println("unsatisfied:"+String.valueOf(unsatisfiedTodos.size()));
+                myTodoExtend=unsatisfiedTodos.get(Integer.valueOf(getArguments().getString("index")));
+                myTodo=myTodoExtend.getTodo();
+                selectedQuotes=myTodoExtend.getQuotes();
+                selectedLabels=myTodoExtend.getLabels();
+
             }
+            else {
+                userId = getArguments().getString("userId", "offline");
+                todos = (List<Todo>) getArguments().getSerializable("toDos");
+                myTodo = (Todo) getArguments().getSerializable("mytodo");
+                selectedLabels = (ArrayList<String>) getArguments().getSerializable("selectedlabels");
+                selectedQuotes = (ArrayList<Quote>) getArguments().getSerializable("selectedquotes");
+            }
+
         }
         assignViews();
         init();
@@ -127,6 +142,9 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                 if ( !checkExceedEnd(alreadyExistStart, alreadyExistEnd, endFinal)) {
                     return false;
                 }
+                if ( !checkIfContained(alreadyExistStart, alreadyExistEnd, startFinal, endFinal)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -150,6 +168,10 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             return false;
         }
         return true;
+    }
+
+    private boolean checkIfContained(String start, String end, String realStart, String realEnd) {
+        return TimeDiff.compare(start, realStart) < 0 || TimeDiff.compare(end, realEnd) > 0;
     }
 
     private void saveLabels() {
@@ -215,16 +237,25 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("mytodo", myTodo);
-                        bundle.putSerializable("labels", selectedLabels);
-                        bundle.putSerializable("quotes", selectedQuotes);
-                        bundle.putString("userId", userId);
-                        bundle.putString("templateName", getArguments().getString("templateName"));
-                        bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                        bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                        bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                        bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
-                        controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                        if (getArguments().getString("card") != null)
+                        {
+                            bundle.putString("userId",userId);
+                            bundle.putSerializable("satisfiedTodos", satisfiedTodos);
+                            bundle.putSerializable("unsatisfiedTodos",unsatisfiedTodos);
+                            controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
+                        }
+                        else {
+                            bundle.putSerializable("mytodo", myTodo);
+                            bundle.putSerializable("labels", selectedLabels);
+                            bundle.putSerializable("quotes", selectedQuotes);
+                            bundle.putString("userId", userId);
+                            bundle.putString("templateName", getArguments().getString("templateName"));
+                            bundle.putSerializable("habits", getArguments().getSerializable("habits"));
+                            bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
+                            bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
+                            bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
+                            controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                        }
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -241,10 +272,13 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveLabels();
-                myTodo.setLength(mTvSelectedTimeWeek.getText().toString());
-                if (saveTime()) {
-                    myTodo.setType(2);
+                if(getArguments().getString("card")!=null)
+                {
+                    //更改labels
+                   saveLabels();
+                    myTodoExtend.setLabels(selectedLabels);
+                    //更改Quotes
+                    myTodoExtend.setQuotes(selectedQuotes);
                     if (timeReminder.isChecked()) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
                     } else {
@@ -253,20 +287,79 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                     if (todoName.getText().length() != 0) {
                         myTodo.setName(todoName.getText().toString());
                     } else {
-                        //提示没有写名字
+                        PromptDialog promptDialog = new PromptDialog(getActivity());
+                        promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
+                            @Override
+                            public void onClick(PromptButton button) {
+
+                            }
+                        }));
                     }
+                    String startTime="1 times",endTime="";
+                    if (timeTypeFlag) {
+                        startTime = mTvSelectedTime1.getText().toString();
+                        endTime = mTvSelectedTime2.getText().toString();
+                    }
+                    String week = getWeek(mTvSelectedTimeWeek.getText().toString());
+                    String startFinal = week + "-" + startTime;
+                    String endFinal = week + "-" + endTime;
+
+                    if(getArguments().getInt("remainedTimes")>1)
+                    {
+                        int times=getArguments().getInt("remainedTimes");
+                        EditPlan editPlan=new EditPlan();
+                        EditPlan.ToDoExtend newTodoExtend=editPlan.new ToDoExtend();
+                        newTodoExtend.copy(myTodoExtend);
+                        newTodoExtend.getTodo().setStartTime(String.valueOf(times-1)+" times");
+                        unsatisfiedTodos.add(newTodoExtend);
+                    }
+                    myTodo.setStartTime(startFinal);
+                    myTodo.setEndTime(endFinal);
+                    myTodoExtend.setTodo(myTodo);
+                    unsatisfiedTodos.set(Integer.valueOf(getArguments().getString("index")),myTodoExtend);
+
+                    Bundle bundle=new Bundle();
+                    bundle.putString("userId",userId);
+                    bundle.putSerializable("satisfiedTodos", satisfiedTodos);
+                    bundle.putSerializable("unsatisfiedTodos",unsatisfiedTodos);
                     NavController controller = Navigation.findNavController(getView());
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("mytodo", myTodo);
-                    bundle.putSerializable("labels", selectedLabels);
-                    bundle.putSerializable("quotes", selectedQuotes);
-                    bundle.putString("userId", userId);
-                    bundle.putString("templateName", getArguments().getString("templateName"));
-                    bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                    bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                    bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                    bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
-                    controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                    controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
+
+                }
+                else {
+                    saveLabels();
+                    myTodo.setLength(mTvSelectedTimeWeek.getText().toString());
+                    if (saveTime()) {
+                        myTodo.setType(2);
+                        if (timeReminder.isChecked()) {
+                            myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
+                        } else {
+                            myTodo.setReminder(0);
+                        }
+                        if (todoName.getText().length() != 0) {
+                            myTodo.setName(todoName.getText().toString());
+                        } else {
+                            PromptDialog promptDialog = new PromptDialog(getActivity());
+                            promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
+                                @Override
+                                public void onClick(PromptButton button) {
+
+                                }
+                            }));
+                        }
+                        NavController controller = Navigation.findNavController(getView());
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("mytodo", myTodo);
+                        bundle.putSerializable("labels", selectedLabels);
+                        bundle.putSerializable("quotes", selectedQuotes);
+                        bundle.putString("userId", userId);
+                        bundle.putString("templateName", getArguments().getString("templateName"));
+                        bundle.putSerializable("habits", getArguments().getSerializable("habits"));
+                        bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
+                        bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
+                        bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
+                        controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                    }
                 }
             }
         });
@@ -275,15 +368,44 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(getView());
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("delete", "true");
-                bundle.putString("userId", userId);
-                bundle.putString("templateName", getArguments().getString("templateName"));
-                bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
-                System.out.println("删除!!");
-                controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                if(!(getArguments().getString("card")==null))
+                {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            unsatisfiedTodos.remove(myTodoExtend);
+                            bundle.putString("userId",userId);
+                            bundle.putSerializable("satisfiedTodos", satisfiedTodos);
+                            bundle.putSerializable("unsatisfiedTodos",unsatisfiedTodos);
+                            controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
+
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("确认删除？", cancel, confirm);
+
+                }
+
+                else
+                {
+                    bundle.putSerializable("delete", "true");
+                    bundle.putString("userId", userId);
+                    bundle.putString("templateName", getArguments().getString("templateName"));
+                    bundle.putSerializable("habits", getArguments().getSerializable("habits"));
+                    bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
+                    bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
+                    bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
+                    System.out.println("删除!!");
+                    controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
+                }
             }
         });
 
@@ -362,6 +484,7 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                     timeLength.setVisibility(View.VISIBLE);
                     start.setVisibility(View.GONE);
                     end.setVisibility(View.GONE);
+                    mTvSelectedLength.setText(" ");
                 }
             }
         });
@@ -448,8 +571,15 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
             timeType.setChecked(true);
             Log.d(TAG, "init: This is the startTime: " + myTodo.getStartTime());
             Log.d(TAG, "init: This is the endTime: " + myTodo.getEndTime());
-            mTvSelectedTime1.setText(myTodo.getStartTime().substring(2));
-            mTvSelectedTime2.setText(myTodo.getEndTime().substring(2));
+            if(myTodo.getEndTime()==null)
+            {
+                mTvSelectedTime1.setText(" ");
+                mTvSelectedTime2.setText(" ");
+            }
+            else {
+                mTvSelectedTime1.setText(myTodo.getStartTime().substring(2));
+                mTvSelectedTime2.setText(myTodo.getEndTime().substring(2));
+            }
             timeTypeFlag = true;
             timeLength.setVisibility(View.GONE);
             start.setVisibility(View.VISIBLE);

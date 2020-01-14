@@ -16,6 +16,7 @@ import comv.example.zyrmj.precious_time01.dao.HabitQuoteDao;
 import comv.example.zyrmj.precious_time01.database.AppDatabase;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitQuote;
 
@@ -120,7 +121,7 @@ public class HabitRepository {
     {
         private HabitCategoryDao habitCategoryDao;
 
-        public getCategories(HabitCategoryDao habitCategoryDao) {
+        getCategories(HabitCategoryDao habitCategoryDao) {
             this.habitCategoryDao = habitCategoryDao;
         }
 
@@ -151,6 +152,27 @@ public class HabitRepository {
             for(HabitQuote hq:habitQuote)
             {
                 quotes.add(hq.getWords());
+            }
+            return quotes;
+        }
+    }
+
+    static class getAllQuotes extends  AsyncTask<String ,Void ,List<Quote>>
+    {
+        private HabitQuoteDao habitQuoteDao;
+
+        public getAllQuotes(HabitQuoteDao habitQuoteDao) {
+            this.habitQuoteDao = habitQuoteDao;
+        }
+
+        @Override
+        protected List<Quote> doInBackground(String... strings) {
+            List<Quote> quotes=new ArrayList<>();
+            List<HabitQuote> habitQuote=habitQuoteDao.getQuotesForHabit(strings[0],strings[1]);
+            for(HabitQuote hq:habitQuote)
+            {
+                Quote quote = new Quote(hq.getUserId(), hq.getWords(), "-1");
+                quotes.add(quote);
             }
             return quotes;
         }
@@ -209,16 +231,14 @@ public class HabitRepository {
         }
         return null;
     }
-public List<Habit> getAllHabits2(String userId)
-{
-    try {
-        List<Habit> habits=new getAllHabitsAsyncTask2(habitDao).execute(userId).get();
-        return habits;
-    } catch (Exception e) {
-        e.printStackTrace();
+    public List<Habit> getAllHabits2(String userId) {
+        try {
+            return new getAllHabitsAsyncTask2(habitDao).execute(userId).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    return null;
     }
-return null;
-}
     public Habit getSpecificHabit(String userId,String habitName)
     {
         try {
@@ -232,18 +252,16 @@ return null;
         return null;
     }
 
-    public List<String> getCategories(String userId,String habitName)
-    {
+    public List<String> getCategories(String userId,String habitName) {
         try {
             return new getCategories(habitCategoryDao).execute(userId,habitName).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
-return null;
+        return null;
     }
 
-    public List<String> getQuotes(String userId,String habitName)
-    {
+    public List<String> getQuotes(String userId,String habitName) {
 
         try {
             return new getQuotes(habitQuoteDao).execute(userId,habitName).get();
@@ -253,6 +271,14 @@ return null;
         return null;
     }
 
+    public List<Quote> getAllQuotes(String userId, String habitName) {
+        try {
+            return new getAllQuotes(habitQuoteDao).execute(userId, habitName).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void insertHabitCategory(HabitCategory...habitCategories) {
         new InsertHabitCategoryTask(habitCategoryDao).execute(habitCategories);

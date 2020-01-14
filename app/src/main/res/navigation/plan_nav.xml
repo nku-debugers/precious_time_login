@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/plan_nav"
-    app:startDestination="@id/choseTemplate">
+    app:startDestination="@id/planWeekView">
 
     <fragment
         android:id="@+id/choseTemplate"
@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_choseTemplate_to_editPlan"
             app:destination="@id/editPlan" />
+        <action
+            android:id="@+id/action_choseTemplate_to_planShow"
+            app:destination="@id/planShow" />
     </fragment>
     <fragment
         android:id="@+id/editPlan"
@@ -28,6 +31,9 @@
         <action
             android:id="@+id/action_editPlan_to_updateTodo"
             app:destination="@id/updateTodo" />
+        <action
+            android:id="@+id/action_editPlan_to_modifyPlan"
+            app:destination="@id/modifyPlan" />
     </fragment>
     <fragment
         android:id="@+id/addToDo"
@@ -46,5 +52,65 @@
         <action
             android:id="@+id/action_updateTodo_to_editPlan"
             app:destination="@id/editPlan" />
+        <action
+            android:id="@+id/action_updateTodo_to_modifyPlan"
+            app:destination="@id/modifyPlan" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyPlan"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.ModifyPlan"
+        android:label="fragment_modify_plan"
+        tools:layout="@layout/fragment_modify_plan" >
+        <action
+            android:id="@+id/action_modifyPlan_self"
+            app:destination="@id/modifyPlan" />
+        <action
+            android:id="@+id/action_modifyPlan_to_updateTodo"
+            app:destination="@id/updateTodo" />
+        <action
+            android:id="@+id/action_modifyPlan_to_planWeekView"
+            app:destination="@id/planWeekView" />
+    </fragment>
+    <fragment
+        android:id="@+id/planWeekView"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanWeekView"
+        android:label="fragment_plan_week_view"
+        tools:layout="@layout/fragment_final_plan_week_view" >
+        <action
+            android:id="@+id/action_planWeekView_to_choseTemplate"
+            app:destination="@id/choseTemplate" />
+        <action
+            android:id="@+id/action_planWeekView_to_planTodosListView"
+            app:destination="@id/planTodosListView" />
+        <action
+            android:id="@+id/action_planWeekView_to_planShow"
+            app:destination="@id/planShow" />
+    </fragment>
+    <fragment
+        android:id="@+id/planTodosListView"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanTodosListView"
+        android:label="fragment_plan_todos_list_view"
+        tools:layout="@layout/fragment_plan_todos_list_view" >
+        <action
+            android:id="@+id/action_planTodosListView_to_planWeekView"
+            app:destination="@id/planWeekView" />
+        <action
+            android:id="@+id/action_planTodosListView_to_planShow"
+            app:destination="@id/planShow" />
+    </fragment>
+    <fragment
+        android:id="@+id/planShow"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanShow"
+        android:label="fragment_plan_show"
+        tools:layout="@layout/fragment_plan_show" >
+        <action
+            android:id="@+id/action_planShow_to_planTodosListView"
+            app:destination="@id/planTodosListView" />
+        <action
+            android:id="@+id/action_planShow_to_planWeekView"
+            app:destination="@id/planWeekView" />
+        <action
+            android:id="@+id/action_planShow_to_choseTemplate"
+            app:destination="@id/choseTemplate" />
     </fragment>
 </navigation>
