@@ -461,7 +461,7 @@ nameEvent.observe(this, new Observer<String>() {
                                         planRepository.insertPlan(plan);
                                         dialog.dismiss();
                                         //将todos插入数据库
-                                        
+
                                         Bundle bundle=new Bundle();
                                         bundle.putSerializable("plan",plan);
                                         bundle.putString("userId",userId);

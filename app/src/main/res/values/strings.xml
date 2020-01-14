@@ -161,4 +161,5 @@
     <string name="week_modify_title">计划名称</string>
     <string name="week_modify_switch">显示修改列表</string>
     <string name="week_modify_confirm">生成计划</string>
+    <string name="Is_modify">更改模式</string>
 </resources>
