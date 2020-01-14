@@ -6,35 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_date"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="30dp"-->
-    <!--        android:background="#455964"-->
-    <!--        android:gravity="center"-->
-    <!--        android:text="2015年1月"-->
-    <!--        android:textColor="#ffffff"-->
-    <!--        android:textSize="16sp"/>-->
-
-    <!--    <comv.example.zyrmj.weekviewlibrary.WeekDayView-->
-    <!--        android:id="@+id/weekdayview"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-
-    <!--        android:visibility="visible"-->
-    <!--        app:columnGap="8dp"-->
-    <!--        app:dayBackgroundColor="#ffffffff"-->
-    <!--        app:eventTextColor="@android:color/white"-->
-    <!--        app:headerColumnBackground="#ffffffff"-->
-    <!--        app:headerColumnPadding="8dp"-->
-    <!--        app:headerColumnTextColor="@color/toolbar_text"-->
-    <!--        app:headerRowBackgroundColor="#465a65"-->
-    <!--        app:headerRowPadding="12dp"-->
-    <!--        app:hourHeight="60dp"-->
-    <!--        app:noOfVisibleDays="1"-->
-    <!--        app:textSize="12sp"-->
-    <!--        app:todayBackgroundColor="#1848adff"-->
-    <!--        app:todayHeaderTextColor="@color/accent" />-->
     <View
         android:id="@+id/view12"
         android:layout_width="0dp"
@@ -59,7 +30,7 @@
         app:srcCompat="@drawable/plan" />
 
     <ImageView
-        android:id="@+id/person"
+        android:id="@+id/personcenter"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -119,7 +90,7 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <TextView
-        android:id="@+id/plan_final_title"
+        android:id="@+id/planName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
@@ -155,7 +126,7 @@
         app:layout_constraintGuide_percent="0.87" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_plan"
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

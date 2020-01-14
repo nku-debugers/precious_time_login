@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_choseTemplate_to_editPlan"
             app:destination="@id/editPlan" />
+        <action
+            android:id="@+id/action_choseTemplate_to_planShow"
+            app:destination="@id/planShow" />
     </fragment>
     <fragment
         android:id="@+id/editPlan"
@@ -72,9 +75,42 @@
         android:id="@+id/planWeekView"
         android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanWeekView"
         android:label="fragment_plan_week_view"
-        tools:layout="@layout/fragment_plan_week_view" >
+        tools:layout="@layout/fragment_final_plan_week_view" >
         <action
             android:id="@+id/action_planWeekView_to_choseTemplate"
+            app:destination="@id/choseTemplate" />
+        <action
+            android:id="@+id/action_planWeekView_to_planTodosListView"
+            app:destination="@id/planTodosListView" />
+        <action
+            android:id="@+id/action_planWeekView_to_planShow"
+            app:destination="@id/planShow" />
+    </fragment>
+    <fragment
+        android:id="@+id/planTodosListView"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanTodosListView"
+        android:label="fragment_plan_todos_list_view"
+        tools:layout="@layout/fragment_plan_todos_list_view" >
+        <action
+            android:id="@+id/action_planTodosListView_to_planWeekView"
+            app:destination="@id/planWeekView" />
+        <action
+            android:id="@+id/action_planTodosListView_to_planShow"
+            app:destination="@id/planShow" />
+    </fragment>
+    <fragment
+        android:id="@+id/planShow"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.PlanShow"
+        android:label="fragment_plan_show"
+        tools:layout="@layout/fragment_plan_show" >
+        <action
+            android:id="@+id/action_planShow_to_planTodosListView"
+            app:destination="@id/planTodosListView" />
+        <action
+            android:id="@+id/action_planShow_to_planWeekView"
+            app:destination="@id/planWeekView" />
+        <action
+            android:id="@+id/action_planShow_to_choseTemplate"
             app:destination="@id/choseTemplate" />
     </fragment>
 </navigation>

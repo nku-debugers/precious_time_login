@@ -147,6 +147,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MyViewHolder> 
                 System.out.println("unsatisfied: "+String.valueOf(unsatisfiedTodos.size()));
                 bundle.putSerializable("satisfiedTodos", satisfiedTodos);
                 bundle.putString("index",String.valueOf(position));
+                bundle.putInt("remainedTimes",Integer.valueOf(holder.times.getText().toString()));
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_modifyPlan_to_updateTodo,bundle);
 

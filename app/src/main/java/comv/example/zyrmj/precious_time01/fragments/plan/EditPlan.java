@@ -129,14 +129,33 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
 
     public  class ToDoExtend implements Serializable {
         private Todo todo;
-        private ArrayList<String> labels ; //类别
-        private ArrayList<Quote> quotes ; //箴言
+        private ArrayList<String> labels=new ArrayList<>() ; //类别
+        private ArrayList<Quote> quotes=new ArrayList<>(); //箴言
         private Integer flag=0;//是否安排完时间？
 
         public ToDoExtend(Todo todo, ArrayList<String> labels, ArrayList<Quote> quotes) {
             this.todo = todo;
             this.labels = labels;
             this.quotes = quotes;
+        }
+        public void copy(ToDoExtend copied)
+        {
+            Todo todo=new Todo();
+            Todo copiedTodo=copied.getTodo();
+            todo.setUserId(copiedTodo.getUserId());
+            todo.setStartTime(copiedTodo.getEndTime());
+            todo.setLength(copiedTodo.getLength());
+            todo.setReminder(copiedTodo.getReminder());
+            todo.setName(copiedTodo.getName());
+            todo.setType(copiedTodo.getType());
+            todo.setCompletion(copiedTodo.getCompletion());
+            todo.setFailureTrigger(copiedTodo.getFailureTrigger());
+            todo.setPlanDate(copiedTodo.getPlanDate());
+            this.todo=todo;
+            this.quotes=copied.getQuotes();
+            this.labels=copied.getLabels();
+
+
         }
 
         @NonNull
@@ -587,8 +606,8 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             addedToDos.add(todo);
             ToDoExtend toDoExtend=new ToDoExtend();
             toDoExtend.setTodo(todo);
-            toDoExtend.setQuotes(null);
-            toDoExtend.setLabels(null);
+            toDoExtend.setQuotes(new ArrayList<>());
+            toDoExtend.setLabels(new ArrayList<>());
             toDoExtends.add(toDoExtend);
 
         }

@@ -66,7 +66,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
         WeekView.EmptyViewLongPressListener, WeekView.ScrollListener {
     private ArrayList<EditPlan.ToDoExtend> satisfiedTodos=new ArrayList<>();
     private ArrayList<EditPlan.ToDoExtend> unsatisfiedTodos=new ArrayList<>();
-    private String userId;
+    private String userId="offline";
     private Button confirm;
     private Switch showList;
     private RecyclerView bottomList;
@@ -478,7 +478,12 @@ nameEvent.observe(this, new Observer<String>() {
                                         List<String> alllabels = new ArrayList<>();
                                         for(EditPlan.ToDoExtend toDoExtend: satisfiedTodos) {
                                             for(String s: toDoExtend.getLabels()) {
-                                                if (!alllabels.contains(s)) {
+                                                int flag2 = 0;
+                                                for(String label: alllabels){
+                                                    if (label.equals(s))
+                                                        flag2 = 1;
+                                                }
+                                                if (flag2 == 0) {
                                                     alllabels.add(s);
                                                 }
                                             }
@@ -499,6 +504,7 @@ nameEvent.observe(this, new Observer<String>() {
                                         for(EditPlan.ToDoExtend toDoExtend: satisfiedTodos) {
                                             if(plandate != null) {
                                                 toDoExtend.getTodo().setPlanDate(plandate);
+                                                toDoExtend.getTodo().setUserId(userId);
                                             }
                                             todoRepository.insertTodo(toDoExtend.getTodo());
 

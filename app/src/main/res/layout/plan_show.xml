@@ -30,7 +30,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline149"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/planlist_title" />
 
     <ImageView
         android:id="@+id/back"
@@ -53,7 +54,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline149" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/addPlan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
