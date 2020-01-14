@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline119" />
 
     <ImageView
-        android:id="@+id/icon_plan3"
+        android:id="@+id/plan"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -59,7 +59,7 @@
         app:srcCompat="@drawable/plan" />
 
     <ImageView
-        android:id="@+id/icon_person3"
+        android:id="@+id/person"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -70,7 +70,7 @@
         app:srcCompat="@drawable/personcenter" />
 
     <ImageView
-        android:id="@+id/icon_clock3"
+        android:id="@+id/clock"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -119,10 +119,10 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/plan_final_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/model_name"
+        android:text="@string/plan_final_title"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline59"
         app:layout_constraintEnd_toEndOf="parent"
@@ -218,7 +218,7 @@
         app:layout_constraintGuide_percent="0.98" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/toPlanShow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -235,5 +235,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.7" />
+
+    <Switch
+        android:id="@+id/Is_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Is_modify"
+        app:layout_constraintBottom_toTopOf="@+id/guideline59"
+        app:layout_constraintEnd_toStartOf="@+id/guideline120"
+        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

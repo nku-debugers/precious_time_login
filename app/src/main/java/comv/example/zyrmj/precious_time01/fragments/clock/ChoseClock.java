@@ -56,22 +56,28 @@ public class ChoseClock extends Fragment {
         accordButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle ();
+                bundle.putString ( "kind","1" );
                 NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_choseClock_to_addTime);
+                controller.navigate(R.id.action_choseClock_to_addTime,bundle);
             }
         } );
         forceButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle ();
+                bundle.putString ( "kind","2" );
                 NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_choseClock_to_addTime);
+                controller.navigate(R.id.action_choseClock_to_addTime, bundle);
             }
         } );
         boringButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle ();
+                bundle.putString ( "kind","3" );
                 NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_choseClock_to_addTime);
+                controller.navigate(R.id.action_choseClock_to_addTime, bundle);
             }
         } );
 //        personcenter.setOnClickListener ( new View.OnClickListener () {

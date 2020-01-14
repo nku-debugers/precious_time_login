@@ -19,11 +19,11 @@ public class TimeConvert {
 		// }else{
 		// return "";
 		// }
-
+		String h = seconds / 3600 < 10 ? "0" + seconds / 3600 : seconds / 3600 + "" ;
 		String m = (seconds % 3600) / 60 < 10 ? "0" + (seconds % 3600) / 60
 				: (seconds % 3600) / 60 + "";
 		String s = seconds % 60 < 10 ? "0" + seconds % 60 : seconds % 60 + "";
-		return m + ":" + s;
+		return h + ":" + m + ":" + s;
 
 	}
 
@@ -36,10 +36,11 @@ public class TimeConvert {
 	 */
 	public static String secondsToMinute1(int seconds) {
 
+		String h = seconds / 3600 < 10 ? "0" + seconds / 3600 : seconds / 3600 + "" ;
 		String m = (seconds % 3600) / 60 < 10 ? "0" + (seconds % 3600) / 60
 				: (seconds % 3600) / 60 + "";
 		String s = seconds % 60 < 10 ? "0" + seconds % 60 : seconds % 60 + "";
-		return m + "分:" + s + "秒";
+		return h + "小时" + m + "分钟" + s + "秒";
 
 	}
 

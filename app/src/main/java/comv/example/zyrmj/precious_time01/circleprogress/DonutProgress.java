@@ -370,6 +370,7 @@ public class DonutProgress extends View {
 		// String text = prefixText + progress + suffixText;
 		String text = String.valueOf(TimeConvert
 				.secondsToMinute((Constant.TIME_DURATION - getProgress())));
+		System.out.println ( "test time: "+text );
 		if (!TextUtils.isEmpty(text)) {
 			textPaint.setColor(Color.parseColor("#FFFFFF"));
 			float textHeight = textPaint.descent() + textPaint.ascent();

@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_personCenterFragment_to_habitShow"
             app:destination="@id/habitShow" />
+        <action
+            android:id="@+id/action_personCenterFragment_to_whiteShowActivity"
+            app:destination="@id/whiteShowActivity" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
@@ -202,4 +205,9 @@
             android:id="@+id/action_habitShow_to_personCenterFragment"
             app:destination="@id/personCenterFragment" />
     </fragment>
+    <activity
+        android:id="@+id/whiteShowActivity"
+        android:name="comv.example.zyrmj.precious_time01.activities.WhiteShowActivity"
+        android:label="whiteshow_test"
+        tools:layout="@layout/whiteshow_test" />
 </navigation>

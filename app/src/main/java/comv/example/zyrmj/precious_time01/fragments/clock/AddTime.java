@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.fragments.clock;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.activities.TimeActivity;
+import comv.example.zyrmj.precious_time01.activities.WhiteShowActivity;
 
 public class AddTime extends Fragment {
     private Button confirm;
@@ -44,13 +46,23 @@ public class AddTime extends Fragment {
         confirm.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
+                String kind = getArguments ().getString ( "kind" );
                 Intent intent=new Intent();
-                intent.putExtra("hour",hour.getText ().toString ());
-                intent.putExtra("minute",minute.getText ().toString ());
-                System.out.println ( "hour : "+hour.getText ()+" minute : "+hour.getText () );
+                String h = hour.getText ().toString ();
+                String m =minute.getText ().toString ();
+                if( TextUtils.isEmpty ( h ) ){
+                    h = "0";
+                }
+                if( TextUtils.isEmpty ( m ) ){
+                    m = "0";
+                }
+                intent.putExtra("hour",h);
+                intent.putExtra("minute",m);
+                intent.putExtra("kind",kind);
+                System.out.println ( h+" time "+m );
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                intent.setClass(getContext(), TimeActivity.class);
+                intent.setClass(getContext(), WhiteShowActivity.class);
                 startActivity(intent);
             }
         } );
