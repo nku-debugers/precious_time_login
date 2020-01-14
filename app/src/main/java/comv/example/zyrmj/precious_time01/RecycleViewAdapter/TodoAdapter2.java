@@ -23,7 +23,7 @@ import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.fragments.plan.EditPlan;
 import me.leefeng.promptlibrary.PromptDialog;
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MyViewHolder> {
+public class TodoAdapter2 extends RecyclerView.Adapter<TodoAdapter2.MyViewHolder> {
     private Activity currentActivity;
     private String userId = "offline";
     private List<Todo> allTodos = new ArrayList<>();
@@ -31,7 +31,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MyViewHolder> 
     private ArrayList<EditPlan.ToDoExtend> satisfiedTodos = new ArrayList<>();
     final String[] weekLabels = {"一", "二", "三", "四", "五", "六", "日"};
 
-    public TodoAdapter(Activity currentActivity) {
+    public TodoAdapter2(Activity currentActivity) {
         this.currentActivity = currentActivity;
     }
 

@@ -60,10 +60,8 @@ public class ChoseTemplate extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Intent intent=getActivity().getIntent();
-        if(intent!=null&&intent.getStringExtra("userId")!=null)
-        { userId=intent.getStringExtra("userId");
-            Log.d("pass",userId);
+        if(getArguments()!=null&&getArguments().getString("userId")!=null)
+        { userId=getArguments().getString("userId");
         }
         init();
         enableButtons();

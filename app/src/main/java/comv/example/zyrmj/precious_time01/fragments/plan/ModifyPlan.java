@@ -65,7 +65,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     private RecyclerView bottomList;
     private WeekView mWeekView;
     List<WeekViewEvent> weekViewEvents;
-    MutableLiveData<List<EditPlan.ToDoExtend>> listdatas;
+    private String plandate;
 
 
     public ModifyPlan() {
@@ -446,6 +446,7 @@ nameEvent.observe(this, new Observer<String>() {
                                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                                     plan.setStartDate( formatter.format(start));
                                     plan.setEndDate(formatter.format(end));
+                                    plan.setUserId(userId);
                                     int flag = 0;
                                     List<Plan> plans = planRepository.getAllPlans(userId);
                                     for (Plan p : plans) {
@@ -456,8 +457,11 @@ nameEvent.observe(this, new Observer<String>() {
 
                                     }
                                     if (flag == 0) {
+                                        plandate=plan.getStartDate();
                                         planRepository.insertPlan(plan);
                                         dialog.dismiss();
+                                        //将todos插入数据库
+                                        
                                         Bundle bundle=new Bundle();
                                         bundle.putSerializable("plan",plan);
                                         bundle.putString("userId",userId);
