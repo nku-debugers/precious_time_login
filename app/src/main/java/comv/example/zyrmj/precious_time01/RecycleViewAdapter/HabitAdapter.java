@@ -33,7 +33,7 @@ import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder> {
   private List<Habit> allHabits=new ArrayList<>();
-  private List<Habit> selectedHabits=new ArrayList<>();
+  private ArrayList<Habit> selectedHabits=new ArrayList<>();
   private CategoryRepository categoryRepository;
   private QuoteRepository quoteRepository;
   private HabitRepository habitRepository;
@@ -109,21 +109,54 @@ if(option.equals("0")) {
 
 else
 {
+
     holder.next.setVisibility(View.GONE);
     holder.checked.setVisibility(View.VISIBLE);
     holder.checked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
             if (isChecked) {
-        selectedHabits.add(habit);
+                if(selectedHabits.size()==0)
+                {
+                    selectedHabits.add(habit);
+                }
+                else {
+                    int flag=1;
+                    for (Habit h : selectedHabits) {
+                        if (h.getName().equals(habit.getName())) {
+                            flag=0;
+                            break;
+                        }
+                    }
+                    if(flag==1) selectedHabits.add(habit);
+                }
+
             }
             else
             {
-                selectedHabits.remove(habit);
+                Habit toDelete=null;
+                for (Habit h : selectedHabits) {
+                    if (h.getName() .equals(habit.getName()))
+                    {
+                        selectedHabits.remove(h);
+                        toDelete=h;
+                        break;
+                    }
+                }
+                selectedHabits.remove(toDelete);
+
 
             }
         }
     });
+
+    for (Habit h : selectedHabits) {
+        if (h.getName() .equals(habit.getName()))
+        {
+            holder.checked.setChecked(true);
+            break;
+        }
+    }
 
 
 }
@@ -165,10 +198,15 @@ else
     {
         this.userId=userId;
     }
-public List<Habit> getSelectedHabits(){
+public ArrayList<Habit> getSelectedHabits(){
+    System.out.println("list size habits "+selectedHabits.size());
       return selectedHabits;
+
 }
 
+    public void setSelectedHabits(ArrayList<Habit> selectedHabits) {
+        this.selectedHabits = selectedHabits;
 
     }
+}
 

@@ -322,10 +322,9 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             @Override
             public void onClick(View view) {
                 List<Habit> habits = new HabitRepository(getContext()).getAllHabits2(userId);
-                Log.d("userId", userId);
-                Log.d("habits", String.valueOf(habits == null));
                 if (habits == null) habits = new ArrayList<>();
                 final HabitAdapter habitAdapter = new HabitAdapter(habits);
+                habitAdapter.setSelectedHabits(selectedHabits);
                 new MaterialDialog.Builder(getContext())
                         .autoDismiss(false)
                         .title("选择习惯")
@@ -335,18 +334,13 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                List<Habit> currentSelectedHabits = habitAdapter.getSelectedHabits();
+                               ArrayList<Habit> currentSelectedHabits = habitAdapter.getSelectedHabits();
                                 if (currentSelectedHabits == null || currentSelectedHabits.size() == 0) {
                                     Toast.makeText(getContext(), "未选择习惯", Toast.LENGTH_LONG);
                                     dialog.dismiss();
                                 } else {
                                     dialog.dismiss();
-                                    for (Habit habit : currentSelectedHabits) {
-                                        for (Habit h : selectedHabits) {
-                                            if (h.getName() == habit.getName()) break;
-                                        }
-                                        selectedHabits.add(habit);
-                                    }
+                                    selectedHabits=currentSelectedHabits;
 
                                 }
                                 for (Habit h : selectedHabits) {

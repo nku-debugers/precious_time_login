@@ -217,14 +217,14 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MyViewHolder> 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardView = itemView.findViewById(R.id.modify_cardview);
-            number = itemView.findViewById(R.id.card_modify_number);
-            name = itemView.findViewById(R.id.card_modify_name);
-            weekDay = itemView.findViewById(R.id.card_modify_week);
-            startTime = itemView.findViewById(R.id.card_modify_start_time);
-            endTime = itemView.findViewById(R.id.card_modify_end_time);
-            times = itemView.findViewById(R.id.card_modify_conut);
-            up = itemView.findViewById(R.id.card_modify_up);
+            cardView = itemView.findViewById(R.id.cardview);
+            number = itemView.findViewById(R.id.number);
+            name = itemView.findViewById(R.id.name);
+            weekDay = itemView.findViewById(R.id.weekDay);
+            startTime = itemView.findViewById(R.id.start_time);
+            endTime = itemView.findViewById(R.id.end_time);
+            times = itemView.findViewById(R.id.times);
+            up = itemView.findViewById(R.id.up);
 
 
         }
