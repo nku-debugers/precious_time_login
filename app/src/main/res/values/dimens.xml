@@ -5,4 +5,18 @@
     <dimen name="picker_view_height">160dp</dimen>
     <dimen name="date_unit_text_size">18sp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_splash_mid">40sp</dimen>
+
+    <dimen name="text_splash_bottom">16sp</dimen>
+    <dimen name="mar_bo_splash">25dp</dimen>
+    <dimen name="rippleStrokeWidth">2dp</dimen>
+    <dimen name="rippleRadius">64dp</dimen>
+    <dimen name="center_start_size">250dp</dimen>
+    <dimen name="center_monitor_size">265dp</dimen>
+    <dimen name="stroke_size">5dp</dimen>
+    <dimen name="stroke_size2">10dp</dimen>
+
+    <dimen name="text_main_note">20sp</dimen>
+    <dimen name="text_monitor_time">25sp</dimen>
+    <dimen name="mar_bo_main_note">30dp</dimen>
 </resources>

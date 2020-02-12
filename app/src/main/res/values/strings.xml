@@ -78,6 +78,7 @@
     <string name="fragment_habit_title">个人习惯</string>
     <string name="fragment_quote_title">个人箴言</string>
     <string name="fragment_template_title">个人模板</string>
+    <string name="fragment_white_title">白名单</string>
 
     <string name="app_title">寸光</string>
     <string name="login_password_hint">请输入密码</string>
@@ -161,11 +162,32 @@
     <string name="week_modify_title">计划名称</string>
     <string name="week_modify_switch">显示修改列表</string>
     <string name="week_modify_confirm">生成计划</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="spalsh_mid_notes">提高效率\n远离手机</string>
+    <string name="monitor_mid_notes">不用不能活</string>
+    <string name="monitor_mid_sign">(?_?)</string>
+
+    <string name="spalsh_bottom_rights"><b>@</b>一个叫gun的app</string>
+
     <string name="Is_modify">更改模式</string>
-    <string name="planlist_title">所有计划</string>
-    <string name="card_plan_name">计划名称</string>
+    <string name="plan_final_title">计划名称</string>
+
+    <string name="plan_show_title">计划列表</string>
+
     <string name="card_plan_number">序号</string>
+    <string name="card_plan_name">计划名称</string>
     <string name="card_plan_start">开始日期</string>
     <string name="card_plan_end">结束日期</string>
     <string name="start_end_time">起止时间</string>
+
+    <string name="plan_finish_title">计划完成度反馈</string>
+    <string name="plan_finish_name">事项名称</string>
+    <string name="plan_finish_time">事项用时</string>
+    <string name="plan_finish_button">确认</string>
+
+    <string name="planlist_title">所有计划</string>
+
 </resources>

@@ -61,10 +61,10 @@
 
             <TextView
                 android:id="@+id/author"
-                android:layout_width="71dp"
-                android:layout_height="27dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/author"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline89"
                 app:layout_constraintStart_toStartOf="@+id/guideline19"

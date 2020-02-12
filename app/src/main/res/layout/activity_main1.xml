@@ -1,0 +1,89 @@
+<comv.example.zyrmj.precious_time01.ripplelibrary.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    app:rb_color="@color/center_bg_color"
+    app:rb_duration="1000"
+    app:rb_radius="60dp"
+    app:rb_rippleAmount="1"
+    app:rb_scale="8" >
+
+    <TextView
+        android:id="@+id/tv_notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_start"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/mar_bo_main_note"
+        android:textColor="@color/ivory"
+        android:textSize="@dimen/text_main_note" />
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_start"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/mar_bo_main_note"
+        android:textColor="@color/ivory"
+        android:textSize="@dimen/text_main_note" />
+
+    <TextView
+        android:id="@+id/tv_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_tv"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.2"
+        android:text="@string/main_mid_start"
+        android:textColor="@color/ivory"
+        android:textSize="@dimen/text_splash_mid" />
+
+    <comv.example.zyrmj.precious_time01.circleprogress.DonutProgress
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/donut_progress"
+        android:layout_width="@dimen/center_monitor_size"
+        android:layout_height="@dimen/center_monitor_size"
+        android:layout_centerInParent="true"
+        android:background="@color/black"
+        android:visibility="invisible"
+        custom:donut_finished_color="@color/black"
+        custom:donut_finished_stroke_width="10dp"
+        custom:donut_inner_bottom_text=""
+        custom:donut_progress="0"
+        custom:donut_text_size="@dimen/text_monitor_time"
+        custom:donut_unfinished_color="@color/ivory"
+        custom:donut_unfinished_stroke_width="@dimen/stroke_size" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</comv.example.zyrmj.precious_time01.ripplelibrary.RippleBackground>
+
+

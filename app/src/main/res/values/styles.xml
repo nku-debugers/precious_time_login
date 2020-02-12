@@ -33,5 +33,38 @@
         <item name="android:background">#33ffffff</item>
         <item name="android:textColor">@android:color/holo_blue_light</item>
     </style>
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
 
+
+    <style name="horizontal_slide" parent="android:Theme.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/AnimFade2</item>
+    </style>
+    <style name="AnimFade2" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_right1</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_to_left1</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_to_right1</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_left1</item>
+    </style>
+
+
+
+
+    <declare-styleable name="RippleBackground">
+        <attr name="rb_color" format="color" />
+        <attr name="rb_strokeWidth" format="dimension"/>
+        <attr name="rb_radius" format="dimension"/>
+        <attr name="rb_duration" format="integer"/>
+        <attr name="rb_rippleAmount" format="integer"/>
+        <attr name="rb_scale" format="float"/>
+        <attr name="rb_type" format="enum">
+            <enum name="fillRipple" value="0"/>
+            <enum name="strokeRipple" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

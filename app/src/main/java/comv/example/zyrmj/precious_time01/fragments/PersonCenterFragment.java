@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.activities.PlanActivity;
 import comv.example.zyrmj.precious_time01.entity.Template;
@@ -92,6 +93,7 @@ public class PersonCenterFragment extends Fragment {
         View toTemplate = getView().findViewById(R.id.toTemplate);
         View toQuote = getView().findViewById(R.id.toQuote);
         View toHabit=getView().findViewById(R.id.toHabit);
+        View toWhite = getView().findViewById ( R.id.toWhite );
         clock=getView().findViewById(R.id.clock);
         plan=getView().findViewById(R.id.plan);
         personcenter=getView().findViewById(R.id.personcenter);
@@ -123,6 +125,13 @@ public class PersonCenterFragment extends Fragment {
                 controller.navigate(R.id.action_personCenterFragment_to_loginFragment3);
             }
         });
+        toWhite.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_personCenterFragment_to_whiteShowActivity);
+            }
+        } );
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,6 +146,16 @@ public class PersonCenterFragment extends Fragment {
                 Intent intent=new Intent();
                 intent.putExtra("userId",userId);
                 intent.setClass(getContext(), PlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        clock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("userId",userId);
+                intent.setClass(getContext(), ClockActivity.class);
                 startActivity(intent);
             }
         });

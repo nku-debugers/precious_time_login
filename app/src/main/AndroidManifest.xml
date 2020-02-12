@@ -3,6 +3,10 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="comv.example.zyrmj.precious_time01">
 
+    <uses-permission xmlns:tools="http://schemas.android.com/tools"
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.PersonCenterActivity"></activity>
+        <activity android:name=".activities.ClockActivity"></activity>
+        <activity android:name=".activities.WhiteShowActivity"></activity>
+        <activity android:name=".activities.PlanFinishActivity"></activity>
         <activity android:name=".activities.PlanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +26,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="comv.example.zyrmj.precious_time01.activities.SplashActivity"
+            android:label="@string/app_name"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+
+        </activity>
+        <activity
+            android:name="comv.example.zyrmj.precious_time01.activities.TimeActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" >
+        </activity>
+
+        <activity
+            android:name="comv.example.zyrmj.precious_time01.activities.MonitorActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:excludeFromRecents="true"
+            android:theme="@style/horizontal_slide" >
+        </activity>
+
+        <service android:name="comv.example.zyrmj.precious_time01.service.MonitorService" >
+        </service>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
