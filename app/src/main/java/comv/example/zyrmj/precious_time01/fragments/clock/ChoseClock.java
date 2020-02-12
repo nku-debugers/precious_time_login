@@ -80,23 +80,23 @@ public class ChoseClock extends Fragment {
                 controller.navigate(R.id.action_choseClock_to_addTime, bundle);
             }
         } );
-//        personcenter.setOnClickListener ( new View.OnClickListener () {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent();
-//                intent.putExtra("userId",userId);
-//                intent.setClass(getContext(), PersonCenterActivity.class);
-//                startActivity(intent);
-//            }
-//        } );
-//        plan.setOnClickListener ( new View.OnClickListener () {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent();
-//                intent.putExtra("userId",userId);
-//                intent.setClass(getContext(), PlanActivity.class);
-//                startActivity(intent);
-//            }
-//        } );
+        personcenter.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("userId",userId);
+                intent.setClass(getContext(), PersonCenterActivity.class);
+                startActivity(intent);
+            }
+        } );
+        plan.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("userId",userId);
+                intent.setClass(getContext(), PlanActivity.class);
+                startActivity(intent);
+            }
+        } );
     }
 }

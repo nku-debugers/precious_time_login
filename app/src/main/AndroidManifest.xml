@@ -16,10 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.PersonCenterActivity"></activity>
-        <activity android:name=".activities.ClockActivity"></activity>
+        <activity android:name=".activities.PlanActivity"></activity>
         <activity android:name=".activities.WhiteShowActivity"></activity>
         <activity android:name=".activities.PlanFinishActivity"></activity>
-        <activity android:name=".activities.PlanActivity">
+        <activity android:name=".activities.ClockActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

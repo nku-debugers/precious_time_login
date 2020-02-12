@@ -32,6 +32,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
+import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
@@ -143,6 +144,16 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                 Intent intent = new Intent();
                 intent.putExtra("userId", userId);
                 intent.setClass(getContext(), PersonCenterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        clock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("userId", userId);
+                intent.setClass(getContext(), ClockActivity.class);
                 startActivity(intent);
             }
         });
@@ -268,7 +279,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         });
     }
 
-    //点击event,如果是更改模式，则跳转到更新页面，否则进到倒计时页面
+    //点击event,如果是更改模式，则跳转到更新页面，否则弹出提示框，询问是否进入管控活动
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         int index=event.getIndex();
@@ -279,7 +290,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         {
 
         }
-        //更新todo
+        //更新todo，向更新页面传递plan name ,userId,需更新的todo
         else
         {
 

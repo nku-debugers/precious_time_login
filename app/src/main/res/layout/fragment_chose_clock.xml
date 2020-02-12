@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline127" />
 
     <ImageView
-        android:id="@+id/icon_plan4"
+        android:id="@+id/plan"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -50,7 +50,7 @@
         app:srcCompat="@drawable/plan" />
 
     <ImageView
-        android:id="@+id/icon_clock4"
+        android:id="@+id/clock"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
@@ -61,7 +61,7 @@
         app:srcCompat="@drawable/clock" />
 
     <ImageView
-        android:id="@+id/icon_person4"
+        android:id="@+id/personcenter"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc"
