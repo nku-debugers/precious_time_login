@@ -268,7 +268,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         });
     }
 
-    //点击event,如果是更改模式，则跳转到更新页面，否则进到倒计时页面
+    //点击event,如果是更改模式，则跳转到更新页面，否则弹出提示框，询问是否进入管控活动
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         int index=event.getIndex();
@@ -279,7 +279,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         {
 
         }
-        //更新todo
+        //更新todo，向更新页面传递plan name ,userId,需更新的todo
         else
         {
 
