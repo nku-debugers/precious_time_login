@@ -32,6 +32,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
+import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
@@ -143,6 +144,16 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                 Intent intent = new Intent();
                 intent.putExtra("userId", userId);
                 intent.setClass(getContext(), PersonCenterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        clock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("userId", userId);
+                intent.setClass(getContext(), ClockActivity.class);
                 startActivity(intent);
             }
         });
