@@ -64,13 +64,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.62" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline90"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="534dp" />
-
     <comv.example.zyrmj.weekviewlibrary.WeekView
         android:id="@+id/weekview"
         android:layout_width="0dp"

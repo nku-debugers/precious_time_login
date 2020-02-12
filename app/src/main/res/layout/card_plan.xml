@@ -73,6 +73,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline155"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline156"
                 android:layout_width="wrap_content"

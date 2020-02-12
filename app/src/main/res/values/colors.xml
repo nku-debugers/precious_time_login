@@ -22,4 +22,15 @@
     <color name="current_time_bg">#FFFFFF</color>
     <color name="current_time_text">#666666</color>
     <color name="selected_time_text">#57C5E8</color>
+
+    <color name="black">#000000</color>
+
+    <!-- 白色 -->
+    <color name="ivory">#FFFFF0</color>
+
+    <!-- 红紫色 -->
+    <color name="red">#FF0000</color>
+    <color name="rippelColor">#0099CC</color>
+
+    <color name="center_bg_color">#1B1B1B</color>
 </resources>

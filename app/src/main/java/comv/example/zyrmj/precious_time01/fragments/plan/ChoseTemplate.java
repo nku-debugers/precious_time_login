@@ -28,6 +28,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
+import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
@@ -150,9 +151,15 @@ public class ChoseTemplate extends Fragment {
             }
         });
 
-
-
-
+        clock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("userId",userId);
+                intent.setClass(getContext(), ClockActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }
