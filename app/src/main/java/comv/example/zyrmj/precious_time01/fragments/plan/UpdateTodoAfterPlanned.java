@@ -218,6 +218,13 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
         }
     }
 
+    private void saveLabels() {
+        selectedLabels = new ArrayList<>();
+        for (int index : selectedIndex) {
+            selectedLabels.add(labels.get(index));
+        }
+    }
+
     private void enableButtons() {
         getView().findViewById(R.id.start_time_in_todo_after).setOnClickListener(this);
         getView().findViewById(R.id.end_time_in_todo_after).setOnClickListener(this);
@@ -235,10 +242,10 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                     public void onClick(PromptButton button) {
                         todoRepository.insertTodo(oldTodo);
                         for(String s : oldSelectedLabels) {
-                            todoRepository.insertTodoCategory(new TodoCategory(userId, s, myTodo.getStartTime(), myTodo.getPlanDate()));
+                            todoRepository.insertTodoCategory(new TodoCategory(userId, s, oldTodo.getStartTime(), oldTodo.getPlanDate()));
                         }
                         for(Quote quote:oldSelectedQuotes) {
-                            todoRepository.insertTodoQuote(new TodoQuote(quote, myTodo));
+                            todoRepository.insertTodoQuote(new TodoQuote(quote, oldTodo));
                         }
                         NavController controller = Navigation.findNavController(getView());
                         Bundle bundle = new Bundle();
@@ -310,7 +317,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                 } else {
                     myTodo.setReminder(0);
                 }
-
+                saveLabels();
                 if (saveTime()) {
                     todoRepository.insertTodo(myTodo);
                     for (String s : selectedLabels) {
