@@ -188,14 +188,6 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
         return TimeDiff.compare(start, realStart) < 0 || TimeDiff.compare(end, realEnd) > 0;
     }
 
-    private void saveLabels() {
-        selectedLabels = new ArrayList<>();
-        for (int index : selectedIndex) {
-            if(!selectedLabels.contains(labels.get(index)))
-                selectedLabels.add(labels.get(index));
-        }
-    }
-
     private boolean saveTime() {
         if (endDateModified || startDateModified) {
             String startTime = mTvSelectedTime1.getText().toString();
@@ -241,12 +233,11 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                     //放弃更改，插入原来的todo
                     @Override
                     public void onClick(PromptButton button) {
-                        deepCopyTodo();
-                        todoRepository.insertTodo(myTodo);
-                        for(String s : selectedLabels) {
+                        todoRepository.insertTodo(oldTodo);
+                        for(String s : oldSelectedLabels) {
                             todoRepository.insertTodoCategory(new TodoCategory(userId, s, myTodo.getStartTime(), myTodo.getPlanDate()));
                         }
-                        for(Quote quote:selectedQuotes) {
+                        for(Quote quote:oldSelectedQuotes) {
                             todoRepository.insertTodoQuote(new TodoQuote(quote, myTodo));
                         }
                         NavController controller = Navigation.findNavController(getView());
@@ -290,7 +281,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                 }
 
                 //保存todo的标签，把数据库里没有的插入数据库，并向关系表里插入新的todo和标签的关系
-                saveLabels();
+                //saveLabels();
                 selectedLabels = new ArrayList<>(new HashSet<>(selectedLabels));
                 List<Category>allCategories = categoryRepository.getAllCateories(userId);
                 List<Category>needToAdd = new ArrayList<>();
@@ -322,19 +313,20 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
 
                 if (saveTime()) {
                     todoRepository.insertTodo(myTodo);
-                    for(String s : selectedLabels) {
+                    for (String s : selectedLabels) {
                         todoRepository.insertTodoCategory(new TodoCategory(userId, s, myTodo.getStartTime(), myTodo.getPlanDate()));
                     }
+
+                    NavController controller = Navigation.findNavController(getView());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("plan", getArguments().getSerializable("plan"));
+                    bundle.putString("userId", getArguments().getString("userId"));
+                    bundle.putInt("modify", getArguments().getInt("modify"));
+                    if (getArguments().getString("weekView") != null)
+                        controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView, bundle);
+                    else
+                        controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
                 }
-                NavController controller = Navigation.findNavController(getView());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("plan",getArguments().getSerializable("plan"));
-                bundle.putString("userId",getArguments().getString("userId"));
-                bundle.putInt("modify",getArguments().getInt("modify"));
-                if(getArguments().getString("weekView")!=null)
-                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView,bundle);
-                else
-                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
 
             }
         });
@@ -429,7 +421,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     }
 
     private void init() {
-
+        deepCopyRelation();
         startDateModified = false;
         endDateModified = false;
         timeReverse = false;
@@ -446,23 +438,16 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
         labels = new ArrayList<>();
         selectedIndex = new ArrayList<>();
         List<Category> categories = categoryRepository.getAllCateories(userId);
-        int i = 0;
-        for (Category category : categories) {
-            labels.add(category.getName());
-            if (Arrays.asList(selectedLabels).contains(category.getName())){
-                selectedIndex.add(i++);
+
+        for (int i = 0; i < categories.size(); i++) {
+            labels.add(categories.get(i).getName());
+            for (String s : selectedLabels) {
+                if (s.equals(categories.get(i).getName())) {
+                    selectedIndex.add(i);
+                }
             }
         }
-//        for(int m=0; i < selectedLabels.size(); m++)
-//        {
-//            Log.d(TAG, "onActivityCreated: the labels selected are " + selectedLabels.get(m));
-//        }
-        for (int k = 0; k < selectedLabels.size(); k++) {
-            Log.d(TAG, "init: This is the i " + i);
-            Log.d(TAG, "init: This is k " + k);
-            labels.add(selectedLabels.get(k));
-            selectedIndex.add(i + k);
-        }
+
         labels.add("+");
         labelsView.setLabels(labels); //给labelView设置字符串数组。
         labelsView.setSelects(selectedIndex);
@@ -474,7 +459,6 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             choseQuote.setText("已选择");
         }
         //初始化时间选择
-        Log.d(TAG, "init: the weekstring is " + weekString2[Integer.valueOf(myTodo.getStartTime().substring(0, 1))]);
         mTvSelectedTimeWeek.setText(weekString2[Integer.valueOf(myTodo.getStartTime().substring(0, 1))]);
         try {
             startDate = new SimpleDateFormat("HH:mm", Locale.CHINA).parse(myTodo.getStartTime());
