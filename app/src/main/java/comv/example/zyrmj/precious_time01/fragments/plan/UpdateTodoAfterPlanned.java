@@ -103,6 +103,9 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             //将oldTodo中的所有数据拷贝到myTodo中（进行深拷贝）
             deepCopyTodo();
             plan = (Plan)getArguments().getSerializable("plan");
+            selectedLabels= (ArrayList<String>) getArguments().getSerializable("selectedLabels");
+            selectedQuotes= (ArrayList<Quote>) getArguments().getSerializable("selectedQuotes");
+            deepCopyRelation();
             planDate=plan.getStartDate();
         }
         assignViews();
@@ -126,6 +129,8 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     }
 
     private void deepCopyRelation() {
+        oldSelectedLabels=new ArrayList<>();
+        oldSelectedQuotes=new ArrayList<>();
         oldSelectedLabels.addAll(selectedLabels);
         oldSelectedQuotes.addAll(selectedQuotes);
     }
@@ -250,7 +255,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                         bundle.putString("userId",getArguments().getString("userId"));
                         bundle.putInt("modify",getArguments().getInt("modify"));
                         if(getArguments().getString("weekView")!=null)
-                            controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView);
+                            controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView,bundle);
                         else
                             controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
                     }
@@ -327,7 +332,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                 bundle.putString("userId",getArguments().getString("userId"));
                 bundle.putInt("modify",getArguments().getInt("modify"));
                 if(getArguments().getString("weekView")!=null)
-                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView);
+                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView,bundle);
                 else
                     controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
 
@@ -424,11 +429,6 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     }
 
     private void init() {
-        selectedLabels = (ArrayList<String>)todoRepository.getCategories(userId, plan.getStartDate(), myTodo.getStartTime());
-        for(String s: todoRepository.getQuotes(userId, plan.getStartDate(), myTodo.getStartTime())) {
-            Quote quote = new Quote(userId, s, "-1");
-            selectedQuotes.add(quote);
-        }
 
         startDateModified = false;
         endDateModified = false;
