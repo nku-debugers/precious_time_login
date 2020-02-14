@@ -65,6 +65,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     private LabelsView labelsView;
     private String userId = "offline";
     private ArrayList<String> labels=new ArrayList<>(), selectedLabels=new ArrayList<>();
+    private ArrayList<String> oldSelectedLabels=new ArrayList<>();
     private CategoryRepository categoryRepository;
     private TodoRepository todoRepository;
     private ArrayList<Integer> selectedIndex=new ArrayList<>();
@@ -75,6 +76,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     private boolean startDateModified, endDateModified;
     private boolean timeReverse;
     private ArrayList<Quote> selectedQuotes=new ArrayList<>();
+    private ArrayList<Quote> oldSelectedQuotes=new ArrayList<>();
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
     private SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.CANADA);
     private String[] weekString = {"日", "一", "二", "三", "四", "五", "六"};
@@ -121,6 +123,11 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
         myTodo.setCompletion(oldTodo.getCompletion());
         myTodo.setFailureTrigger(oldTodo.getFailureTrigger());
         myTodo.setPlanDate(oldTodo.getPlanDate());
+    }
+
+    private void deepCopyRelation() {
+        oldSelectedLabels.addAll(selectedLabels);
+        oldSelectedQuotes.addAll(selectedQuotes);
     }
 
     private boolean checkAndInsert(String week, String startFinal, String endFinal) {
@@ -229,7 +236,23 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                     //放弃更改，插入原来的todo
                     @Override
                     public void onClick(PromptButton button) {
-
+                        deepCopyTodo();
+                        todoRepository.insertTodo(myTodo);
+                        for(String s : selectedLabels) {
+                            todoRepository.insertTodoCategory(new TodoCategory(userId, s, myTodo.getStartTime(), myTodo.getPlanDate()));
+                        }
+                        for(Quote quote:selectedQuotes) {
+                            todoRepository.insertTodoQuote(new TodoQuote(quote, myTodo));
+                        }
+                        NavController controller = Navigation.findNavController(getView());
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                        bundle.putString("userId",getArguments().getString("userId"));
+                        bundle.putInt("modify",getArguments().getInt("modify"));
+                        if(getArguments().getString("weekView")!=null)
+                            controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView);
+                        else
+                            controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -248,8 +271,65 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             //收集页面信息，插入更改后的todo
             @Override
             public void onClick(View view) {
+                //保存todo的名字
+                if (todoName.getText().toString().length() != 0) {
+                    myTodo.setName(todoName.getText().toString());
+                } else {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarnAlert("请正确填写事项名称", new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
 
+                        }
+                    }));
+                }
 
+                //保存todo的标签，把数据库里没有的插入数据库，并向关系表里插入新的todo和标签的关系
+                saveLabels();
+                selectedLabels = new ArrayList<>(new HashSet<>(selectedLabels));
+                List<Category>allCategories = categoryRepository.getAllCateories(userId);
+                List<Category>needToAdd = new ArrayList<>();
+                for(String s:selectedLabels) {
+                    int flag = 0;
+                    for(Category c: allCategories) {
+                        if (c.getName().equals(s))
+                            flag = 1;
+                    }
+                    if (flag == 0) {
+                        categoryRepository.insertCategory(new Category(userId, s));
+                    }
+                }
+                myTodo.setPlanDate(planDate);
+
+                //保存 箴言与todo的关系
+                for(Quote quote:selectedQuotes) {
+                    todoRepository.insertTodoQuote(new TodoQuote(quote, myTodo));
+                }
+
+                myTodo.setType(2);
+
+                //保存 提醒信息
+                if (timeReminder.isChecked()) {
+                    myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
+                } else {
+                    myTodo.setReminder(0);
+                }
+
+                if (saveTime()) {
+                    todoRepository.insertTodo(myTodo);
+                    for(String s : selectedLabels) {
+                        todoRepository.insertTodoCategory(new TodoCategory(userId, s, myTodo.getStartTime(), myTodo.getPlanDate()));
+                    }
+                }
+                NavController controller = Navigation.findNavController(getView());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                bundle.putString("userId",getArguments().getString("userId"));
+                bundle.putInt("modify",getArguments().getInt("modify"));
+                if(getArguments().getString("weekView")!=null)
+                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView);
+                else
+                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
 
             }
         });

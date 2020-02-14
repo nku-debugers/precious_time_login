@@ -3,6 +3,8 @@ package comv.example.zyrmj.precious_time01.activities;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.circleprogress.DonutProgress;
 import comv.example.zyrmj.precious_time01.constant.Constant;
+import comv.example.zyrmj.precious_time01.entity.User;
+import comv.example.zyrmj.precious_time01.repository.UserRepository;
 import comv.example.zyrmj.precious_time01.ripplelibrary.RippleBackground;
 import comv.example.zyrmj.precious_time01.service.MonitorService;
 import comv.example.zyrmj.precious_time01.Utils.L;
@@ -15,6 +17,7 @@ import comv.example.zyrmj.precious_time01.Utils.TimeConvert;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,6 +28,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class TimeActivity extends BaseActivity {
@@ -48,10 +52,23 @@ public class TimeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main1);
+        firstRun();
         initView();
         initData();
         setLinstener();
         fillData();
+    }
+
+    private void firstRun() {
+        SharedPreferences sharedPreferences = getSharedPreferences("FirstRun",0);
+        Boolean first_run = sharedPreferences.getBoolean("First",true);
+        if (first_run){
+            sharedPreferences.edit().putBoolean("First",false).commit();
+            User u = new User();
+            UserRepository re = new UserRepository(this);
+            re.insertUsers(u);
+            Toast.makeText(this,"第一次",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

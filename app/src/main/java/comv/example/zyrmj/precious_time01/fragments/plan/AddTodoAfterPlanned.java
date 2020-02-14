@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -47,7 +45,6 @@ import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
-import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import me.leefeng.promptlibrary.PromptButton;
@@ -56,6 +53,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 
 public class AddTodoAfterPlanned extends Fragment implements View.OnClickListener{
     static String TAG = "mytag";
+    private Plan plan;
     private Todo myTodo;
     private ImageView back;
     private Button choseQuote, confirm,clear;
@@ -209,16 +207,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
-                        Bundle bundle = new Bundle();
-                        bundle.putString("delete", "true");
-                        bundle.putString("userId", userId);
-                        bundle.putString("templateName", templateName);
-                        bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                        bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                        bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                        bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
-                        controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
-                        // TODO: 2020/1/14  需要变成新的
+                        controller.navigate(R.id.action_addToDo2_to_editPlan);
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -237,7 +226,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
             public void onClick(View view) {
 
                 saveLabels();
-                if (saveTime()) { // TODO: 2020/1/14 Save Time 的逻辑需要改，控制不能 结束时间 小于开始时间
+                if (saveTime()) { // TODO: 2020/1/14 如果不成功需要 给出 “还有选项没有填写”的提示
                     myTodo.setType(2);
                     if (timeReminder.isChecked()) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
@@ -585,13 +574,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         mTimePickerWeek.setScrollLoop(true);
         // 允许滚动动画
         mTimePickerWeek.setCanShowAnim(true);
-    }
-
-    private String getTime(String time) {
-        String hour=time.substring(0,2);
-        String minute=time.substring(3,5);
-        System.out.println("timeresult "+hour+" "+minute);
-        return hour+":"+minute;
     }
 
     private String getWeek(String selected) {
