@@ -41,11 +41,13 @@ import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
 import comv.example.zyrmj.precious_time01.datepicker.DateFormatUtils;
 import comv.example.zyrmj.precious_time01.entity.Category;
+import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
+import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import me.leefeng.promptlibrary.PromptButton;
@@ -91,11 +93,11 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        todoRepository=new TodoRepository(getContext());
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "offline");
-            todos = (List<Todo>) getArguments().getSerializable("toDos");
-            templateName=getArguments().getString("templateName","");
-            planDate = getArguments().getString("planDate", "");
+            Plan plan= (Plan) getArguments().getSerializable("plan");
+            planDate = plan.getStartDate();
         }
         assignViews();
         init();
@@ -143,6 +145,8 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
     private boolean checkAndInsert(String week, String startFinal, String endFinal) {
         String alreadyExistStart;
         String alreadyExistEnd;
+        //获得所有todos，检查时间冲突
+        todos=todoRepository.getListTodoByPlanDate(userId,planDate);
         Log.d(TAG, "checkAndInsert: the week is" + week);
         for(int i=0 ;i < todos.size(); i++) {
             Log.d(TAG, "checkAndInsert: the start time is" + todos.get(i).getStartTime());
@@ -192,9 +196,9 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
     }
 
     private void enableButtons() {
-        getView().findViewById(R.id.start_time_in_todo).setOnClickListener(this);
-        getView().findViewById(R.id.end_time_in_todo).setOnClickListener(this);
-        getView().findViewById(R.id.week_time_in_todo).setOnClickListener(this);
+        getView().findViewById(R.id.start_time_in_todo_after).setOnClickListener(this);
+        getView().findViewById(R.id.end_time_in_todo_after).setOnClickListener(this);
+        getView().findViewById(R.id.week_time_in_todo_after).setOnClickListener(this);
         week.setOnClickListener(this);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -276,16 +280,11 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
 
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("mytodo", myTodo);
-                    bundle.putSerializable("labels", selectedLabels);
-                    bundle.putSerializable("quotes", selectedQuotes);
-                    bundle.putString("userId", userId);
-                    bundle.putString("templateName", templateName);
-                    bundle.putSerializable("habits", getArguments().getSerializable("habits"));
-                    bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
-                    bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
-                    bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
-                    controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
+                    bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                    bundle.putString("userId",getArguments().getString("userId"));
+                    bundle.putInt("modify",getArguments().getInt("modify"));
+                    if(getArguments().getString("weekView")!=null)
+                    controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
                     // TODO: 2020/1/14 这里也需要改成新的
                 }
             }
@@ -371,7 +370,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
     private void assignViews() {
         week = getView().findViewById(R.id.week_card_after);
         back=getView().findViewById(R.id.back_after);
-        confirm = getView().findViewById(R.id.todo_confirm);
+        confirm = getView().findViewById(R.id.todo_confirm_after);
         clear=getView().findViewById(R.id.clear_after);
         choseQuote = getView().findViewById(R.id.choseQuoteTodo_after);
         timeReminder = getView().findViewById(R.id.time_remind_switch2_after);
