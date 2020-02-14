@@ -1,6 +1,8 @@
 package comv.example.zyrmj.precious_time01.RecycleViewAdapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +21,46 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
+import comv.example.zyrmj.precious_time01.activities.ClockActivity;
+import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.fragments.plan.EditPlan;
+import comv.example.zyrmj.precious_time01.repository.TodoRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
 
 public class TodoAdapter2 extends RecyclerView.Adapter<TodoAdapter2.MyViewHolder> {
    private String userId = "offline";
     private List<Todo> allTodos = new ArrayList<>();
     private int modify=0;
+    private Plan showedPlan;
+    private TodoRepository todoRepository;
+    private Activity currActivity;
+
+    public Activity getCurrActivity() {
+        return currActivity;
+    }
+
+    public void setCurrActivity(Activity currActivity) {
+        this.currActivity = currActivity;
+    }
+
+    public TodoRepository getTodoRepository() {
+        return todoRepository;
+    }
+
+    public void setTodoRepository(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+    }
+
+    public Plan getShowedPlan() {
+        return showedPlan;
+    }
+
+    public void setShowedPlan(Plan showedPlan) {
+        this.showedPlan = showedPlan;
+    }
 
     public List<Todo> getAllTodos() {
         return allTodos;
@@ -79,13 +113,43 @@ public class TodoAdapter2 extends RecyclerView.Adapter<TodoAdapter2.MyViewHolder
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(modify==1) {
+                if (modify == 1 && todo.getType() != 0) {
                     Bundle bundle = new Bundle();
+                    bundle.putSerializable("mytodo", todo);
+                    bundle.putSerializable("plan", showedPlan);
                     bundle.putString("userId", userId);
-                    bundle.putSerializable("todo", todo);
-                    System.out.println("update todo " + todo.getName());
+                    bundle.putInt("modify", 1);
+                    bundle.putString("weekView", "true");
+                    bundle.putString("option", "update");
+                    //deleteTodo
+                    todoRepository.deleteTodo(todo);
+                    todoRepository.deleteCategory(todo.getUserId(), todo.getPlanDate(), todo.getStartTime());
+                    todoRepository.deleteQuote(todo.getUserId(), todo.getPlanDate(), todo.getStartTime());
                     NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_modifyPlan_to_updateTodo,bundle);
+                    controller.navigate(R.id.action_planTodosListView_to_updateTodoAfterPlanned, bundle);
+                }
+                if (modify == 0 && todo.getType() != 0) {
+                    PromptDialog promptDialog = new PromptDialog(currActivity);
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //todo 2/14 计算任务时长,传递给手机管控模块
+                            Intent intent = new Intent();
+                            intent.putExtra("userId", userId);
+                            //传递任务时长
+                            intent.setClass(currActivity, ClockActivity.class);
+                            currActivity.startActivity(intent);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("开始进行此项活动？", cancel, confirm);
                 }
             }
         });

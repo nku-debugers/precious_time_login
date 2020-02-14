@@ -98,7 +98,6 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             userId = getArguments().getString("userId", "offline");
             oldTodo=(Todo)getArguments().getSerializable("mytodo");
             myTodo=new Todo();
-            // TODO: 2020/2/14
             //将oldTodo中的所有数据拷贝到myTodo中（进行深拷贝）
             deepCopyTodo();
             plan = (Plan)getArguments().getSerializable("plan");

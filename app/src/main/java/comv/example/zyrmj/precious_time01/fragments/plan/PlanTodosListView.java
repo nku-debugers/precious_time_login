@@ -157,6 +157,9 @@ public class PlanTodosListView extends Fragment {
         todoAdapter2.setUserId(userId);
         todoAdapter2.setModify(modify);
         todoAdapter2.setAllTodos(todos);
+        todoAdapter2.setShowedPlan(plan);
+        todoAdapter2.setTodoRepository(new TodoRepository(getContext()));
+        todoAdapter2.setCurrActivity(getActivity());
         recyclerView.setAdapter(todoAdapter2);
 
         //更改模式下，允许滑动删除

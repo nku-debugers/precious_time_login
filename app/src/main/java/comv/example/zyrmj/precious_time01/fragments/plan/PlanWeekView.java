@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 
@@ -42,6 +43,9 @@ import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -288,27 +292,54 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         int index=event.getIndex();
         Todo todo=todos.get(index);
 
-        //倒计时
-        if(modify==0)
-        {
+        //开启手机管控模块
 
+        if(modify==0&&todo.getType()!=0)
+        {
+            PromptDialog promptDialog = new PromptDialog(getActivity());
+            PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                @Override
+                public void onClick(PromptButton button) {
+                    //todo 2/14 计算任务时长,传递给手机管控模块
+                    Intent intent = new Intent();
+                    intent.putExtra("userId", userId);
+                    //传递任务时长
+                    intent.setClass(getContext(), ClockActivity.class);
+                    startActivity(intent);
+                }
+            });
+            PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                @Override
+                public void onClick(PromptButton button) {
+                    //Nothing
+                }
+            });
+            confirm.setTextColor(Color.parseColor("#DAA520"));
+            confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+            promptDialog.showWarnAlert("开始进行此项活动？", cancel, confirm);
         }
         //更新todo，向更新页面传递plan,userId,需更新的todo
-        else
+        if(modify==1&&todo.getType()!=0)
         {
             Bundle bundle=new Bundle();
             bundle.putSerializable("mytodo",todo);
             bundle.putSerializable("plan",showedPlan);
             bundle.putString("userId",userId);
             bundle.putInt("modify",1);
-            bundle.putString("weekView", "ture");
+            bundle.putString("weekView", "true");
             bundle.putString("option","update");
+            //deleteTodo
+            TodoRepository todoRepository=new TodoRepository(getContext());
+           todoRepository.deleteTodo(todo);
+           todoRepository.deleteCategory(todo.getUserId(),todo.getPlanDate(),todo.getStartTime() );
+            todoRepository.deleteQuote(todo.getUserId(),todo.getPlanDate(),todo.getStartTime());
             NavController controller = Navigation.findNavController(getView());
             controller.navigate(R.id.action_planWeekView_to_updateTodoAfterPlanned, bundle);
 
         }
 
     }
+
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
