@@ -56,6 +56,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 
 public class AddTodoAfterPlanned extends Fragment implements View.OnClickListener{
     static String TAG = "mytag";
+    private Plan plan;
     private Todo myTodo;
     private ImageView back;
     private Button choseQuote, confirm,clear;
@@ -90,6 +91,8 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         return inflater.inflate(R.layout.add_todo_after_planned, container, false);
     }
 
+    // TODO: 2020/2/14  需要把全局变量 todos 删掉，templateName 也要删掉，planDate也要删掉，增加一个plan
+    
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -210,15 +213,8 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
                         Bundle bundle = new Bundle();
-                        bundle.putString("delete", "true");
-                        bundle.putString("userId", userId);
-                        bundle.putString("templateName", templateName);
-                        bundle.putSerializable("habits",getArguments().getSerializable("habits"));
-                        bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
-                        bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
-                        bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                        // TODO: 2020/2/14 给主界面传参数，以供确认并没有添加新的todo
                         controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
-                        // TODO: 2020/1/14  需要变成新的
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {

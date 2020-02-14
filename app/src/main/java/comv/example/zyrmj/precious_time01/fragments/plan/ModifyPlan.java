@@ -448,6 +448,7 @@ nameEvent.observe(this, new Observer<String>() {
                                     //计算endDate
                                     Calendar cal = Calendar.getInstance();
                                     String splieTimes[] = plan.getStartDate().split("/");
+                                    // TODO: 2020/2/14 计划时长要加 背景提示，写成 2020/09/02 格式 
                                     Date start = new Date((Integer.valueOf(splieTimes[0]) - 1900),
                                             (Integer.valueOf(splieTimes[1]) - 1), (Integer.valueOf(splieTimes[2])));
                                     cal.setTime(start);
