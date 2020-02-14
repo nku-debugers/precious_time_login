@@ -133,6 +133,10 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                 Bundle bundle=new Bundle();
                 bundle.putSerializable("plan",showedPlan);
                 bundle.putString("userId",userId);
+                bundle.putInt("modify",1);
+                bundle.putString("weekView", "ture");
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_planWeekView_to_addTodoAfterPlanned, bundle);
 
 
             }
@@ -188,7 +192,6 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                     bundle.putSerializable("plan", showedPlan);
                     bundle.putString("userId", userId);
                     bundle.putInt("modify",modify);
-                    System.out.println("modify:"+modify);
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_planWeekView_to_planTodosListView, bundle);
                 }

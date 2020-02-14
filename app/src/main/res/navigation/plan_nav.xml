@@ -85,6 +85,12 @@
         <action
             android:id="@+id/action_planWeekView_to_planShow"
             app:destination="@id/planShow" />
+        <action
+            android:id="@+id/action_planWeekView_to_addTodoAfterPlanned"
+            app:destination="@id/addTodoAfterPlanned" />
+        <action
+            android:id="@+id/action_planWeekView_to_updateTodoAfterPlanned"
+            app:destination="@id/updateTodoAfterPlanned" />
     </fragment>
     <fragment
         android:id="@+id/planTodosListView"
@@ -112,5 +118,23 @@
         <action
             android:id="@+id/action_planShow_to_choseTemplate"
             app:destination="@id/choseTemplate" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateTodoAfterPlanned"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.UpdateTodoAfterPlanned"
+        android:label="add_todo_after_planned"
+        tools:layout="@layout/add_todo_after_planned" >
+        <action
+            android:id="@+id/action_updateTodoAfterPlanned_to_planWeekView"
+            app:destination="@id/planWeekView" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTodoAfterPlanned"
+        android:name="comv.example.zyrmj.precious_time01.fragments.plan.AddTodoAfterPlanned"
+        android:label="add_todo_after_planned"
+        tools:layout="@layout/add_todo_after_planned" >
+        <action
+            android:id="@+id/action_addTodoAfterPlanned_to_planWeekView"
+            app:destination="@id/planWeekView" />
     </fragment>
 </navigation>
