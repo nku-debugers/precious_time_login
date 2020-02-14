@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -47,7 +45,6 @@ import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
-import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import me.leefeng.promptlibrary.PromptButton;
@@ -91,8 +88,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         return inflater.inflate(R.layout.add_todo_after_planned, container, false);
     }
 
-    // TODO: 2020/2/14  需要把全局变量 todos 删掉，templateName 也要删掉，planDate也要删掉，增加一个plan
-    
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -212,9 +207,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
-                        Bundle bundle = new Bundle();
-                        // TODO: 2020/2/14 给主界面传参数，以供确认并没有添加新的todo
-                        controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
+                        controller.navigate(R.id.action_addToDo2_to_editPlan);
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -233,7 +226,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
             public void onClick(View view) {
 
                 saveLabels();
-                if (saveTime()) { // TODO: 2020/1/14 Save Time 的逻辑需要改，控制不能 结束时间 小于开始时间
+                if (saveTime()) { // TODO: 2020/1/14 如果不成功需要 给出 “还有选项没有填写”的提示
                     myTodo.setType(2);
                     if (timeReminder.isChecked()) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
@@ -581,13 +574,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         mTimePickerWeek.setScrollLoop(true);
         // 允许滚动动画
         mTimePickerWeek.setCanShowAnim(true);
-    }
-
-    private String getTime(String time) {
-        String hour=time.substring(0,2);
-        String minute=time.substring(3,5);
-        System.out.println("timeresult "+hour+" "+minute);
-        return hour+":"+minute;
     }
 
     private String getWeek(String selected) {
