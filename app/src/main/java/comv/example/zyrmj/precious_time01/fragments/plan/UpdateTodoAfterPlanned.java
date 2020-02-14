@@ -56,6 +56,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 
 public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickListener{
     static String TAG = "mytag";
+    private Todo oldTodo;
     private Todo myTodo;
     private ImageView back;
     private Button choseQuote, confirm,delete;
@@ -63,17 +64,17 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     private EditText todoName, reminder;
     private LabelsView labelsView;
     private String userId = "offline";
-    private ArrayList<String> labels, selectedLabels;
+    private ArrayList<String> labels=new ArrayList<>(), selectedLabels=new ArrayList<>();
     private CategoryRepository categoryRepository;
     private TodoRepository todoRepository;
-    private ArrayList<Integer> selectedIndex;
+    private ArrayList<Integer> selectedIndex=new ArrayList<>();
     private TextView mTvSelectedTime1, mTvSelectedTime2, mTvSelectedTimeWeek;
     private CustomDatePicker mTimePicker1, mTimePicker2, mTimePickerWeek;
     private CardView start, end, week;
     private Date startDate, endDate;
     private boolean startDateModified, endDateModified;
     private boolean timeReverse;
-    private ArrayList<Quote> selectedQuotes;
+    private ArrayList<Quote> selectedQuotes=new ArrayList<>();
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);//设置日期格式
     private SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.CANADA);
     private String[] weekString = {"日", "一", "二", "三", "四", "五", "六"};
@@ -92,19 +93,42 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        todoRepository=new TodoRepository(getContext());
         if (getArguments() != null) {
             userId = getArguments().getString("userId", "offline");
-            myTodo = (Todo)getArguments().getSerializable("mytodo");
+            oldTodo=(Todo)getArguments().getSerializable("mytodo");
+            myTodo=new Todo();
+            // TODO: 2020/2/14
+            //将oldTodo中的所有数据拷贝到myTodo中（进行深拷贝）
+            deepCopyTodo();
             plan = (Plan)getArguments().getSerializable("plan");
+            planDate=plan.getStartDate();
         }
         assignViews();
         init();
         enableButtons();
     }
 
+    //todo深拷贝
+    private void deepCopyTodo()
+    {
+        myTodo.setUserId(oldTodo.getUserId());
+        myTodo.setStartTime(oldTodo.getStartTime());
+        myTodo.setEndTime(oldTodo.getEndTime());
+        myTodo.setLength(oldTodo.getLength());
+        myTodo.setReminder(oldTodo.getReminder());
+        myTodo.setName(oldTodo.getName());
+        myTodo.setType(oldTodo.getType());
+        myTodo.setCompletion(oldTodo.getCompletion());
+        myTodo.setFailureTrigger(oldTodo.getFailureTrigger());
+        myTodo.setPlanDate(oldTodo.getPlanDate());
+    }
+
     private boolean checkAndInsert(String week, String startFinal, String endFinal) {
         String alreadyExistStart;
         String alreadyExistEnd;
+        //获得所有todos，检查时间冲突
+        todos=todoRepository.getListTodoByPlanDate(userId,planDate);
         Log.d(TAG, "checkAndInsert: the week is" + week);
         for(int i=0 ;i < todos.size(); i++) {
             Log.d(TAG, "checkAndInsert: the start time is" + todos.get(i).getStartTime());
@@ -192,10 +216,9 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
     }
 
     private void enableButtons() {
-        getView().findViewById(R.id.start_time_in_todo).setOnClickListener(this);
-        getView().findViewById(R.id.end_time_in_todo).setOnClickListener(this);
-        getView().findViewById(R.id.week_time_in_todo).setOnClickListener(this);
-        getView().findViewById(R.id.todo_length).setOnClickListener(this);
+        getView().findViewById(R.id.start_time_in_todo_after).setOnClickListener(this);
+        getView().findViewById(R.id.end_time_in_todo_after).setOnClickListener(this);
+        getView().findViewById(R.id.week_time_in_todo_after).setOnClickListener(this);
         week.setOnClickListener(this);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -203,18 +226,11 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             public void onClick(View view) {
                 PromptDialog promptDialog = new PromptDialog(getActivity());
                 PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    // TODO: 2020/2/14
+                    //放弃更改，插入原来的todo
                     @Override
                     public void onClick(PromptButton button) {
-                        NavController controller = Navigation.findNavController(getView());
-                        Bundle bundle = new Bundle();
-                        if (getArguments().getString("card") != null)
-                        {
-                            bundle.putString("userId",userId);
-                            controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
-                        }
-                        else {
-                            // TODO: 2020/1/14
-                        }
+
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -229,140 +245,21 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {
+            // TODO: 2020/2/14
+            //收集页面信息，插入更改后的todo
             @Override
             public void onClick(View view) {
-                if(getArguments().getString("card")!=null)
-                {
-                    //更改labels
-                    saveLabels();
-                    //更改Quotes
-                    if (timeReminder.isChecked()) {
-                        myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
-                    } else {
-                        myTodo.setReminder(0);
-                    }
-                    if (todoName.getText().length() != 0) {
-                        myTodo.setName(todoName.getText().toString());
-                    } else {
-                        PromptDialog promptDialog = new PromptDialog(getActivity());
-                        promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
-                            @Override
-                            public void onClick(PromptButton button) {
-
-                            }
-                        }));
-                    }
-                    String startTime="1 times",endTime="";
-
-                    startTime = mTvSelectedTime1.getText().toString();
-                    endTime = mTvSelectedTime2.getText().toString();
-
-                    String week = getWeek(mTvSelectedTimeWeek.getText().toString());
-                    String startFinal = week + "-" + startTime;
-                    String endFinal = week + "-" + endTime;
-                    myTodo.setStartTime(startFinal);
-                    myTodo.setEndTime(endFinal);
 
 
-                    selectedLabels = new ArrayList<String>(new HashSet<String>(selectedLabels));
-                    List<Category>allCategories = categoryRepository.getAllCateories(userId);
-                    for(String s:selectedLabels) {
-                        int flag = 0;
-                        for(Category c: allCategories) {
-                            if (c.getName().equals(s))
-                                flag = 1;
-                        }
-                        if (flag == 0) {
-                            categoryRepository.insertCategory(new Category(userId, s));
-                        }
-                    }
 
-                    myTodo.setPlanDate(planDate);
-                    todoRepository.insertTodo(myTodo);
-                    for(Quote quote:selectedQuotes) {
-                        todoRepository.insertTodoQuote(new TodoQuote(quote, myTodo));
-                    }
-                    for(String s : selectedLabels) {
-                        todoRepository.insertTodoCategory(new TodoCategory(userId, s, myTodo.getStartTime(), myTodo.getPlanDate()));
-                    }
-
-                    Bundle bundle=new Bundle();
-                    bundle.putString("userId",userId);
-                    bundle.putSerializable("plan", plan);
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
-
-                }
-                else {
-                    saveLabels();
-                    myTodo.setLength(mTvSelectedTimeWeek.getText().toString());
-                    if (saveTime()) {
-                        myTodo.setType(2);
-                        if (timeReminder.isChecked()) {
-                            myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
-                        } else {
-                            myTodo.setReminder(0);
-                        }
-                        if (todoName.getText().length() != 0) {
-                            myTodo.setName(todoName.getText().toString());
-                        } else {
-                            PromptDialog promptDialog = new PromptDialog(getActivity());
-                            promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
-                                @Override
-                                public void onClick(PromptButton button) {
-
-                                }
-                            }));
-                        }
-                        NavController controller = Navigation.findNavController(getView());
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("mytodo", myTodo);
-                        bundle.putSerializable("labels", selectedLabels);
-                        bundle.putSerializable("quotes", selectedQuotes);
-                        bundle.putString("userId", userId);
-                        bundle.putString("templateName", getArguments().getString("templateName"));
-                        bundle.putSerializable("habits", getArguments().getSerializable("habits"));
-                        bundle.putSerializable("idleTimes", getArguments().getSerializable("idleTimes"));
-                        bundle.putSerializable("toDoExtends", getArguments().getSerializable("toDoExtends"));
-                        bundle.putSerializable("toDos", getArguments().getSerializable("toDos"));
-                        controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
-                    }
-                }
             }
         });
+        //删除原todo,因为已在之前页面删掉，这里直接返回即可
         delete.setOnClickListener(new View.OnClickListener() {
+            // TODO: 2020/2/14
             @Override
             public void onClick(View view) {
-                NavController controller = Navigation.findNavController(getView());
-                Bundle bundle = new Bundle();
-                if(!(getArguments().getString("card")==null))
-                {
-                    PromptDialog promptDialog = new PromptDialog(getActivity());
-                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
-                        @Override
-                        public void onClick(PromptButton button) {
-                            bundle.putString("userId",userId);
-                            controller.navigate(R.id.action_updateTodo_to_modifyPlan, bundle);
 
-                        }
-                    });
-                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
-                        @Override
-                        public void onClick(PromptButton button) {
-                            //Nothing
-                        }
-                    });
-                    confirm.setTextColor(Color.parseColor("#DAA520"));
-                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
-                    promptDialog.showWarnAlert("确认删除？", cancel, confirm);
-
-                }
-
-                else
-                {
-
-                    controller.navigate(R.id.action_updateTodo_to_editPlan, bundle);
-                }
             }
         });
 

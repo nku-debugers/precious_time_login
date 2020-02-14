@@ -16,9 +16,6 @@ public class PlanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
-        Plan plan=new Plan();
-        plan.setStartDate("2019-01-13");
-        new PlanRepository(this).deletePlan(plan);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }

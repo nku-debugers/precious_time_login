@@ -285,6 +285,8 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     bundle.putInt("modify",getArguments().getInt("modify"));
                     if(getArguments().getString("weekView")!=null)
                     controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
+                    else
+                        controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
                     // TODO: 2020/1/14 这里也需要改成新的
                 }
             }
