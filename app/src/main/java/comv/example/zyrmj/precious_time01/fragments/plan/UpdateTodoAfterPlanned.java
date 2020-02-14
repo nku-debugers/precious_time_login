@@ -250,9 +250,9 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                         bundle.putString("userId",getArguments().getString("userId"));
                         bundle.putInt("modify",getArguments().getInt("modify"));
                         if(getArguments().getString("weekView")!=null)
-                            controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
+                            controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView);
                         else
-                            controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
+                            controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -327,9 +327,9 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                 bundle.putString("userId",getArguments().getString("userId"));
                 bundle.putInt("modify",getArguments().getInt("modify"));
                 if(getArguments().getString("weekView")!=null)
-                    controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
+                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView);
                 else
-                    controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
+                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
 
             }
         });
