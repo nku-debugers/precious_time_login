@@ -36,6 +36,7 @@ import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
 import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
@@ -328,14 +329,24 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             bundle.putInt("modify",1);
             bundle.putString("weekView", "true");
             bundle.putString("option","update");
-            //deleteTodo
+            ArrayList<String> selectedLabels;
+            ArrayList<Quote> selectedQuotes=new ArrayList<>();
             TodoRepository todoRepository=new TodoRepository(getContext());
+            selectedLabels = (ArrayList<String>)todoRepository.getCategories(userId, showedPlan.getStartDate(),todo.getStartTime());
+            if(selectedLabels==null)
+                selectedLabels=new ArrayList<>();
+            for(String s: todoRepository.getQuotes(userId, showedPlan.getStartDate(), todo.getStartTime())) {
+                Quote quote = new Quote(userId, s, "-1");
+                selectedQuotes.add(quote);
+            }
+            bundle.putSerializable("selectedLabels",selectedLabels);
+            bundle.putSerializable("selectedQuotes",selectedQuotes);
+            //deleteTodo
            todoRepository.deleteTodo(todo);
            todoRepository.deleteCategory(todo.getUserId(),todo.getPlanDate(),todo.getStartTime() );
             todoRepository.deleteQuote(todo.getUserId(),todo.getPlanDate(),todo.getStartTime());
             NavController controller = Navigation.findNavController(getView());
             controller.navigate(R.id.action_planWeekView_to_updateTodoAfterPlanned, bundle);
-
         }
 
     }

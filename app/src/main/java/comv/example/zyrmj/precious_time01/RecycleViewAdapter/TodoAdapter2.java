@@ -23,6 +23,7 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.fragments.plan.EditPlan;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
@@ -119,8 +120,18 @@ public class TodoAdapter2 extends RecyclerView.Adapter<TodoAdapter2.MyViewHolder
                     bundle.putSerializable("plan", showedPlan);
                     bundle.putString("userId", userId);
                     bundle.putInt("modify", 1);
-                    bundle.putString("weekView", "true");
                     bundle.putString("option", "update");
+                    ArrayList<String> selectedLabels;
+                    ArrayList<Quote> selectedQuotes=new ArrayList<>();
+                    selectedLabels = (ArrayList<String>)todoRepository.getCategories(userId, showedPlan.getStartDate(),todo.getStartTime());
+                    if(selectedLabels==null)
+                        selectedLabels=new ArrayList<>();
+                    for(String s: todoRepository.getQuotes(userId, showedPlan.getStartDate(), todo.getStartTime())) {
+                        Quote quote = new Quote(userId, s, "-1");
+                        selectedQuotes.add(quote);
+                    }
+                    bundle.putSerializable("selectedLabels",selectedLabels);
+                    bundle.putSerializable("selectedQuotes",selectedQuotes);
                     //deleteTodo
                     todoRepository.deleteTodo(todo);
                     todoRepository.deleteCategory(todo.getUserId(), todo.getPlanDate(), todo.getStartTime());
