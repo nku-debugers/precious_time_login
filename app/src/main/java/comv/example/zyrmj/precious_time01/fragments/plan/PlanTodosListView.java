@@ -131,6 +131,23 @@ public class PlanTodosListView extends Fragment {
 
             }
         });
+
+
+        //添加todo,跳转到添加页面
+        addTodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //传递当前plan
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("plan",plan);
+                bundle.putString("userId",userId);
+                bundle.putInt("modify",1);
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_planTodosListView_to_addTodoAfterPlanned, bundle);
+
+
+            }
+        });
     }
 
     private void initList() {

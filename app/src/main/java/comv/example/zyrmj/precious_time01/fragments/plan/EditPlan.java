@@ -143,7 +143,8 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             Todo todo=new Todo();
             Todo copiedTodo=copied.getTodo();
             todo.setUserId(copiedTodo.getUserId());
-            todo.setStartTime(copiedTodo.getEndTime());
+            todo.setStartTime(copiedTodo.getStartTime());
+            todo.setEndTime(copiedTodo.getEndTime());
             todo.setLength(copiedTodo.getLength());
             todo.setReminder(copiedTodo.getReminder());
             todo.setName(copiedTodo.getName());

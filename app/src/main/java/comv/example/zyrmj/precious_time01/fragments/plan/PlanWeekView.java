@@ -293,10 +293,18 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         {
 
         }
-        //更新todo，向更新页面传递plan name ,userId,需更新的todo
+        //更新todo，向更新页面传递plan,userId,需更新的todo
         else
         {
-
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("mytodo",todo);
+            bundle.putSerializable("plan",showedPlan);
+            bundle.putString("userId",userId);
+            bundle.putInt("modify",1);
+            bundle.putString("weekView", "ture");
+            bundle.putString("option","update");
+            NavController controller = Navigation.findNavController(getView());
+            controller.navigate(R.id.action_planWeekView_to_updateTodoAfterPlanned, bundle);
 
         }
 
