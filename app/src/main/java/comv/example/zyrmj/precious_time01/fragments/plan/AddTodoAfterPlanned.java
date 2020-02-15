@@ -105,6 +105,15 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         enableButtons();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent i = new Intent(getActivity(), LongRunningService.class);
+        i.setAction("notice");
+        getActivity().startService(i);
+        Log.d(TAG, "onStart: after start");
+    }
+
     private void saveLabels() {
         selectedLabels = new ArrayList<>();
         for (int index : selectedIndex) {
@@ -279,10 +288,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     }
 
                     NavController controller = Navigation.findNavController(getView());
-
-
-                    Intent i = new Intent(getActivity(), LongRunningService.class);
-                    getActivity().startService(intent);
 
 
 
