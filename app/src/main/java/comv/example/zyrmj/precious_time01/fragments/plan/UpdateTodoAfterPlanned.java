@@ -1,5 +1,6 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -47,6 +48,7 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
+import comv.example.zyrmj.precious_time01.notification.LongRunningService;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
@@ -223,6 +225,16 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
         for (int index : selectedIndex) {
             selectedLabels.add(labels.get(index));
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent i = new Intent(getActivity(), LongRunningService.class);
+        i.putExtra("num", 2);
+        i.setAction("notice");
+        getActivity().startService(i);
+        Log.d(TAG, "onStart: after start");
     }
 
     private void enableButtons() {

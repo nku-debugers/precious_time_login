@@ -109,6 +109,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
     public void onStart() {
         super.onStart();
         Intent i = new Intent(getActivity(), LongRunningService.class);
+        i.putExtra("num", 1);
         i.setAction("notice");
         getActivity().startService(i);
         Log.d(TAG, "onStart: after start");

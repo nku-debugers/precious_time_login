@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import comv.example.zyrmj.precious_time01.repository.PlanRepository;
  * A simple {@link Fragment} subclass.
  */
 public class PlanShow extends Fragment {
+    private static String TAG = "mytag";
     private ImageView back;
     private FloatingActionButton addPlan;
     private RecyclerView recyclerView;
@@ -50,6 +52,7 @@ public class PlanShow extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: in plan show");
         super.onActivityCreated(savedInstanceState);
         if (!(getArguments() == null)) {
             userId = getArguments().getString("userId", "offline");

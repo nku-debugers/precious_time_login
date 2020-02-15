@@ -80,8 +80,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
             //再次开启LongRunningService这个服务，从而可以
-            Intent i = new Intent(context, LongRunningService.class);
-            context.startService(i);
+//            Intent i = new Intent(context, LongRunningService.class);
+//            context.startService(i);
         }
 
     }
