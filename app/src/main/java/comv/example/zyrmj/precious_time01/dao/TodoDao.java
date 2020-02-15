@@ -8,12 +8,16 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import androidx.room.Update;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 
 @Dao
 public interface TodoDao {
     @Insert
     void insert(Todo... todos);
+
+    @Update
+    void update(Todo...todos);
 
     @Delete
     void delete(Todo... todos);
