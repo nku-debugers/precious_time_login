@@ -58,7 +58,7 @@
             android:theme="@style/horizontal_slide"></activity>
 
         <service android:name=".service.MonitorService"></service>
-
+        <receiver android:name=".notification.AlarmReceiver" ></receiver>
     </application>
 
 </manifest>
