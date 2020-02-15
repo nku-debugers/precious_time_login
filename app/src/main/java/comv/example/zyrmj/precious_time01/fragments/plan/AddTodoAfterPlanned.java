@@ -1,5 +1,6 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -44,6 +45,7 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
+import comv.example.zyrmj.precious_time01.notification.LongRunningService;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
@@ -52,6 +54,7 @@ import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
 
 public class AddTodoAfterPlanned extends Fragment implements View.OnClickListener{
+    private Intent intent;
     static String TAG = "mytag";
     private Plan plan;
     private Todo myTodo;
@@ -268,6 +271,13 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     }
 
                     NavController controller = Navigation.findNavController(getView());
+
+
+                    Intent i = new Intent(getActivity(), LongRunningService.class);
+                    getActivity().startService(intent);
+
+
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("plan",getArguments().getSerializable("plan"));
                     bundle.putString("userId",getArguments().getString("userId"));
