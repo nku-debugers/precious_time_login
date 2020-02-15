@@ -210,7 +210,15 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
-                        controller.navigate(R.id.action_addToDo2_to_editPlan);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                        bundle.putString("userId",getArguments().getString("userId"));
+                        bundle.putInt("modify",getArguments().getInt("modify"));
+                        if(getArguments().getString("weekView")!=null)
+                            controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
+                        else
+                            controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
+
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -286,7 +294,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
                     else
                         controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
-                    // TODO: 2020/1/14 这里也需要改成新的
                 }
             }
         });
