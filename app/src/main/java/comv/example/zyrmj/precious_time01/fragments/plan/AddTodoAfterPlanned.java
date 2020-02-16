@@ -290,8 +290,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
 
                     NavController controller = Navigation.findNavController(getView());
 
-
-
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("plan",getArguments().getSerializable("plan"));
                     bundle.putString("userId",getArguments().getString("userId"));

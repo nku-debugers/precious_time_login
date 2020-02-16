@@ -113,6 +113,7 @@ public class TimeDiff {
         Date date = new Date();
         calendar.setTime(date);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        if (dayOfWeek < 0) dayOfWeek = 6;
         return dateTime.substring(0, 1).equals(dayOfWeek + "");
     }
 
