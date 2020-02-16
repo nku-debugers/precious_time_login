@@ -59,6 +59,7 @@
 
         <service android:name=".service.MonitorService"></service>
         <receiver android:name=".notification.AlarmReceiver" ></receiver>
+        <receiver android:name=".notification.NotificationBroadcastReceiver"></receiver>
     </application>
 
 </manifest>

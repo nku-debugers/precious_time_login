@@ -96,14 +96,14 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         enableButtons();
         TextView Name = getView().findViewById(R.id.planName);
         Name.setText(showedPlan.getPlanName());
-        List<Todo>temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
-        alarmTodos = new ArrayList<>();
-        for (int i = 0; i < temp.size(); i++) {
-            if (getCurrentWeekDay(temp.get(i).getStartTime())) {
-                alarmTodos.add(temp.get(i));
-            }
-        }
-        setAlarms();
+//        List<Todo>temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
+//        alarmTodos = new ArrayList<>();
+//        for (int i = 0; i < temp.size(); i++) {
+//            if (getCurrentWeekDay(temp.get(i).getStartTime()) && temp.get(i).getCompletion()==0) {
+//                alarmTodos.add(temp.get(i));
+//            }
+//        }
+//        setAlarms();
     }
 
     private void setAlarms() {

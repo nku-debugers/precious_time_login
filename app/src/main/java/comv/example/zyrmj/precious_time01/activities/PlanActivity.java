@@ -5,17 +5,34 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.User;
+import comv.example.zyrmj.precious_time01.notification.LongRunningService;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
+import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.precious_time01.repository.UserRepository;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-public class PlanActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getAlarmMillis;
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getCurrentWeekDay;
+
+public class PlanActivity extends AppCompatActivity {
+    private List<Todo> alarmTodos;
+    private String userId = "offline";
+    private Plan showedPlan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +41,74 @@ public class PlanActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         firstRun();
+        Intent intent = getIntent();
+        if (intent != null && intent.getStringExtra("userId") != null) {
+            userId = intent.getStringExtra("userId");
+        }
+        showedPlan = choosePlan();
+        if (showedPlan != null) {
+            List<Todo> temp = new TodoRepository(this).getListTodoByPlanDate(userId, showedPlan.getStartDate());
+            alarmTodos = new ArrayList<>();
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/mm/dd", Locale.CHINA);
+            String today = simpleDateFormat.format(date);
+//            if (temp.size() > 0) {
+//                String week = temp.get(0).getPlanDate()
+//            }
+            for (int i = 0; i < temp.size(); i++) {
+                if (getCurrentWeekDay(temp.get(i).getStartTime()) && temp.get(i).getCompletion() == 0) {
+                    alarmTodos.add(temp.get(i));
+                }
+            }
+            setAlarms();
+        }
+
         NavController controller = Navigation.findNavController(this, R.id.fragment);
         NavigationUI.setupActionBarWithNavController(this, controller);
+    }
+
+    private Plan choosePlan() {
+        List<Plan> plans = new PlanRepository(this).getAllPlans(userId);
+        System.out.println("plans result");
+        Date currDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currDateString = sdf.format(currDate);
+        Plan chosenPlan = null;
+        int diff = Integer.MAX_VALUE;
+        for (Plan plan : plans) {
+            System.out.println(plan.getPlanName());
+            System.out.println(plan.getStartDate());
+            System.out.println(plan.getEndDate());
+            int distance = TimeDiff.daysBetween(plan.getStartDate(), currDateString);
+            if (distance < diff) {
+                diff = distance;
+                chosenPlan = plan;
+            }
+
+        }
+//        System.out.println("final plan");
+//        System.out.println(chosenPlan.getPlanName());
+//        System.out.println(chosenPlan.getStartDate());
+//        System.out.println(chosenPlan.getEndDate());
+        return chosenPlan;
+    }
+
+    private void setAlarms() {
+        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
+        for (int i = 0; i < alarmTodos.size(); i++) {
+            if (alarmTodos.get(i).getReminder() > 0) {
+                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
+                Intent myIntent = new Intent(this, LongRunningService.class);
+                Log.d("mytag", "setAlarms: The k is " + k);
+                myIntent.putExtra("Millis", k);
+                myIntent.putExtra("userId", userId);
+                myIntent.putExtra("todoName", alarmTodos.get(i).getName());
+                myIntent.putExtra("todoStartTime", alarmTodos.get(i).getStartTime());
+                myIntent.setAction("notice");
+                Log.d("mytag", "setAlarms: this is the " + i + " time");
+                startService(myIntent);
+            }
+        }
     }
 
     @Override
