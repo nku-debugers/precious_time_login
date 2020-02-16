@@ -135,10 +135,7 @@ public class TimeDiff {
         Log.d("mytag", "the DateTimeMillis are " + MillisOfDateTime + dateTime);
         Log.d("mytag", "the Millis are" + Millis);
 
-        if (Millis >= 0) {
-            return Millis;
-        }
-        else return 0;
+        return Millis;
 
 
     }

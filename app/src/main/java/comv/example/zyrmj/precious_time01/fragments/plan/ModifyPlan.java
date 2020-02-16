@@ -507,6 +507,7 @@ nameEvent.observe(this, new Observer<String>() {
                                                 toDoExtend.getTodo().setPlanDate(plandate);
                                                 toDoExtend.getTodo().setUserId(userId);
                                             }
+
                                             todoRepository.insertTodo(toDoExtend.getTodo());
 
                                             for(String s : toDoExtend.getLabels() ) {
@@ -524,6 +525,7 @@ nameEvent.observe(this, new Observer<String>() {
                                         Bundle bundle=new Bundle();
                                         bundle.putSerializable("plan",plan);
                                         bundle.putString("userId",userId);
+                                        bundle.putInt("fromModify", 1);
                                         NavController controller = Navigation.findNavController(getView());
                                         controller.navigate(R.id.action_modifyPlan_to_planWeekView, bundle);
 
