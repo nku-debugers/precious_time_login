@@ -245,13 +245,9 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             controller.navigate(R.id.action_planWeekView_to_choseTemplate, bundle);
         } else {
             if (getArguments() != null && getArguments().getSerializable("plan") != null) {
-                Plan oldPlan = (Plan) getArguments().getSerializable("plan");
-                Plan plan=new Plan();
-                plan.setStartDate(oldPlan.getStartDate());
-                plan.setEndDate(oldPlan.getEndDate());
-                plan.setPlanName(oldPlan.getPlanName());
-                plan.setUserId(oldPlan.getUserId());
+                Plan plan = (Plan) getArguments().getSerializable("plan");
                 modify=getArguments().getInt("modify");
+                //if..
                 return plan;
             } else {
                 System.out.println("plans result");
