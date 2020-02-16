@@ -37,6 +37,10 @@ public class LongRunningService extends Service {
         //此处设置开启AlarmReceiver这个Service
         Intent i = new Intent(this, AlarmReceiver.class);
         i.setAction("notice");
+        i.putExtra("userId", intent.getStringExtra("userId"));
+        i.putExtra("todoName", intent.getStringExtra("todoName"));
+        Log.d(TAG, "onStartCommand: the start time is: " + intent.getStringExtra("todoStartTime"));
+        i.putExtra("todoStartTime", intent.getStringExtra("todoStartTime"));
         Random  r=new Random();
         if (intent.getIntExtra("num", 0) == 1) {
             PendingIntent pi = PendingIntent.getBroadcast(this, 1, i, 0);
