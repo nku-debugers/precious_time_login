@@ -46,7 +46,9 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="15dp"
             android:max="10"
-            android:progress="3" />
+            android:progress="3"
+            android:progressDrawable="@drawable/po_seekbar"
+            android:thumb="@drawable/seekbar_thumb" />
 
     </LinearLayout>
 
@@ -125,22 +127,20 @@
 
     <comv.example.zyrmj.precious_time01.PlanFinishLayout
         android:id="@+id/textLayout"
-        android:layout_width="60dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline160"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="@+id/guideline161"
         app:layout_constraintTop_toTopOf="@+id/guideline159"
         app:layout_constraintVertical_bias="0.100000024" />
 
-    <TextView
-        android:id="@+id/plan_finish_number"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline161"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/guideline159"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline157" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
