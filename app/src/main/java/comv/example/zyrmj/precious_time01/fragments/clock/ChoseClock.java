@@ -53,6 +53,7 @@ public class ChoseClock extends Fragment {
     }
 
     public void enableButtons(){
+        //自觉模式
         accordButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {

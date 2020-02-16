@@ -41,6 +41,7 @@ public class TodoRepository {
     public void deleteTodo(Todo... todos) {
         new deleteTodoAsyncTask(todoDao).execute(todos);
     }
+    public void updateTodo(Todo...todos){ new updateTodoAsyncTask(todoDao).execute(todos);}
     public LiveData<List<Todo>> getLiveTodoByPlanDate(String userId, String planDate) {
         try {
             return new getLiveTodoByPlanDateAsyncTask(todoDao).execute(userId, planDate).get();
@@ -49,6 +50,10 @@ public class TodoRepository {
         }
         return null;
     }
+
+
+
+
     public List<Todo> getListTodoByPlanDate(String userId, String planDate) {
         try {
             return new getListTodoByPlanDateAsyncTask(todoDao).execute(userId, planDate).get();
@@ -147,6 +152,20 @@ public class TodoRepository {
         }
     }
 
+    static class updateTodoAsyncTask extends AsyncTask<Todo, Void, Void> {
+        private TodoDao todoDao;
+
+        updateTodoAsyncTask(TodoDao todoDao) {
+            this.todoDao = todoDao;
+        }
+        @Override
+        protected Void doInBackground(Todo... todos) {
+            todoDao.update(todos);
+            return null;
+        }
+    }
+
+
     static class getLiveTodoByPlanDateAsyncTask extends AsyncTask<String, Void, LiveData<List<Todo>>> {
         private TodoDao todoDao;
         getLiveTodoByPlanDateAsyncTask(TodoDao todoDao){
@@ -240,6 +259,8 @@ public class TodoRepository {
             return null;
         }
     }
+
+
 
     static class deleteCategoryAsyncTask extends AsyncTask<String, Void, Void> {
         private TodoCategoryDao todoCategoryDao;

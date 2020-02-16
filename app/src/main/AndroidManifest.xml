@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     package="comv.example.zyrmj.precious_time01">
 
     <uses-permission xmlns:tools="http://schemas.android.com/tools"
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <dist:module dist:instant="true" />
 
     <application
         android:allowBackup="true"
@@ -15,11 +19,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.PersonCenterActivity"></activity>
-        <activity android:name=".activities.PlanActivity"></activity>
-        <activity android:name=".activities.WhiteShowActivity"></activity>
-        <activity android:name=".activities.PlanFinishActivity"></activity>
-        <activity android:name=".activities.ClockActivity">
+        <service
+            android:name=".notification.LongRunningService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".activities.PersonCenterActivity" />
+        <activity android:name=".activities.ClockActivity" />
+        <activity android:name=".activities.WhiteShowActivity" />
+        <activity android:name=".activities.PlanFinishActivity" />
+        <activity android:name=".activities.PlanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,38 +36,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="comv.example.zyrmj.precious_time01.activities.SplashActivity"
-            android:label="@string/app_name"
+            android:name=".activities.SplashActivity"
             android:excludeFromRecents="true"
+            android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
-
-        </activity>
+            android:theme="@style/horizontal_slide"></activity>
         <activity
-            android:name="comv.example.zyrmj.precious_time01.activities.TimeActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
+            android:name=".activities.TimeActivity"
             android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
-        </activity>
-
-        <activity
-            android:name="comv.example.zyrmj.precious_time01.activities.MonitorActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"></activity>
+        <activity
+            android:name=".activities.MonitorActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/horizontal_slide" >
-        </activity>
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"></activity>
 
-        <service android:name="comv.example.zyrmj.precious_time01.service.MonitorService" >
-        </service>
+        <service android:name=".service.MonitorService"></service>
+        <receiver android:name=".notification.AlarmReceiver" ></receiver>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <dist:module dist:instant="true" />
 
 </manifest>

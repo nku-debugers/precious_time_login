@@ -1,9 +1,13 @@
 package comv.example.zyrmj.precious_time01.Utils;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 
 public class TimeDiff {
 
@@ -102,5 +106,48 @@ public class TimeDiff {
         long between_days=(time2-time1)/(1000*3600*24);
 
         return Math.abs(Integer.parseInt(String.valueOf(between_days)));
+    }
+
+    public static boolean getCurrentWeekDay(String dateTime) {
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        if (dayOfWeek < 0) dayOfWeek = 6;
+        return dateTime.substring(0, 1).equals(dayOfWeek + "");
+    }
+
+    public static long getAlarmMillis(String dateTime, int reminder) {
+        Log.d("mytag", "getAlarmMillis: The dateTime is :" + dateTime + "the reminder is " + reminder);
+
+        long nh = 1000 * 60 * 60;// 一小时的毫秒数
+        long nm = 1000 * 60;// 一分钟的毫秒数
+        long ns = 1000;// 一秒钟的毫秒数
+        long MillisOfDateTime = Integer.parseInt(dateTime.substring(2, 4)) * nh + Integer.parseInt(dateTime.substring(5)) * nm;
+
+        Date d = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+        String nowTime = simpleDateFormat.format(d);
+        long NowMillis = Integer.parseInt(nowTime.substring(0, 2)) * nh + Integer.parseInt(nowTime.substring(3, 5)) * nm + Integer.parseInt(nowTime.substring(6)) * ns;
+        long Millis = MillisOfDateTime - NowMillis - reminder * nm;
+
+        Log.d("mytag", "nowTimeMillis are " + NowMillis + " now is " + nowTime);
+        Log.d("mytag", "the DateTimeMillis are " + MillisOfDateTime + dateTime);
+        Log.d("mytag", "the Millis are" + Millis);
+
+        if (Millis >= 0) {
+            return Millis;
+        }
+        else return 0;
+
+
+    }
+
+    public static void main(String[]args) {
+        Date d = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+        String s = simpleDateFormat.format(d);
+        System.out.println(s);
+
     }
 }
