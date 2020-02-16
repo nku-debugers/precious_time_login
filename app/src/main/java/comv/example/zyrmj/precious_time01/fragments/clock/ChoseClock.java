@@ -37,6 +37,7 @@ public class ChoseClock extends Fragment {
         Intent intent=getActivity().getIntent();
         if(intent!=null&&intent.getStringExtra("userId")!=null)
         { userId=intent.getStringExtra("userId");
+          timeLength=intent.getStringExtra("timeLength");
             Log.d("pass",userId);
         }
         init();
@@ -53,6 +54,7 @@ public class ChoseClock extends Fragment {
     }
 
     public void enableButtons(){
+        //自觉模式
         accordButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
