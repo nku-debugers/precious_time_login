@@ -13,7 +13,10 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import java.util.Random;
+
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.activities.PlanActivity;
 import comv.example.zyrmj.precious_time01.fragments.plan.AddTodoAfterPlanned;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -30,21 +33,39 @@ public class AlarmReceiver extends BroadcastReceiver {
             String name = "我是渠道名字";
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = null;
+
+            String userId = intent.getStringExtra("userId");
+            String todoName = intent.getStringExtra("todoName");
+            String todoStartTime = intent.getStringExtra("todoStartTime");
+            if (todoStartTime != null) {
+                todoStartTime = todoStartTime.substring(2);
+            }
+            Intent clickIntent = new Intent(context,
+                    PlanActivity.class);
+            clickIntent.putExtra("userId", userId);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    context, new Random().nextInt(), clickIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel mChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW);
                 Toast.makeText(context, mChannel.toString(), Toast.LENGTH_SHORT).show();
                 Log.i(TAG, mChannel.toString());
+
+
                 notificationManager.createNotificationChannel(mChannel);
                 notification = new Notification.Builder(context)
                         .setChannelId(id)
-                        .setContentTitle("5 new messages")
-                        .setContentText("hahaha")
+                        .setContentTitle(todoName)
+                        .setContentText("计划于" + todoStartTime + "开始")
+                        .setContentIntent(pendingIntent)
                         .setSmallIcon(R.drawable.icon_follow).build();
             } else {
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                         .setContentTitle("5 new messages")
                         .setContentText("hahaha")
                         .setSmallIcon(R.drawable.icon_follow)
+                        .setContentIntent(pendingIntent)
                         .setOngoing(true);
 //                    .setChannel(id);//无效
                 notification = notificationBuilder.build();
