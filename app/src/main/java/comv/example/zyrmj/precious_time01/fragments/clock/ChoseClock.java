@@ -37,7 +37,6 @@ public class ChoseClock extends Fragment {
         Intent intent=getActivity().getIntent();
         if(intent!=null&&intent.getStringExtra("userId")!=null)
         { userId=intent.getStringExtra("userId");
-          timeLength=intent.getStringExtra("timeLength");
             Log.d("pass",userId);
         }
         init();
