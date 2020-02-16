@@ -42,6 +42,7 @@ import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
+import comv.example.zyrmj.precious_time01.notification.LongRunningService;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
@@ -50,6 +51,9 @@ import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
+
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getAlarmMillis;
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getCurrentWeekDay;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +69,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
     int modify=0; //0表示不可修改 1便是可修改
     private String userId = "offline";
     private Plan showedPlan;
-    List<Todo> todos;
+    List<Todo> todos, alarmTodos;
 
 
     public PlanWeekView() {
@@ -92,8 +96,29 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         enableButtons();
         TextView Name = getView().findViewById(R.id.planName);
         Name.setText(showedPlan.getPlanName());
+        List<Todo>temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
+        alarmTodos = new ArrayList<>();
+        for (int i = 0; i < temp.size(); i++) {
+            if (getCurrentWeekDay(temp.get(i).getStartTime())) {
+                alarmTodos.add(temp.get(i));
+            }
+        }
+        setAlarms();
+    }
 
-
+    private void setAlarms() {
+        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
+        for (int i = 0; i < alarmTodos.size(); i++) {
+            if (alarmTodos.get(i).getReminder() > 0) {
+                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
+                Intent myIntent = new Intent(getActivity(), LongRunningService.class);
+                Log.d("mytag", "setAlarms: The k is " + k);
+                myIntent.putExtra("Millis", k);
+                myIntent.setAction("notice");
+                Log.d("mytag", "setAlarms: this is the " + i + " time");
+                getActivity().startService(myIntent);
+            }
+        }
     }
 
     private void assignViews() {

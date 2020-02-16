@@ -25,10 +25,10 @@
             android:exported="true"></service>
 
         <activity android:name=".activities.PersonCenterActivity" />
-        <activity android:name=".activities.PlanActivity" />
+        <activity android:name=".activities.ClockActivity" />
         <activity android:name=".activities.WhiteShowActivity" />
         <activity android:name=".activities.PlanFinishActivity" />
-        <activity android:name=".activities.ClockActivity">
+        <activity android:name=".activities.PlanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
