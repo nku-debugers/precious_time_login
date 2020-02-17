@@ -189,5 +189,6 @@
     <string name="plan_finish_button">确认</string>
 
     <string name="planlist_title">所有计划</string>
+    <string name="give_up">放弃</string>
 
 </resources>
