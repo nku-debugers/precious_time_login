@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sample</string>
+    <string name="app_name">寸光</string>
     <string name="end_time_exceed_warning" translatable="false">结束时间应晚于开始时间</string>
     <string name="all">ALL</string>
     <string name="year_month_day">YEAR-MONTH-DAY</string>
@@ -104,7 +104,6 @@
 
     <string name="model_name">模板名称</string>
     <string name="week_switch">周视图</string>
-
     <string name="plan_title">生成计划</string>
     <string name="import_model">导入模板</string>
     <string name="import_no_model">不导入模板</string>

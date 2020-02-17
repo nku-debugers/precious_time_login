@@ -48,7 +48,7 @@ public class Todo implements Serializable {
     @ColumnInfo(name = "failure_trigger")
     public String failureTrigger;
     private String length;
-    private Double completion;
+    private Boolean completion;
     private Integer type;//0-template 1-habit 2-userItem
 
     public Integer getType() {
@@ -59,19 +59,9 @@ public class Todo implements Serializable {
         this.type = type;
     }
 
-//    public Todo(@NonNull String userId, @NonNull String name, String endTime, @NonNull String startTime, String failureTrigger, String length, Integer type,Double completion) {
-//        this.userId = userId;
-//        this.name = name;
-//        this.endTime = endTime;
-//        this.startTime = startTime;
-//        this.failureTrigger = failureTrigger;
-//        this.length = length;
-//        this.completion = completion;
-//        this.type = type;
-//    }
 
     public Todo() {
-        this.completion=0.0;
+        this.completion=null;
         this.userId="offline";
     }
 
@@ -117,11 +107,11 @@ public class Todo implements Serializable {
         this.length = length;
     }
 
-    public Double getCompletion() {
+    public Boolean getCompletion() {
         return completion;
     }
 
-    public void setCompletion(Double completion) {
+    public void setCompletion(Boolean completion) {
         this.completion = completion;
     }
 

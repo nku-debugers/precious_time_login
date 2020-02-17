@@ -1,9 +1,11 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
+import comv.example.zyrmj.precious_time01.notification.LongRunningService;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
@@ -52,6 +55,7 @@ import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
 
 public class AddTodoAfterPlanned extends Fragment implements View.OnClickListener{
+    private Intent intent;
     static String TAG = "mytag";
     private Plan plan;
     private Todo myTodo;
@@ -100,6 +104,16 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         assignViews();
         init();
         enableButtons();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent i = new Intent(getActivity(), LongRunningService.class);
+        i.putExtra("num", 1);
+        i.setAction("notice");
+        getActivity().startService(i);
+        Log.d(TAG, "onStart: after start");
     }
 
     private void saveLabels() {
@@ -199,6 +213,43 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
         getView().findViewById(R.id.week_time_in_todo_after).setOnClickListener(this);
         week.setOnClickListener(this);
 
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            NavController controller = Navigation.findNavController(getView());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                            bundle.putString("userId",getArguments().getString("userId"));
+                            bundle.putInt("modify",getArguments().getInt("modify"));
+                            if(getArguments().getString("weekView")!=null)
+                                controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
+                            else
+                                controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
+
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,7 +258,15 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     @Override
                     public void onClick(PromptButton button) {
                         NavController controller = Navigation.findNavController(getView());
-                        controller.navigate(R.id.action_addToDo2_to_editPlan);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                        bundle.putString("userId",getArguments().getString("userId"));
+                        bundle.putInt("modify",getArguments().getInt("modify"));
+                        if(getArguments().getString("weekView")!=null)
+                            controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
+                        else
+                            controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
+
                     }
                 });
                 PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
@@ -268,6 +327,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     }
 
                     NavController controller = Navigation.findNavController(getView());
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("plan",getArguments().getSerializable("plan"));
                     bundle.putString("userId",getArguments().getString("userId"));
@@ -276,7 +336,6 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                     controller.navigate(R.id.action_addTodoAfterPlanned_to_planWeekView, bundle);
                     else
                         controller.navigate(R.id.action_addTodoAfterPlanned_to_planTodosListView, bundle);
-                    // TODO: 2020/1/14 这里也需要改成新的
                 }
             }
         });

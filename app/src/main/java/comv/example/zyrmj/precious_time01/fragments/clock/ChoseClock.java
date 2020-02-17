@@ -53,6 +53,7 @@ public class ChoseClock extends Fragment {
     }
 
     public void enableButtons(){
+
         //暂定使用getArguments（）判断是否为null，改进后或许为getArguments().getString("hour")==null
         if(getArguments()==null){
             accordButton.setOnClickListener ( new View.OnClickListener () {

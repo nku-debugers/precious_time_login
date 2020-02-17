@@ -18,8 +18,11 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -39,6 +43,7 @@ import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
+import comv.example.zyrmj.precious_time01.notification.LongRunningService;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
@@ -47,6 +52,9 @@ import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
+
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getAlarmMillis;
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getCurrentWeekDay;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +70,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
     int modify=0; //0表示不可修改 1便是可修改
     private String userId = "offline";
     private Plan showedPlan;
-    List<Todo> todos;
+    List<Todo> todos, alarmTodos;
 
 
     public PlanWeekView() {
@@ -89,8 +97,34 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         enableButtons();
         TextView Name = getView().findViewById(R.id.planName);
         Name.setText(showedPlan.getPlanName());
+//        List<Todo>temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
+//        alarmTodos = new ArrayList<>();
+//        for (int i = 0; i < temp.size(); i++) {
+//            if (getCurrentWeekDay(temp.get(i).getStartTime()) && temp.get(i).getCompletion()==0) {
+//                alarmTodos.add(temp.get(i));
+//            }
+//        }
+//        setAlarms();
+    }
 
-
+    private void setAlarms() {
+        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
+        for (int i = 0; i < alarmTodos.size(); i++) {
+            if (alarmTodos.get(i).getReminder() > 0) {
+                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
+                //if (k >= 0) {
+                    Intent myIntent = new Intent(getContext(), LongRunningService.class);
+                    Log.d("mytag", "setAlarms: The k is " + k);
+                    myIntent.putExtra("Millis", k);
+                    myIntent.putExtra("userId", userId);
+                    myIntent.putExtra("todoName", alarmTodos.get(i).getName());
+                    myIntent.putExtra("todoStartTime", alarmTodos.get(i).getStartTime());
+                    myIntent.setAction("notice");
+                    Log.d("mytag", "setAlarms: this is the " + i + " time");
+                    getContext().startService(myIntent);
+                //}
+            }
+        }
     }
 
     private void assignViews() {
@@ -219,6 +253,40 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             if (getArguments() != null && getArguments().getSerializable("plan") != null) {
                 Plan plan = (Plan) getArguments().getSerializable("plan");
                 modify=getArguments().getInt("modify");
+
+                if (getArguments().getInt("fromModify", 0) == 1) {
+                    List<Todo> temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId, plan.getStartDate());
+                    alarmTodos = new ArrayList<>();
+                    Date date = new Date();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+                    String today = simpleDateFormat.format(date);
+                    if (temp.size() > 0) {
+                        String todoPlanDate = temp.get(0).getPlanDate();
+                        Calendar cal = Calendar.getInstance();
+                        String splieTimes[] = todoPlanDate.split("-");
+                        Date start = new Date((Integer.valueOf(splieTimes[0]) - 1900),
+                                (Integer.valueOf(splieTimes[1]) - 1), (Integer.valueOf(splieTimes[2])));
+                        cal.setTime(start);
+                        cal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(temp.get(0).getStartTime().substring(0, 1)));
+                        //Calendar转为Date类型
+                        Date end = cal.getTime();
+                        //将增加后的日期转为字符串
+                        String  todoToday = simpleDateFormat.format(end);
+                        Log.d("mytag", "onCreate: todoToday is " + todoToday);
+                        Log.d("mytag", "onCreate: today is " + today);
+                        if (todoToday.equals(today)) {
+                            for (int i = 0; i < temp.size(); i++) {
+                                if (temp.get(i).getCompletion()== null || !temp.get(i).getCompletion())
+                                    if (getCurrentWeekDay(temp.get(i).getStartTime())) {
+                                        alarmTodos.add(temp.get(i));
+                                    }
+                            }
+                            setAlarms();
+                        }
+
+                    }
+                }
+
                 return plan;
             } else {
                 System.out.println("plans result");
@@ -297,27 +365,46 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
 
         if(modify==0&&todo.getType()!=0)
         {
-            PromptDialog promptDialog = new PromptDialog(getActivity());
-            PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
-                @Override
-                public void onClick(PromptButton button) {
-                    //todo 2/14 计算任务时长,传递给手机管控模块
-                    Intent intent = new Intent();
-                    intent.putExtra("userId", userId);
-                    //传递任务时长
-                    intent.setClass(getContext(), ClockActivity.class);
-                    startActivity(intent);
-                }
-            });
-            PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
-                @Override
-                public void onClick(PromptButton button) {
-                    //Nothing
-                }
-            });
-            confirm.setTextColor(Color.parseColor("#DAA520"));
-            confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
-            promptDialog.showWarnAlert("开始进行此项活动？", cancel, confirm);
+            //统一计算时长
+            String length=TimeDiff.dateDiff(todo.getStartTime().split("-")[1],todo.getEndTime().split("-")[1],"HH:mm");
+            todo.setLength(length);
+
+            new MaterialDialog.Builder(getContext())
+                    .title(todo.getName())
+                    .content("总时长："+todo.getLength() )
+                    .positiveText("任务成功")
+                    .negativeText("任务失败")
+                    .neutralText("开始使用管控模块完成")
+                    .onAny(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            Toast.makeText(getActivity(), which.toString(), Toast.LENGTH_LONG).show();
+                            if(which.toString().equals("NEUTRAL"))
+                            {
+                                Intent intent = new Intent();
+                                intent.putExtra("userId", userId);
+                                intent.putExtra("timeLength",length);
+                                intent.setClass(getContext(), ClockActivity.class);
+                                startActivity(intent);
+                            }
+                            else if(which.toString().equals("NEGATIVE"))
+                            {
+                                //跳转到填写失败原因的界面
+                                    todo.setCompletion(false);
+
+                            }
+                            else
+                            {
+                                todo.setCompletion(true);
+
+                            }
+                            new TodoRepository(getContext()).updateTodo(todo);
+                        }
+
+                    })
+                    .show();
+
+
         }
         //更新todo，向更新页面传递plan,userId,需更新的todo
         if(modify==1&&todo.getType()!=0)
