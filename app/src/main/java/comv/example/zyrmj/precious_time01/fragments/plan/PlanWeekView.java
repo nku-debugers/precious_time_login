@@ -287,7 +287,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
 
                     }
                 }
-                
+
                 return plan;
             } else {
                 System.out.println("plans result");
