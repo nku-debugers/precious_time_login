@@ -15,12 +15,14 @@ import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -57,6 +59,9 @@ import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +73,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     private ArrayList<EditPlan.ToDoExtend> unsatisfiedTodos=new ArrayList<>();
     private String userId="offline";
     private Button confirm;
+    private ImageView back;
     private Switch showList;
     private RecyclerView bottomList;
     private WeekView mWeekView;
@@ -130,6 +136,64 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     private void assignViews()
     {
         initList();
+        back = getView().findViewById(R.id.week_modify_back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PromptDialog promptDialog = new PromptDialog(getActivity());
+                PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userId", userId);
+                        NavController controller = Navigation.findNavController(getView());
+                        controller.navigate(R.id.action_modifyPlan_to_planWeekView, bundle);
+                    }
+                });
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        //Nothing
+                    }
+                });
+                confirm.setTextColor(Color.parseColor("#DAA520"));
+                confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+            }
+        });
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("userId", userId);
+                            NavController controller = Navigation.findNavController(getView());
+                            controller.navigate(R.id.action_modifyPlan_to_planWeekView, bundle);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         showList=getView().findViewById(R.id.week_modify_switch);
         confirm=getView().findViewById(R.id.week_modify_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
