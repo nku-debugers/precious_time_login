@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -209,6 +210,44 @@ public class AddToDo extends Fragment implements View.OnClickListener{
         getView().findViewById(R.id.end_time_in_todo).setOnClickListener(this);
         getView().findViewById(R.id.week_time_in_todo).setOnClickListener(this);
         getView().findViewById(R.id.todo_length).setOnClickListener(this);
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            NavController controller = Navigation.findNavController(getView());
+                            Bundle bundle = new Bundle();
+                            bundle.putString("delete", "true");
+                            bundle.putString("userId", userId);
+                            bundle.putString("templateName", templateName);
+                            bundle.putSerializable("habits",getArguments().getSerializable("habits"));
+                            bundle.putSerializable("idleTimes",getArguments().getSerializable("idleTimes"));
+                            bundle.putSerializable("toDoExtends",getArguments().getSerializable("toDoExtends"));
+                            bundle.putSerializable("toDos",getArguments().getSerializable("toDos"));
+                            controller.navigate(R.id.action_addToDo2_to_editPlan, bundle);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         week.setOnClickListener(this);
 
         back.setOnClickListener(new View.OnClickListener() {
