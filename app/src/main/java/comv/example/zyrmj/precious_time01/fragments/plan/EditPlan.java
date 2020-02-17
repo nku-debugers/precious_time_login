@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.media.TimedMetaData;
 import android.os.Bundle;
@@ -51,6 +52,9 @@ import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -283,8 +287,23 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
         returnImge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_editPlan_to_choseTemplate);
+                PromptDialog promptDialog = new PromptDialog(getActivity());
+                PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        NavController controller = Navigation.findNavController(getView());
+                        controller.navigate(R.id.action_editPlan_to_choseTemplate);
+                    }
+                });
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        //Nothing
+                    }
+                });
+                confirm.setTextColor(Color.parseColor("#DAA520"));
+                confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
             }
         });
 
@@ -331,8 +350,23 @@ public class EditPlan extends Fragment implements WeekView.MonthChangeListener,
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_editPlan_to_choseTemplate);
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            NavController controller = Navigation.findNavController(getView());
+                            controller.navigate(R.id.action_editPlan_to_choseTemplate);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
                     return true;
                 }
                 return false;
