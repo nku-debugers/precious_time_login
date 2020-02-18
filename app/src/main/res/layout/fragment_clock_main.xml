@@ -72,11 +72,12 @@
         android:layout_marginBottom="0dp">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/give_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-            android:visibility="invisible"
+            android:background="@drawable/btn_shape"
+            android:text="@string/give_up"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

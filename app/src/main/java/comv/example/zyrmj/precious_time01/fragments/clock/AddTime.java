@@ -1,6 +1,5 @@
 package comv.example.zyrmj.precious_time01.fragments.clock;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,10 +10,10 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.activities.TimeActivity;
-import comv.example.zyrmj.precious_time01.activities.WhiteShowActivity;
 
 public class AddTime extends Fragment {
     private Button confirm;
@@ -23,7 +22,6 @@ public class AddTime extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate( R.layout.clock_time, container, false);
     }
     @Override
@@ -46,8 +44,6 @@ public class AddTime extends Fragment {
         confirm.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                String kind = getArguments ().getString ( "kind" );
-                Intent intent=new Intent();
                 String h = hour.getText ().toString ();
                 String m =minute.getText ().toString ();
                 if( TextUtils.isEmpty ( h ) ){
@@ -56,14 +52,12 @@ public class AddTime extends Fragment {
                 if( TextUtils.isEmpty ( m ) ){
                     m = "0";
                 }
-                intent.putExtra("hour",h);
-                intent.putExtra("minute",m);
-                intent.putExtra("kind",kind);
-                System.out.println ( h+" time "+m );
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                intent.setClass(getContext(), WhiteShowActivity.class);
-                startActivity(intent);
+                Bundle bundle = new Bundle (  );
+                bundle.putString("kind",getArguments().getString("kind"));
+                bundle.putString ( "hour", h );
+                bundle.putString ( "minute", m );
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_addTime_to_whiteShow, bundle);
             }
         } );
     }

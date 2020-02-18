@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <service
             android:name=".notification.LongRunningService"
             android:enabled="true"
@@ -26,29 +27,15 @@
 
         <activity android:name=".activities.PersonCenterActivity" />
         <activity android:name=".activities.ClockActivity" />
-        <activity android:name=".activities.WhiteShowActivity" />
-        <activity android:name=".activities.PlanFinishActivity" />
         <activity android:name=".activities.PlanActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.SplashActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"></activity>
-        <activity
-            android:name=".activities.TimeActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"></activity>
+
         <activity
             android:name=".activities.MonitorActivity"
             android:excludeFromRecents="true"

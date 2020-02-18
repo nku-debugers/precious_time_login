@@ -40,7 +40,6 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 
-		// �رռ����е�activity
 		ActivityStackControlUtil.remove(this);
 
 	}
@@ -78,42 +77,24 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
 	}
 
 
-	/**
-	 * ��ʼ���������� �������մ��ݵ�intent������ʵ���� �������󡣡���
-	 */
+
 	protected abstract void initData();
 
-	/**
-	 * ��ʼ���ؼ�
-	 */
+
 	protected abstract void initView();
 
-	/**
-	 * �����¼�����
-	 */
+
 	protected abstract void setLinstener();
 
-	/**
-	 * ������
-	 * 
-	 */
+
 	protected abstract void fillData();
 
-	/**
-	 * ͨ����������Activity
-	 * 
-	 * @param pClass
-	 */
+
 	protected void openActivity(Class<?> pClass) {
 		openActivity(pClass, null);
 	}
 
-	/**
-	 * ͨ����������Activity�����Һ���Bundle����
-	 * 
-	 * @param pClass
-	 * @param pBundle
-	 */
+
 	protected void openActivity(Class<?> pClass, Bundle pBundle) {
 		Intent intent = new Intent(this, pClass);
 		if (pBundle != null) {
@@ -123,21 +104,12 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
 
 	}
 
-	/**
-	 * ͨ��Action����Activity
-	 * 
-	 * @param pAction
-	 */
+
 	protected void openActivity(String pAction) {
 		openActivity(pAction, null);
 	}
 
-	/**
-	 * ͨ��Action����Activity�����Һ���Bundle����
-	 * 
-	 * @param pAction
-	 * @param pBundle
-	 */
+
 	protected void openActivity(String pAction, Bundle pBundle) {
 		Intent intent = new Intent(pAction);
 		if (pBundle != null) {
