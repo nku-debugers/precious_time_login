@@ -55,7 +55,47 @@ public class ChoseClock extends Fragment {
     public void enableButtons(){
 
         //暂定使用getArguments（）判断是否为null，改进后或许为getArguments().getString("hour")==null
-        if(getArguments()==null){
+
+        if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("hour")!=null)
+        {
+            accordButton.setOnClickListener ( new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle ();
+                    bundle.putString ( "kind","1" );
+                    bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
+                    bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
+                }
+            } );
+            forceButton.setOnClickListener ( new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle ();
+                    bundle.putString ( "kind","2" );
+                    bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
+                    bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
+                }
+            } );
+            boringButton.setOnClickListener ( new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle ();
+                    bundle.putString ( "kind","3" );
+                    bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
+                    bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
+                }
+            } );
+
+
+        }
+
+       else{
             accordButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
@@ -65,6 +105,8 @@ public class ChoseClock extends Fragment {
                     controller.navigate(R.id.action_choseClock_to_addTime,bundle);
                 }
             } );
+            // TODO: 2020/2/18  
+            //强制，无趣模式和自觉模式有区别，应跳到选择白名单界面 
             forceButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
@@ -81,41 +123,6 @@ public class ChoseClock extends Fragment {
                     bundle.putString ( "kind","3" );
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_choseClock_to_addTime, bundle);
-                }
-            } );
-        }
-        else{
-            accordButton.setOnClickListener ( new View.OnClickListener () {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
-                    bundle.putString ( "kind","1" );
-                    bundle.putString ( "hour",getArguments().getString("hour") );
-                    bundle.putString ( "minute",getArguments().getString("minute") );
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
-                }
-            } );
-            forceButton.setOnClickListener ( new View.OnClickListener () {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
-                    bundle.putString ( "kind","2" );
-                    bundle.putString ( "hour",getArguments().getString("hour") );
-                    bundle.putString ( "minute",getArguments().getString("minute") );
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
-                }
-            } );
-            boringButton.setOnClickListener ( new View.OnClickListener () {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
-                    bundle.putString ( "kind","3" );
-                    bundle.putString ( "hour",getArguments().getString("hour") );
-                    bundle.putString ( "minute",getArguments().getString("minute") );
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
                 }
             } );
         }

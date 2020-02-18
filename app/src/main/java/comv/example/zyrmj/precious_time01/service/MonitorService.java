@@ -77,6 +77,8 @@ public class MonitorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		whiteAppList = intent.getStringArrayListExtra ( "whitenames" );
+		if (whiteAppList==null)
+			whiteAppList=new ArrayList<>();
 		whiteAppList.add ( "comv.example.zyrmj.precious_time01" );
 		whiteAppList.add ( "" );
 		if (flag == true) {

@@ -254,6 +254,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                 Plan plan = (Plan) getArguments().getSerializable("plan");
                 modify=getArguments().getInt("modify");
 
+
                 if (getArguments().getInt("fromModify", 0) == 1) {
                     List<Todo> temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId, plan.getStartDate());
                     alarmTodos = new ArrayList<>();
@@ -383,7 +384,8 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                             {
                                 Intent intent = new Intent();
                                 intent.putExtra("userId", userId);
-                                intent.putExtra("timeLength",length);
+                                intent.putExtra ( "hour",length.split(":")[0] );
+                                intent.putExtra ( "minute",length.split(":")[1]);
                                 intent.setClass(getContext(), ClockActivity.class);
                                 startActivity(intent);
                             }
