@@ -1,11 +1,13 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,9 @@ import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TodoAdapter2;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +82,23 @@ public class PlanTodosListView extends Fragment {
         if (modify == 0)
             addTodo.hide();
         recyclerView = getView().findViewById(R.id.recycleView);
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", userId);
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_planTodosListView_to_planWeekView);
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void enableButtons() {
