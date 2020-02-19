@@ -28,7 +28,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.RecycleViewAdapter.WhiteAppAdapter;
 import comv.example.zyrmj.precious_time01.WhiteApp;
 
 /**
@@ -37,11 +40,10 @@ import comv.example.zyrmj.precious_time01.WhiteApp;
 public class WhiteShow extends Fragment {
 
     private Button button;
-    private ImageView imageView1,imageView2,imageView3;
-    private TextView textView1,textView2,textView3;
-    private Switch aSwitch1,aSwitch2,aSwitch3;
+   RecyclerView recyclerView;
     private String userId = "offline";
     private List<WhiteApp> whiteApps;
+    final WhiteAppAdapter whiteAppAdapter=new WhiteAppAdapter();
 
     public WhiteShow() {
         // Required empty public constructor
@@ -52,7 +54,7 @@ public class WhiteShow extends Fragment {
     public View onCreateView(LayoutInflater inflater , ViewGroup container ,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate ( R.layout.fragment_white_show , container , false );
+        return inflater.inflate ( R.layout.white_show , container , false );
     }
 
     @Override
@@ -63,48 +65,41 @@ public class WhiteShow extends Fragment {
     }
 
     public void init(){
-        button = getView ().findViewById ( R.id.white_test_confirm2 );
-        imageView1 = getView ().findViewById ( R.id.imageView6 );
-        imageView2 = getView ().findViewById ( R.id.imageView5 );
-        imageView3 = getView ().findViewById ( R.id.imageView );
-        textView1 = getView ().findViewById ( R.id.textView8 );
-        textView2 = getView ().findViewById ( R.id.textView7 );
-        textView3 = getView ().findViewById ( R.id.textView6 );
-        aSwitch1 = getView ().findViewById ( R.id.switch6 );
-        aSwitch2 = getView ().findViewById ( R.id.switch5 );
-        aSwitch3 = getView ().findViewById ( R.id.switch4 );
+
         if(needPermissionForBlocking(getActivity ().getApplicationContext ())) {
             Intent intent = new Intent ( Settings.ACTION_USAGE_ACCESS_SETTINGS );
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity ( intent );
         }
+        recyclerView=getView().findViewById(R.id.white_recyclerView);
+        button=getView().findViewById(R.id.white_confirm);
+        initList();
+
+
+    }
+
+    private void initList()
+    {
         whiteApps = getAllAppNamesPackages ();
-        imageView1.setImageDrawable (whiteApps.get ( 0 ).Appicon);
-        imageView2.setImageDrawable (whiteApps.get ( 1 ).Appicon);
-        imageView3.setImageDrawable (whiteApps.get ( 2 ).Appicon);
-        textView1.setText ( whiteApps.get ( 0 ).AppName );
-        textView2.setText ( whiteApps.get ( 1 ).AppName );
-        textView3.setText ( whiteApps.get ( 2 ).AppName );
+        whiteAppAdapter.setAllWhiteApps(whiteApps);
+        //后续获取个人中心的已选择的白名单 todo
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(whiteAppAdapter);
+
     }
 
     public void enableButtons(){
         button.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                ArrayList<String> whitenames = new ArrayList<> ();
-                if(whiteApps.get ( 0 ).Iswhite){
-                    whitenames.add ( whiteApps.get ( 0 ).AppPkgName );
-                }
-                if(whiteApps.get ( 1 ).Iswhite){
-                    whitenames.add ( whiteApps.get ( 1 ).AppPkgName );
-                }
-                if(whiteApps.get ( 2 ).Iswhite){
-                    whitenames.add ( whiteApps.get ( 2 ).AppPkgName );
-                }
+
+                ArrayList<String> whitenames = whiteAppAdapter.getWhiteAppNames();
+                System.out.println("whitenames: "+whitenames.toString());
                 Bundle bundle = new Bundle (  );
                 bundle.putString ( "hour", getArguments ().getString ( "hour" ));
                 bundle.putString ( "minute", getArguments ().getString ( "minute" ));
                 bundle.putString ( "kind", getArguments ().getString ( "kind" ));
+                bundle.putString("userId",userId);
                 bundle.putStringArrayList ( "whitenames",whitenames);
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_whiteShow_to_clockMain,bundle);
