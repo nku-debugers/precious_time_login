@@ -163,6 +163,9 @@ public class ClockMain extends Fragment {
             @Override
             public void onClick(View view) {
                 //添加放弃按钮
+                Bundle bundle = new Bundle (  );
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
             }
         } );
 
@@ -175,11 +178,11 @@ public class ClockMain extends Fragment {
         Constant.TIME_DURATION = Integer.parseInt(hour) * 60 * 60 + Integer.parseInt(minute) * 60;
     }
 
-    public void saveUseTimes() {
-
-        int times = (Integer) SPUtils.get(getActivity (), "use_times", 0);
-        SPUtils.put(getActivity (), "use_times", times + 1);
-    }
+//    public void saveUseTimes() {
+//
+//        int times = (Integer) SPUtils.get(getActivity (), "use_times", 0);
+//        SPUtils.put(getActivity (), "use_times", times + 1);
+//    }
 
     private void setRippleEffect() {
 
@@ -300,12 +303,18 @@ public class ClockMain extends Fragment {
         @Override
         public void onFinish() {
             System.out.println ( "finish!" );
-            saveUseTimes();
+//            saveUseTimes();
             Bundle bundle = new Bundle (  );
             bundle.putString ( "time", TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
-            System.out.println ( "total time = "+TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
-            NavController controller = Navigation.findNavController(getView());
-            controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
+            if(getArguments ().getInt ( "single" )==1){
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
+            }
+//            System.out.println ( "total time = "+TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
+            else{
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
+            }
             new Handler ().postDelayed( new Runnable() {
                 @Override
                 public void run() {

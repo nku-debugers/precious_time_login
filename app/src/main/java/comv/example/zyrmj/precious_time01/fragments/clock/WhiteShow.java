@@ -21,10 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RadioGroup;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +51,7 @@ public class WhiteShow extends Fragment {
     public View onCreateView(LayoutInflater inflater , ViewGroup container ,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate ( R.layout.white_show , container , false );
+        return inflater.inflate ( R.layout.fragment_white_show , container , false );
     }
 
     @Override
@@ -100,45 +96,14 @@ public class WhiteShow extends Fragment {
                 bundle.putString ( "hour", getArguments ().getString ( "hour" ));
                 bundle.putString ( "minute", getArguments ().getString ( "minute" ));
                 bundle.putString ( "kind", getArguments ().getString ( "kind" ));
+                bundle.putInt ( "single", getArguments ().getInt ( "single" ));
                 bundle.putString("userId",userId);
                 bundle.putStringArrayList ( "whitenames",whitenames);
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_whiteShow_to_clockMain,bundle);
             }
         } );
-        aSwitch1.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View view) {
-                WhiteApp app = whiteApps.get ( 0 );
-                if(app.Iswhite==true){
-                    app.Iswhite = false;
-                }
-                else app.Iswhite = true;
-                whiteApps.set ( 0, app );
-            }
-        } );
-        aSwitch2.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View view) {
-                WhiteApp app = whiteApps.get ( 1 );
-                if(app.Iswhite==true){
-                    app.Iswhite = false;
-                }
-                else app.Iswhite = true;
-                whiteApps.set ( 1, app );
-            }
-        } );
-        aSwitch3.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View view) {
-                WhiteApp app = whiteApps.get ( 2 );
-                if(app.Iswhite==true){
-                    app.Iswhite = false;
-                }
-                else app.Iswhite = true;
-                whiteApps.set ( 2, app );
-            }
-        } );
+
     }
 
     public static boolean needPermissionForBlocking(Context context) {
@@ -166,7 +131,7 @@ public class WhiteShow extends Fragment {
             String packageName = packageInfo.packageName;
             Drawable appIcon = packageInfo.applicationInfo.loadIcon ( getActivity ().getPackageManager () );
 
-            if((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0 && packageName!="comv.example.zyrmj.precious_time01"){
+            if((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0 && !packageName.equals ( "comv.example.zyrmj.precious_time01" )){
                 Log.i("zyn", "app_icon : " + appIcon);
                 Log.i("zyn", "app_name : " + appName);
                 Log.i("zyn", "app_pkt_name : " + packageName);

@@ -54,14 +54,13 @@ public class ChoseClock extends Fragment {
 
     public void enableButtons(){
 
-        //暂定使用getArguments（）判断是否为null，改进后或许为getArguments().getString("hour")==null
-
+        Bundle bundle = new Bundle ();
         if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("hour")!=null)
         {
+            bundle.putInt ( "single", 0 );
             accordButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
                     bundle.putString ( "kind","1" );
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
@@ -72,7 +71,6 @@ public class ChoseClock extends Fragment {
             forceButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
                     bundle.putString ( "kind","2" );
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
@@ -83,7 +81,6 @@ public class ChoseClock extends Fragment {
             boringButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
                     bundle.putString ( "kind","3" );
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
@@ -96,10 +93,10 @@ public class ChoseClock extends Fragment {
         }
 
        else{
+            bundle.putInt ( "single", 1 );
             accordButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
                     bundle.putString ( "kind","1" );
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_choseClock_to_addTime,bundle);
@@ -110,7 +107,6 @@ public class ChoseClock extends Fragment {
             forceButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
                     bundle.putString ( "kind","2" );
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_choseClock_to_addTime, bundle);
@@ -119,7 +115,6 @@ public class ChoseClock extends Fragment {
             boringButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle ();
                     bundle.putString ( "kind","3" );
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_choseClock_to_addTime, bundle);

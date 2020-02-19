@@ -58,6 +58,7 @@ public class AddTime extends Fragment {
                 }
                 Bundle bundle = new Bundle (  );
                 bundle.putString("kind",getArguments().getString("kind"));
+                bundle.putInt ( "single", getArguments ().getInt ( "single" ));
                 bundle.putString ( "hour", h );
                 bundle.putString ( "minute", m );
                 if(getArguments().getString("kind").equals ( "1" )){
