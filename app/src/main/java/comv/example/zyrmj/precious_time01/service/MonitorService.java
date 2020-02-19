@@ -44,17 +44,18 @@ public class MonitorService extends Service {
 						.getSystemService(ACTIVITY_SERVICE);
 			}
 			String recentTaskName =getTopPackage ();
-			//System.out.println ( "TopPackage : "+recentTaskName );
+
+			if(!recentTaskName.equals ( "" ))	System.out.println ( "TopPackage : "+recentTaskName );
 
 			boolean Iswhite = false;
 			for(String name:whiteAppList){
-				//System.out.println ( "white name: "+name );
-				if(recentTaskName.equals ( name )){
+//				System.out.println ( "white name: "+name );
+				if(recentTaskName.equalsIgnoreCase ( name )||recentTaskName.equals ( "" )){
 					Iswhite = true;
 				}
 
 			}
-			//System.out.println ( "white : "+Iswhite );
+			System.out.println ( "white : "+Iswhite+" "+recentTaskName);
 			if (!Iswhite) {
 				//System.out.println ( recentTaskName );
 				L.i("MonitorService", "Yes--recentTaskName=" + recentTaskName);
@@ -77,13 +78,14 @@ public class MonitorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		whiteAppList = intent.getStringArrayListExtra ( "whitenames" );
+		System.out.println("whiteNames: ms "+whiteAppList.toString());
 		if (whiteAppList==null)
 			whiteAppList=new ArrayList<>();
 		whiteAppList.add ( "comv.example.zyrmj.precious_time01" );
 		whiteAppList.add ( "" );
 		if (flag == true) {
 			timer = new Timer();
-			timer.schedule(task, 0, 100);		
+			timer.schedule(task, 0, 100);
 			flag = false;
 		}
 
