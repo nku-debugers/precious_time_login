@@ -1,12 +1,14 @@
 package comv.example.zyrmj.precious_time01.fragments.plan;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,9 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.PlanAdapter;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +73,27 @@ public class PlanShow extends Fragment {
         back = getView().findViewById(R.id.back);
         addPlan = getView().findViewById(R.id.addPlan);
         recyclerView = getView().findViewById(R.id.recycleView);
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", userId);
+                    bundle.putSerializable("plan", oldPlan);
+                    NavController controller = Navigation.findNavController(getView());
+                    if (getArguments().getString("weekView") != null) {
+                        controller.navigate(R.id.action_planShow_to_planWeekView, bundle);
+                    } else {
+                        controller.navigate(R.id.action_planShow_to_planTodosListView, bundle);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void enableButtons() {

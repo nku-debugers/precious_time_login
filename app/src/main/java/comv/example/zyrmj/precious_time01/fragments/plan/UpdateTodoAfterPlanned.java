@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -243,6 +244,52 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
         getView().findViewById(R.id.week_time_in_todo_after).setOnClickListener(this);
         week.setOnClickListener(this);
 
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        // TODO: 2020/2/14
+                        //放弃更改，插入原来的todo
+                        @Override
+                        public void onClick(PromptButton button) {
+                            todoRepository.insertTodo(oldTodo);
+                            for(String s : oldSelectedLabels) {
+                                todoRepository.insertTodoCategory(new TodoCategory(userId, s, oldTodo.getStartTime(), oldTodo.getPlanDate()));
+                            }
+                            for(Quote quote:oldSelectedQuotes) {
+                                todoRepository.insertTodoQuote(new TodoQuote(quote, oldTodo));
+                            }
+                            NavController controller = Navigation.findNavController(getView());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                            bundle.putString("userId",getArguments().getString("userId"));
+                            bundle.putInt("modify",getArguments().getInt("modify"));
+                            if(getArguments().getString("weekView")!=null)
+                                controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView,bundle);
+                            else
+                                controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,7 +371,7 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
                 myTodo.setType(2);
 
                 //保存 提醒信息
-                if (timeReminder.isChecked()) {
+                if (timeReminder.isChecked() && reminder.getText().toString().length() != 0) {
                     myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
                 } else {
                     myTodo.setReminder(0);

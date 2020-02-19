@@ -95,6 +95,20 @@ public class TemplateShowFragment extends Fragment {
             }
         });
 
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_templateShowFragment_to_personCenterFragment);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         FloatingActionButton addTemplate = getView().findViewById(R.id.addTemplate);
         addTemplate.setOnClickListener(new View.OnClickListener() {
             @Override

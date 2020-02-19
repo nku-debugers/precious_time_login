@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.entity.Quote;
+import comv.example.zyrmj.precious_time01.entity.relations.TodoCategory;
+import comv.example.zyrmj.precious_time01.entity.relations.TodoQuote;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
@@ -79,6 +82,36 @@ public class AddQuoteFragment extends Fragment {
                 author.setText("");
             }
         });
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            NavController controller = Navigation.findNavController(getView());
+                            controller.navigate(R.id.action_addQuoteFragment_to_quoteFragment);
+                        }
+                    });
+                    PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+                            //Nothing
+                        }
+                    });
+                    confirm.setTextColor(Color.parseColor("#DAA520"));
+                    confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                    promptDialog.showWarnAlert("您的数据将不会被保存，是否退出？", cancel, confirm);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         back = getView().findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package comv.example.zyrmj.precious_time01.fragments;
 
 
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 
@@ -15,6 +16,9 @@ import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
 import comv.example.zyrmj.weekviewlibrary.WeekView;
 import comv.example.zyrmj.weekviewlibrary.WeekViewEvent;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -83,9 +87,23 @@ public class WeekViewFragment extends Fragment implements WeekView.MonthChangeLi
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_testWeekView_to_templateShowFragment);
-
             }
         });
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_testWeekView_to_templateShowFragment);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         add = (FloatingActionButton) getView().findViewById(R.id.add );
         add.setOnClickListener(new View.OnClickListener() {
             @Override

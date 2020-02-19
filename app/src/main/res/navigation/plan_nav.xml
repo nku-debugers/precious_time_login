@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_choseTemplate_to_planShow"
             app:destination="@id/planShow" />
+        <action
+            android:id="@+id/action_choseTemplate_to_planWeekView"
+            app:destination="@id/planWeekView" />
     </fragment>
     <fragment
         android:id="@+id/editPlan"
