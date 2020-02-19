@@ -287,7 +287,7 @@ public class AddToDo extends Fragment implements View.OnClickListener{
                 saveLabels();
                 if (saveTime()) {
                     myTodo.setType(2);
-                    if (timeReminder.isChecked()) {
+                    if (timeReminder.isChecked() && reminder.getText().toString().length() != 0) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
                     } else {
                         myTodo.setReminder(0);

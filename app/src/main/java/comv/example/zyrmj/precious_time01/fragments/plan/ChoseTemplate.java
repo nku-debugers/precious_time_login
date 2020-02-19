@@ -33,7 +33,9 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.RecycleViewAdapter.TemplateAdapter;
 import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
+import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
@@ -140,14 +142,23 @@ public class ChoseTemplate extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
-                    if(getArguments().getSerializable("plan")!=null) {
+                    List<Plan> plans = new PlanRepository(getContext()).getAllPlans(userId);
+                    if (getArguments() != null) {
+                        if (getArguments().getSerializable("plan") != null) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("userId", userId);
+                            bundle.putSerializable("plan", getArguments().getSerializable("plan"));
+                            if (getArguments().getString("weekView") != null)
+                                bundle.putString("weekView", "true");
+                            NavController controller = Navigation.findNavController(getView());
+                            controller.navigate(R.id.action_choseTemplate_to_planShow, bundle);
+                        }
+                    }
+                    else if (plans.size() != 0){
                         Bundle bundle = new Bundle();
                         bundle.putString("userId", userId);
-                        bundle.putSerializable("plan", getArguments().getSerializable("plan"));
-                        if (getArguments().getString("weekView") != null)
-                            bundle.putString("weekView","true");
                         NavController controller = Navigation.findNavController(getView());
-                        controller.navigate(R.id.action_choseTemplate_to_planShow, bundle);
+                        controller.navigate(R.id.action_choseTemplate_to_planWeekView, bundle);
                     }
                     else {
 
@@ -170,14 +181,22 @@ public class ChoseTemplate extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getArguments().getSerializable("plan")!=null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userId", userId);
-                    bundle.putSerializable("plan", getArguments().getSerializable("plan"));
-                    if (getArguments().getString("weekView") != null)
-                        bundle.putString("weekView","true");
-                    NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_choseTemplate_to_planShow, bundle);
+                if (getArguments() != null) {
+                    if (getArguments().getSerializable("plan") != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userId", userId);
+                        bundle.putSerializable("plan", getArguments().getSerializable("plan"));
+                        if (getArguments().getString("weekView") != null)
+                            bundle.putString("weekView", "true");
+                        NavController controller = Navigation.findNavController(getView());
+                        controller.navigate(R.id.action_choseTemplate_to_planShow, bundle);
+                    }
+                }
+                else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userId", userId);
+                        NavController controller = Navigation.findNavController(getView());
+                        controller.navigate(R.id.action_choseTemplate_to_planWeekView, bundle);
                 }
 
             }

@@ -329,7 +329,7 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
                     myTodoExtend.setLabels(selectedLabels);
                     //更改Quotes
                     myTodoExtend.setQuotes(selectedQuotes);
-                    if (timeReminder.isChecked()) {
+                    if (timeReminder.isChecked() && reminder.getText().toString().length() != 0) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
                     } else {
                         myTodo.setReminder(0);

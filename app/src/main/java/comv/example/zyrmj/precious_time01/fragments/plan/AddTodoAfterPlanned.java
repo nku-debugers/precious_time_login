@@ -287,7 +287,7 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
                 saveLabels();
                 if (saveTime()) { // TODO: 2020/1/14 如果不成功需要 给出 “还有选项没有填写”的提示
                     myTodo.setType(2);
-                    if (timeReminder.isChecked()) {
+                    if (timeReminder.isChecked() && reminder.getText().toString().length() != 0) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
                     } else {
                         myTodo.setReminder(0);
