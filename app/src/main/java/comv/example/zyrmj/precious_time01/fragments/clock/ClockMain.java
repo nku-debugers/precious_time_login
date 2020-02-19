@@ -47,7 +47,7 @@ public class ClockMain extends Fragment {
     private int Clickcount = 5;
     private int useTime = 0;
     private String kind;
-    private static final int count = 5;
+    private static final int count = 2000;
     private static boolean suspend = false;
 
     public ClockMain() {
@@ -302,6 +302,7 @@ public class ClockMain extends Fragment {
 
         @Override
         public void onFinish() {
+            stopService ();
             System.out.println ( "finish!" );
 //            saveUseTimes();
             Bundle bundle = new Bundle (  );
@@ -312,6 +313,7 @@ public class ClockMain extends Fragment {
             }
 //            System.out.println ( "total time = "+TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
             else{
+                bundle.putString ( "todoName",getArguments ().getString("todoName") );
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
             }

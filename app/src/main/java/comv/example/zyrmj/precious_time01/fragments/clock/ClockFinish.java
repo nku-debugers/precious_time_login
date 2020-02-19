@@ -54,7 +54,7 @@ public class ClockFinish extends Fragment {
     }
 
     public void init(){
-        getActivity ().setContentView( R.layout.fragment_clock_finish );
+        getActivity ().setContentView( R.layout.fragment_clock_finish2 );
         DisplayMetrics displayMetrics = new DisplayMetrics ();
         getActivity ().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;

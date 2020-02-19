@@ -25,6 +25,33 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        style="@style/InputBoxStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline160"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline159">
+
+        <SeekBar
+            android:id="@+id/plan_finish_progress"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="15dp"
+            android:max="10"
+            android:progress="3"
+            android:progressDrawable="@drawable/po_seekbar"
+            android:thumb="@drawable/seekbar_thumb" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/plan_finish_title"
         android:layout_width="wrap_content"
@@ -98,21 +125,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline160" />
 
+    <comv.example.zyrmj.precious_time01.PlanFinishLayout
+        android:id="@+id/textLayout"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline160"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="@+id/guideline161"
+        app:layout_constraintTop_toTopOf="@+id/guideline159"
+        app:layout_constraintVertical_bias="0.100000024" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline161"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.1" />
-
-    <Switch
-        android:id="@+id/switch4"
-        android:layout_width="106dp"
-        android:layout_height="41dp"
-        android:text="Switch"
-        app:layout_constraintBottom_toTopOf="@+id/guideline160"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline159" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

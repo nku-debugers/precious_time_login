@@ -55,13 +55,14 @@ public class ChoseClock extends Fragment {
     public void enableButtons(){
 
         Bundle bundle = new Bundle ();
-        if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("hour")!=null)
+        if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("todoName")!=null)
         {
             bundle.putInt ( "single", 0 );
             accordButton.setOnClickListener ( new View.OnClickListener () {
                 @Override
                 public void onClick(View view) {
                     bundle.putString ( "kind","1" );
+                    bundle.putString ( "todoName",getActivity().getIntent().getStringExtra("todoName") );
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
                     NavController controller = Navigation.findNavController(getView());
@@ -72,6 +73,7 @@ public class ChoseClock extends Fragment {
                 @Override
                 public void onClick(View view) {
                     bundle.putString ( "kind","2" );
+                    bundle.putString ( "todoName",getActivity().getIntent().getStringExtra("todoName") );
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
                     NavController controller = Navigation.findNavController(getView());
@@ -82,6 +84,7 @@ public class ChoseClock extends Fragment {
                 @Override
                 public void onClick(View view) {
                     bundle.putString ( "kind","3" );
+                    bundle.putString ( "todoName",getActivity().getIntent().getStringExtra("todoName") );
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
                     NavController controller = Navigation.findNavController(getView());
