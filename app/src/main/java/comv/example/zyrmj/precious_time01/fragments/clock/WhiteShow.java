@@ -90,7 +90,8 @@ public class WhiteShow extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ArrayList<String> whitenames = whiteAppAdapter.getWhiteAppNames();
+                ArrayList<String> whitenames = whiteAppAdapter.getWhiteAppPkgNames();
+                System.out.println("whiteNames: "+ whitenames.toString());
                 System.out.println("whitenames: "+whitenames.toString());
                 Bundle bundle = new Bundle (  );
                 bundle.putString ( "hour", getArguments ().getString ( "hour" ));

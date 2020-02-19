@@ -48,9 +48,11 @@ public class MonitorService extends Service {
 			if(!recentTaskName.equals ( "" ))	System.out.println ( "TopPackage : "+recentTaskName );
 
 			boolean Iswhite = false;
+			if(recentTaskName.equals("")||recentTaskName.contains("launcher")) //判断是否按home键
+				Iswhite=true;
 			for(String name:whiteAppList){
 //				System.out.println ( "white name: "+name );
-				if(recentTaskName.equalsIgnoreCase ( name )||recentTaskName.equals ( "" )){
+				if(recentTaskName.equals( name )){
 					Iswhite = true;
 				}
 
@@ -78,7 +80,6 @@ public class MonitorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		whiteAppList = intent.getStringArrayListExtra ( "whitenames" );
-		System.out.println("whiteNames: ms "+whiteAppList.toString());
 		if (whiteAppList==null)
 			whiteAppList=new ArrayList<>();
 		whiteAppList.add ( "comv.example.zyrmj.precious_time01" );
