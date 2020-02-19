@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -103,6 +104,39 @@ public class WhiteShow extends Fragment {
                 bundle.putStringArrayList ( "whitenames",whitenames);
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_whiteShow_to_clockMain,bundle);
+            }
+        } );
+        aSwitch1.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                WhiteApp app = whiteApps.get ( 0 );
+                if(app.Iswhite==true){
+                    app.Iswhite = false;
+                }
+                else app.Iswhite = true;
+                whiteApps.set ( 0, app );
+            }
+        } );
+        aSwitch2.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                WhiteApp app = whiteApps.get ( 1 );
+                if(app.Iswhite==true){
+                    app.Iswhite = false;
+                }
+                else app.Iswhite = true;
+                whiteApps.set ( 1, app );
+            }
+        } );
+        aSwitch3.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                WhiteApp app = whiteApps.get ( 2 );
+                if(app.Iswhite==true){
+                    app.Iswhite = false;
+                }
+                else app.Iswhite = true;
+                whiteApps.set ( 2, app );
             }
         } );
     }

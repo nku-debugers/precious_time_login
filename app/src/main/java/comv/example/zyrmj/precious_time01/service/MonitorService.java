@@ -44,12 +44,12 @@ public class MonitorService extends Service {
 						.getSystemService(ACTIVITY_SERVICE);
 			}
 			String recentTaskName =getTopPackage ();
-			//System.out.println ( "TopPackage : "+recentTaskName );
+			System.out.println ( "TopPackage : "+recentTaskName );
 
 			boolean Iswhite = false;
 			for(String name:whiteAppList){
-				//System.out.println ( "white name: "+name );
-				if(recentTaskName.equals ( name )){
+//				System.out.println ( "white name: "+name );
+				if(recentTaskName.equals ( name )||recentTaskName.equals ( "" )){
 					Iswhite = true;
 				}
 

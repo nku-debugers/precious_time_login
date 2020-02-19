@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_addTime_to_whiteShow"
             app:destination="@id/whiteShow" />
+        <action
+            android:id="@+id/action_addTime_to_clockMain"
+            app:destination="@id/clockMain" />
     </fragment>
     <fragment
         android:id="@+id/whiteShow"
