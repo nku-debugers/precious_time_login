@@ -82,6 +82,8 @@ public class WhiteShow extends Fragment {
         //后续获取个人中心的已选择的白名单 todo
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(whiteAppAdapter);
+        recyclerView.setItemViewCacheSize(whiteApps.size()-4);
+        //解决RecyclerView点击一个item，后面每间隔9个item就会触发一次同样的事件的问题
 
     }
 
