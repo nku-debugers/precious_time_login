@@ -166,8 +166,17 @@ public class ClockMain extends Fragment {
             public void onClick(View view) {
                 //添加放弃按钮
                 Bundle bundle = new Bundle (  );
-                NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
+                if(getArguments ().getInt ( "single" )==1){
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
+                }
+                else{
+                    bundle.putString ( "todoName",getArguments ().getString("todoName") );
+                    bundle.putString ( "hour",getArguments ().getString("hour") );
+                    bundle.putString ( "minute",getArguments ().getString("minute") );
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
+                }
             }
         } );
 
@@ -315,6 +324,8 @@ public class ClockMain extends Fragment {
             }
 //            System.out.println ( "total time = "+TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
             else{
+                bundle.putString ( "hour",getArguments ().getString("hour") );
+                bundle.putString ( "minute",getArguments ().getString("minute") );
                 bundle.putString ( "todoName",getArguments ().getString("todoName") );
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
