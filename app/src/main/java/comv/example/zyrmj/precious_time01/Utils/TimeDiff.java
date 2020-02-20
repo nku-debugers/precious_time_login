@@ -141,10 +141,11 @@ public class TimeDiff {
     }
 
     public static void main(String[]args) {
-        Date d = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
-        String s = simpleDateFormat.format(d);
-        System.out.println(s);
+        String x = "2017-09-09";
+        String y = "2017-09-08";
+        if (x.compareTo(y) >= 0) {
+
+        }
 
     }
 }
