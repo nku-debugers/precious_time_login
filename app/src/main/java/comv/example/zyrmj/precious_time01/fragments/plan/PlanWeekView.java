@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -389,51 +390,83 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
 
         if(modify==0&&todo.getType()!=0)
         {
+            if(todo.getCompletion()==null)
             //统一计算时长
-            String length=TimeDiff.dateDiff(todo.getStartTime().split("-")[1],todo.getEndTime().split("-")[1],"HH:mm");
-            todo.setLength(length);
+            {
+                String length = TimeDiff.dateDiff(todo.getStartTime().split("-")[1], todo.getEndTime().split("-")[1], "HH:mm");
+                todo.setLength(length);
 
-            new MaterialDialog.Builder(getContext())
-                    .title(todo.getName())
-                    .content("总时长："+todo.getLength() )
-                    .positiveText("任务成功")
-                    .negativeText("任务失败")
-                    .neutralText("开始使用管控模块完成")
-                    .onAny(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(MaterialDialog dialog, DialogAction which) {
-                            Toast.makeText(getActivity(), which.toString(), Toast.LENGTH_LONG).show();
-                            if(which.toString().equals("NEUTRAL"))
-                            {
-                                Intent intent = new Intent();
-                                intent.putExtra("userId", userId);
-                                intent.putExtra("todoName",todo.getName());
-                                intent.putExtra ( "hour",length.split(":")[0] );
-                                intent.putExtra ( "minute",length.split(":")[1]);
-                                intent.setClass(getContext(), ClockActivity.class);
-                                startActivity(intent);
-                            }
-                            else if(which.toString().equals("NEGATIVE"))
-                            {
-                                //跳转到填写失败原因的界面
+                new MaterialDialog.Builder(getContext())
+                        .title(todo.getName())
+                        .content("总时长：" + todo.getLength())
+                        .positiveText("任务成功")
+                        .negativeText("任务失败")
+                        .neutralText("开始使用管控模块完成")
+                        .onAny(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                if (which.toString().equals("NEUTRAL")) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra("userId", userId);
+                                    intent.putExtra("todoName", todo.getName());
+                                    intent.putExtra("hour", length.split(":")[0]);
+                                    intent.putExtra("minute", length.split(":")[1]);
+                                    intent.putExtra("todo",todo);
+                                    intent.setClass(getContext(), ClockActivity.class);
+                                    startActivity(intent);
+                                } else if (which.toString().equals("NEGATIVE")) {
+                                    //弹出填写失败原因的提示框
                                     todo.setCompletion(false);
+                                    new MaterialDialog.Builder(getContext())
+                                            .title(todo.getName() )
+                                            .content("失败原因")
+                                            .inputType(InputType.TYPE_CLASS_TEXT)
+                                            .input("", null, new MaterialDialog.InputCallback() {
+                                                @Override
+                                                public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                    todo.setFailureTrigger(input.toString());
+                                                    new TodoRepository(getContext()).updateTodo(todo);
+                                                }
+                                            })
+                                            .positiveText("确定")
+                                            .show();
+
+
+
+                                } else {
+                                    todo.setCompletion(true);
+                                    new TodoRepository(getContext()).updateTodo(todo);
+                                    //如果是habit的话，要根据todo时长更新完成度
+
+                                }
 
                             }
-                            else
-                            {
-                                todo.setCompletion(true);
 
-                            }
-                            new TodoRepository(getContext()).updateTodo(todo);
-                        }
+                        })
+                        .show();
+            }
+            else if(todo.getCompletion()==true)
+            {
+                new MaterialDialog.Builder(getContext())
+                        .title(todo.getName())
+                        .content("任务成功完成！")
+                        .positiveText("确认")
+                        .show();
+            }
 
-                    })
-                    .show();
+            else
+            {
+                new MaterialDialog.Builder(getContext())
+                        .title(todo.getName())
+                        .content("任务完成失败\n失败原因："+todo.getFailureTrigger())
+                        .positiveText("确认")
+                        .show();
 
+            }
 
         }
         //更新todo，向更新页面传递plan,userId,需更新的todo
-        if(modify==1&&todo.getType()!=0)
+        if(modify==1&&todo.getType()!=0&&todo.getCompletion()==null)
         {
             Bundle bundle=new Bundle();
             bundle.putSerializable("mytodo",todo);
@@ -504,6 +537,10 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             if(todo.getType()==0 )
             {
                 event.setColor(getResources().getColor(R.color.event_color_05));
+            }
+            else if(todo.getCompletion()!=null&&todo.getCompletion()==false)
+            {
+                event.setColor(getResources().getColor(R.color.event_color_06));
             }
 
             else

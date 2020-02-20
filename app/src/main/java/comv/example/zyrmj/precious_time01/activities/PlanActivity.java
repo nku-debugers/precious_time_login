@@ -85,7 +85,8 @@ public class PlanActivity extends AppCompatActivity {
                 if (todoToday.equals(today)) {
                     for (int i = 0; i < temp.size(); i++) {
                         if (temp.get(i).getCompletion()== null || !temp.get(i).getCompletion())
-                            if (nowTime.compareTo(temp.get(i).getStartTime().substring(2)) < 0) {
+                            if(TimeDiff.compare(nowTime,temp.get(i).getStartTime().split("-")[1])>0)
+                            {
                                 temp.get(i).setCompletion(false);
                                 temp.get(i).setFailureTrigger("outdated");
                                 tr.updateTodo(temp.get(i));

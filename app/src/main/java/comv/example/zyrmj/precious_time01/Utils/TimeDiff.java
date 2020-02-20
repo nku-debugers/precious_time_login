@@ -140,12 +140,4 @@ public class TimeDiff {
 
     }
 
-    public static void main(String[]args) {
-        String x = "2017-09-09";
-        String y = "2017-09-08";
-        if (x.compareTo(y) >= 0) {
-
-        }
-
-    }
 }

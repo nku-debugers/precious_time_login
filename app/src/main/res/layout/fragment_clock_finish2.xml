@@ -28,8 +28,8 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         style="@style/InputBoxStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="362dp"
+        android:layout_height="81dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/guideline160"
         app:layout_constraintEnd_toEndOf="parent"
