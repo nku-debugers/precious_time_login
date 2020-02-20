@@ -54,11 +54,11 @@ public class ClockFinish extends Fragment {
     }
 
     public void init(){
-        getActivity ().setContentView( R.layout.fragment_clock_finish );
+        getActivity ().setContentView( R.layout.fragment_clock_finish2 );
         DisplayMetrics displayMetrics = new DisplayMetrics ();
         getActivity ().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenWidth = displayMetrics.widthPixels;
-        number = new TextView ( getContext () );
+        number = new TextView ( getActivity () );
         name = getView ().findViewById ( R.id.plan_finish_name );
         time = getView ().findViewById ( R.id.plan_finish_time );
         confirm = getView ().findViewById ( R.id.plan_finish_button );
@@ -114,6 +114,7 @@ public class ClockFinish extends Fragment {
             curValue = curValue + start;
         }
         Log.e("check", total+"，"+curValue+"，"+ progress.getMax());
+        System.out.println ( "curValue = "+curValue );
         return String.valueOf(curValue);
     }
 

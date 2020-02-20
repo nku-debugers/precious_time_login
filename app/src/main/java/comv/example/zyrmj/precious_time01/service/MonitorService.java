@@ -44,17 +44,20 @@ public class MonitorService extends Service {
 						.getSystemService(ACTIVITY_SERVICE);
 			}
 			String recentTaskName =getTopPackage ();
-			//System.out.println ( "TopPackage : "+recentTaskName );
+
+			if(!recentTaskName.equals ( "" ))	System.out.println ( "TopPackage : "+recentTaskName );
 
 			boolean Iswhite = false;
+			if(recentTaskName.equals("")||recentTaskName.contains("launcher")) //判断是否按home键
+				Iswhite=true;
 			for(String name:whiteAppList){
-				//System.out.println ( "white name: "+name );
-				if(recentTaskName.equals ( name )){
+//				System.out.println ( "white name: "+name );
+				if(recentTaskName.equals( name )){
 					Iswhite = true;
 				}
 
 			}
-			//System.out.println ( "white : "+Iswhite );
+			System.out.println ( "white : "+Iswhite+" "+recentTaskName);
 			if (!Iswhite) {
 				//System.out.println ( recentTaskName );
 				L.i("MonitorService", "Yes--recentTaskName=" + recentTaskName);
@@ -83,7 +86,7 @@ public class MonitorService extends Service {
 		whiteAppList.add ( "" );
 		if (flag == true) {
 			timer = new Timer();
-			timer.schedule(task, 0, 100);		
+			timer.schedule(task, 0, 100);
 			flag = false;
 		}
 

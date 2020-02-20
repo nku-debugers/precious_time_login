@@ -407,6 +407,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                             {
                                 Intent intent = new Intent();
                                 intent.putExtra("userId", userId);
+                                intent.putExtra("todoName",todo.getName());
                                 intent.putExtra ( "hour",length.split(":")[0] );
                                 intent.putExtra ( "minute",length.split(":")[1]);
                                 intent.setClass(getContext(), ClockActivity.class);

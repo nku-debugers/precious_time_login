@@ -21,9 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +51,7 @@ public class WhiteShow extends Fragment {
     public View onCreateView(LayoutInflater inflater , ViewGroup container ,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate ( R.layout.white_show , container , false );
+        return inflater.inflate ( R.layout.fragment_white_show , container , false );
     }
 
     @Override
@@ -85,6 +82,8 @@ public class WhiteShow extends Fragment {
         //后续获取个人中心的已选择的白名单 todo
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(whiteAppAdapter);
+        recyclerView.setItemViewCacheSize(whiteApps.size()-4);
+        //解决RecyclerView点击一个item，后面每间隔9个item就会触发一次同样的事件的问题
 
     }
 
@@ -93,18 +92,21 @@ public class WhiteShow extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ArrayList<String> whitenames = whiteAppAdapter.getWhiteAppNames();
+                ArrayList<String> whitenames = whiteAppAdapter.getWhiteAppPkgNames();
+                System.out.println("whiteNames: "+ whitenames.toString());
                 System.out.println("whitenames: "+whitenames.toString());
                 Bundle bundle = new Bundle (  );
                 bundle.putString ( "hour", getArguments ().getString ( "hour" ));
                 bundle.putString ( "minute", getArguments ().getString ( "minute" ));
                 bundle.putString ( "kind", getArguments ().getString ( "kind" ));
+                bundle.putInt ( "single", getArguments ().getInt ( "single" ));
                 bundle.putString("userId",userId);
-                bundle.putStringArrayList ( "whitenames",whitenames);
+                bundle.putSerializable ("whitenames",whitenames);
                 NavController controller = Navigation.findNavController(getView());
                 controller.navigate(R.id.action_whiteShow_to_clockMain,bundle);
             }
         } );
+
     }
 
     public static boolean needPermissionForBlocking(Context context) {
@@ -132,7 +134,7 @@ public class WhiteShow extends Fragment {
             String packageName = packageInfo.packageName;
             Drawable appIcon = packageInfo.applicationInfo.loadIcon ( getActivity ().getPackageManager () );
 
-            if((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0 && packageName!="comv.example.zyrmj.precious_time01"){
+            if((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0 && !packageName.equals ( "comv.example.zyrmj.precious_time01" )){
                 Log.i("zyn", "app_icon : " + appIcon);
                 Log.i("zyn", "app_name : " + appName);
                 Log.i("zyn", "app_pkt_name : " + packageName);

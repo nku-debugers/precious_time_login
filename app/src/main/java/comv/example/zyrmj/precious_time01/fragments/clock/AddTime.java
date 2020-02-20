@@ -13,7 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.WhiteApp;
 
 public class AddTime extends Fragment {
     private Button confirm;
@@ -54,10 +58,19 @@ public class AddTime extends Fragment {
                 }
                 Bundle bundle = new Bundle (  );
                 bundle.putString("kind",getArguments().getString("kind"));
+                bundle.putInt ( "single", getArguments ().getInt ( "single" ));
                 bundle.putString ( "hour", h );
                 bundle.putString ( "minute", m );
-                NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_addTime_to_whiteShow, bundle);
+                if(getArguments().getString("kind").equals ( "1" )){
+                    ArrayList<String> whitenames = new ArrayList<> ();
+                    bundle.putStringArrayList ( "whitenames", whitenames);
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_addTime_to_clockMain, bundle);
+                }
+                else{
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_addTime_to_whiteShow, bundle);
+                }
             }
         } );
     }

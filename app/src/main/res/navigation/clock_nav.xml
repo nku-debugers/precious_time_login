@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_addTime_to_whiteShow"
             app:destination="@id/whiteShow" />
+        <action
+            android:id="@+id/action_addTime_to_clockMain"
+            app:destination="@id/clockMain" />
     </fragment>
     <fragment
         android:id="@+id/whiteShow"
@@ -44,6 +47,9 @@
         <action
             android:id="@+id/action_clockMain_to_clockFinish"
             app:destination="@id/clockFinish" />
+        <action
+            android:id="@+id/action_clockMain_to_choseClock"
+            app:destination="@id/choseClock" />
     </fragment>
     <fragment
         android:id="@+id/clockFinish"

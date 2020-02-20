@@ -36,14 +36,14 @@ public class WhiteAppAdapter extends RecyclerView.Adapter<WhiteAppAdapter.MyView
 
     private List<WhiteApp> allWhiteApps=new ArrayList<>();
     private List<WhiteApp> selectedWhiteApps=new ArrayList<>();
-    private ArrayList<String> whiteAppNames=new ArrayList<>();//返回所有选中App的name
+    private ArrayList<String> whiteAppPkgNames =new ArrayList<>();//返回所有选中App的name
 
-    public ArrayList<String> getWhiteAppNames() {
-        return whiteAppNames;
+    public ArrayList<String> getWhiteAppPkgNames() {
+        return whiteAppPkgNames;
     }
 
-    public void setWhiteAppNames(ArrayList<String> whiteAppNames) {
-        this.whiteAppNames = whiteAppNames;
+    public void setWhiteAppPkgNames(ArrayList<String> whiteAppPkgNames) {
+        this.whiteAppPkgNames = whiteAppPkgNames;
     }
 
     // 读取个人中心设置白名单，设定默认选中项
@@ -66,25 +66,25 @@ public class WhiteAppAdapter extends RecyclerView.Adapter<WhiteAppAdapter.MyView
                if(b==true)
                {
                    int flag=0;//是否已存在
-                   for(String name:whiteAppNames)
+                   for(String name: whiteAppPkgNames)
                    {
-                       if(name.equals(whiteApp.AppName))
+                       if(name.equals(whiteApp.AppPkgName))
                        {
                            flag=1;
                            break;
                        }
                    }
                    if(flag==0)
-                       whiteAppNames.add(whiteApp.AppName);
+                       whiteAppPkgNames.add(whiteApp.AppPkgName);
 
                }
                else
                {
-                   for(String name:whiteAppNames)
+                   for(String name: whiteAppPkgNames)
                    {
-                       if(name.equals(whiteApp.AppName))
+                       if(name.equals(whiteApp.AppPkgName))
                        {
-                           whiteAppNames.remove(name);
+                           whiteAppPkgNames.remove(name);
                            break;
                        }
                    }

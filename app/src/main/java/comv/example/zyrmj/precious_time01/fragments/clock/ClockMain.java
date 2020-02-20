@@ -18,6 +18,8 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.L;
 import comv.example.zyrmj.precious_time01.Utils.SPUtils;
@@ -35,7 +37,7 @@ import comv.example.zyrmj.precious_time01.service.MonitorService;
 public class ClockMain extends Fragment {
 
     private TextView tv_start, tv_notes, tv_count;
-    private Button button;
+    private Button give_up;
     private RippleBackground rippleBackground;
     private DonutProgress donutProgress;
     private boolean isStart;
@@ -47,7 +49,8 @@ public class ClockMain extends Fragment {
     private int Clickcount = 5;
     private int useTime = 0;
     private String kind;
-    private static final int count = 5;
+    private static final int count = 2000;
+    private static boolean suspend = false;
 
     public ClockMain() {
         // Required empty public constructor
@@ -85,7 +88,7 @@ public class ClockMain extends Fragment {
         tv_start = getView ().findViewById(R.id.tv_start);
         tv_notes = getView ().findViewById(R.id.tv_notes);
         tv_count = getView ().findViewById(R.id.tv_count);
-        button = getView ().findViewById(R.id.give_up );
+        give_up = getView ().findViewById(R.id.give_up );
         rippleBackground = getView ().findViewById(R.id.content);
         donutProgress = getView ().findViewById(R.id.donut_progress);
 
@@ -97,9 +100,9 @@ public class ClockMain extends Fragment {
         isStart = false;
         kind = getArguments ().getString ( "kind" );
         if (kind.equals("1")) {
-            button.setVisibility(View.VISIBLE);
+            give_up.setVisibility(View.VISIBLE);
         } else {
-            button.setVisibility(View.INVISIBLE);
+            give_up.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -121,7 +124,20 @@ public class ClockMain extends Fragment {
             @Override
             public void onClick(View view) {
                 if (kind.equals("1")) {
-                    T.showLong(getActivity (), "你还有  " + mDTime + "结束，加油~");
+//                    T.showLong(getActivity (), "你还有  " + mDTime + "结束，加油~");
+                    if(suspend){
+                        suspend = false;
+                        stratService();
+                    }
+                    else{
+                        suspend = true;
+                        tv_count.setText("");
+                        useTime = donutProgress.getProgress();
+                        prepareNewTask();
+                        tv_start.setText("已暂停");
+                    }
+
+
                 } else if (kind.equals("2")) {
                     T.showLong(getActivity (), "你还有  " + mDTime + "才能解锁");
                 } else if (kind.equals("3")) {
@@ -145,12 +161,16 @@ public class ClockMain extends Fragment {
             }
         } );
 
-        button.setOnClickListener ( new View.OnClickListener () {
+        give_up.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
                 //添加放弃按钮
+                Bundle bundle = new Bundle (  );
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
             }
         } );
+
     }
 
     public void setMonitorDurationTime() {
@@ -160,11 +180,11 @@ public class ClockMain extends Fragment {
         Constant.TIME_DURATION = Integer.parseInt(hour) * 60 * 60 + Integer.parseInt(minute) * 60;
     }
 
-    public void saveUseTimes() {
-
-        int times = (Integer) SPUtils.get(getActivity (), "use_times", 0);
-        SPUtils.put(getActivity (), "use_times", times + 1);
-    }
+//    public void saveUseTimes() {
+//
+//        int times = (Integer) SPUtils.get(getActivity (), "use_times", 0);
+//        SPUtils.put(getActivity (), "use_times", times + 1);
+//    }
 
     private void setRippleEffect() {
 
@@ -256,7 +276,7 @@ public class ClockMain extends Fragment {
 
     private void stratService() {
         Intent intent = new Intent(getContext (), MonitorService.class);
-        intent.putStringArrayListExtra("whitenames", getArguments ().getStringArrayList ( "whitenames" ));
+        intent.putStringArrayListExtra("whitenames", (ArrayList<String>) getArguments().getSerializable("whitenames"));
         getActivity ().startService(intent);
 
     }
@@ -284,12 +304,21 @@ public class ClockMain extends Fragment {
 
         @Override
         public void onFinish() {
-            saveUseTimes();
+            stopService ();
+            System.out.println ( "finish!" );
+//            saveUseTimes();
             Bundle bundle = new Bundle (  );
             bundle.putString ( "time", TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
-            System.out.println ( "total time = "+TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
-            NavController controller = Navigation.findNavController(getView());
-            controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
+            if(getArguments ().getInt ( "single" )==1){
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
+            }
+//            System.out.println ( "total time = "+TimeConvert.secondsToMinute(Constant.TIME_DURATION) );
+            else{
+                bundle.putString ( "todoName",getArguments ().getString("todoName") );
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
+            }
             new Handler ().postDelayed( new Runnable() {
                 @Override
                 public void run() {
