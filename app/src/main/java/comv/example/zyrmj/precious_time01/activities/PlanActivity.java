@@ -69,12 +69,29 @@ public class PlanActivity extends AppCompatActivity {
                 String  todoToday = simpleDateFormat.format(end);
                 Log.d("mytag", "onCreate: todoToday is " + todoToday);
                 Log.d("mytag", "onCreate: today is " + today);
+                TodoRepository tr = new TodoRepository(this);
+                if (todoToday.compareTo(today) < 0) {
+                    for (int i = 0; i < temp.size(); i++) {
+                        if (temp.get(i).getCompletion() == null) {
+                            temp.get(i).setCompletion(false);
+                            temp.get(i).setFailureTrigger("outdated");
+                            tr.updateTodo(temp.get(i));
+                        }
+                    }
+                }
+                SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm", Locale.CHINA);
+                String nowTime = simpleDateFormat1.format(date);
+
                 if (todoToday.equals(today)) {
                     for (int i = 0; i < temp.size(); i++) {
                         if (temp.get(i).getCompletion()== null || !temp.get(i).getCompletion())
-                        if (getCurrentWeekDay(temp.get(i).getStartTime())) {
+                            if (nowTime.compareTo(temp.get(i).getStartTime().substring(2)) < 0) {
+                                temp.get(i).setCompletion(false);
+                                temp.get(i).setFailureTrigger("outdated");
+                                tr.updateTodo(temp.get(i));
+                            }
                             alarmTodos.add(temp.get(i));
-                        }
+
                     }
                     setAlarms();
                 }
@@ -113,8 +130,10 @@ public class PlanActivity extends AppCompatActivity {
     }
 
     private void setAlarms() {
+        TodoRepository tr = new TodoRepository(this);
         Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
         for (int i = 0; i < alarmTodos.size(); i++) {
+
             if (alarmTodos.get(i).getReminder() > 0) {
                 long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
                 if (k >= 0) {
@@ -127,6 +146,11 @@ public class PlanActivity extends AppCompatActivity {
                     myIntent.setAction("notice");
                     Log.d("mytag", "setAlarms: this is the " + i + " time");
                     startService(myIntent);
+                }
+                else {
+                    alarmTodos.get(i).setCompletion(false);
+                    alarmTodos.get(i).setFailureTrigger("outdated");
+                    tr.updateTodo(alarmTodos.get(i));
                 }
             }
         }
