@@ -5,6 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/fail_linear"
+        style="@style/InputBoxStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline162"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline160">
+
+        <EditText
+            android:id="@+id/fail_input"
+            style="@style/EditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/fail_input"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
     <View
         android:id="@+id/view20"
         android:layout_width="0dp"
@@ -96,7 +119,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline160" />
+        app:layout_constraintTop_toTopOf="@+id/guideline162" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline161"
@@ -106,13 +129,21 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <Switch
-        android:id="@+id/switch4"
+        android:id="@+id/isFinish"
         android:layout_width="106dp"
         android:layout_height="41dp"
-        android:text="Switch"
+        android:textOff="@string/isFinishOff"
+        android:textOn="@string/isFinishOn"
         app:layout_constraintBottom_toTopOf="@+id/guideline160"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline159" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline162"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
