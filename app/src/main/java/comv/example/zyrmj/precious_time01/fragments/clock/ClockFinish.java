@@ -1,20 +1,24 @@
 package comv.example.zyrmj.precious_time01.fragments.clock;
 
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.chip.ChipGroup;
 
 import comv.example.zyrmj.precious_time01.PlanFinishLayout;
 import comv.example.zyrmj.precious_time01.R;
@@ -24,14 +28,11 @@ import comv.example.zyrmj.precious_time01.R;
  */
 public class ClockFinish extends Fragment {
 
-    private TextView name, time, number;
-    private int start = 0, end = 100, total;
-    private SeekBar progress;
+    private TextView name, time;
+    private LinearLayout fail_linear;
+    private EditText fail;
+    private Switch isFinish;
     private Button confirm;
-    private PlanFinishLayout layout;
-    private int screenWidth;
-    private float moveStep = 0;
-    private ViewGroup.LayoutParams layoutParams;
 
     public ClockFinish() {
         // Required empty public constructor
@@ -54,68 +55,43 @@ public class ClockFinish extends Fragment {
     }
 
     public void init(){
-        getActivity ().setContentView( R.layout.fragment_clock_finish2 );
-        DisplayMetrics displayMetrics = new DisplayMetrics ();
-        getActivity ().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        screenWidth = displayMetrics.widthPixels;
-        number = new TextView ( getActivity () );
         name = getView ().findViewById ( R.id.plan_finish_name );
         time = getView ().findViewById ( R.id.plan_finish_time );
+        fail_linear = getView ().findViewById ( R.id.fail_linear );
+        fail = getView ().findViewById ( R.id.fail_input );
+        isFinish = getView ().findViewById ( R.id.isFinish );
         confirm = getView ().findViewById ( R.id.plan_finish_button );
-        layoutParams = new ViewGroup.LayoutParams ( screenWidth, 50 );
-        layout = getView ().findViewById ( R.id.textLayout );
-        layout.addView ( number, layoutParams );
-        number.layout ( 0,20, screenWidth, 80);
-        progress = getView ().findViewById ( R.id.plan_finish_progress );
-        String total_time = getArguments ().getString ( "time" );
-        time.setText ( total_time );
-        number.setText ( String.valueOf ( start ) );
-        progress.setEnabled ( true );
-        progress.setMax ( Math.abs ( end ) );
-        progress.setProgress ( start );
-
-        if (start < 0 && end < 0) {
-            total = Math.abs(start) - Math.abs(end);
-        } else if (start < 0 && end > -1) {
-            total = end + Math.abs(start);
-        } else {
-            total = end - start;
+        name.setText ( getArguments ().getString ( "todoName" ) );
+        if(getArguments ().getString ( "hour" ).equals ( "0" )){
+            time.setText ( getArguments ().getString ( "minute" ) +"分钟");
         }
-        moveStep = (float) (((float) screenWidth / total) * 0.8);
+        else{
+            time.setText ( getArguments ().getString ( "hour" )+"小时"+getArguments ().getString ( "minute" ) +"分钟");
+        }
+        isFinish.setText ( "未完成" );
     }
 
     public void enableButtons(){
-
-        progress.setOnSeekBarChangeListener ( new SeekBar.OnSeekBarChangeListener () {
+        confirm.setOnClickListener ( new View.OnClickListener () {
             @Override
-            public void onProgressChanged(SeekBar seekBar , int i , boolean b) {
-                number.layout((int) (i * moveStep), 20, screenWidth, 80);
-                number.setText(check(i));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onClick(View view) {
+                //添加跳转逻辑
 
             }
         } );
-
-    }
-
-    private String check(int pro) {
-        int curValue = total * pro/Math.abs(end);
-        if (start <0 && end < 0) {
-            curValue = start + curValue;
-        } else if (start < 0 && end > -1) {
-            curValue = curValue + start;
-        }
-        Log.e("check", total+"，"+curValue+"，"+ progress.getMax());
-        System.out.println ( "curValue = "+curValue );
-        return String.valueOf(curValue);
+        isFinish.setOnCheckedChangeListener ( new CompoundButton.OnCheckedChangeListener () {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton , boolean b) {
+                if(b==false){
+                    isFinish.setText ( "已完成" );
+                    fail_linear.setVisibility ( View.INVISIBLE );
+                }
+                else{
+                    isFinish.setText ( "未完成" );
+                    fail_linear.setVisibility ( View.VISIBLE );
+                }
+            }
+        } );
     }
 
 }

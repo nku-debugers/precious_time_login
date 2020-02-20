@@ -191,4 +191,8 @@
     <string name="give_up">放弃</string>
     <string name="white_confirm">确认</string>
 
+    <string name="isFinishOn">完成</string>
+    <string name="isFinishOff">未完成</string>
+    <string name="fail_input">失败原因</string>
+
 </resources>
