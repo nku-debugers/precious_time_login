@@ -414,6 +414,7 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                                     {
                                         String quote=quotes.get(0);
                                         intent.putExtra("quote",quote);
+                                        System.out.println("add quote1");
                                     }
                                     intent.putExtra("userId", userId);
                                     intent.putExtra("todoName", todo.getName());

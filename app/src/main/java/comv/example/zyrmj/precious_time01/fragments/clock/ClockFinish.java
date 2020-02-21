@@ -2,6 +2,7 @@ package comv.example.zyrmj.precious_time01.fragments.clock;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -22,6 +23,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.ChipGroup;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.PlanFinishLayout;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
@@ -33,6 +36,9 @@ import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -142,6 +148,36 @@ public class ClockFinish extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                PromptDialog promptDialog = new PromptDialog(getActivity());
+                PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+
+                        //添加跳转逻辑
+                        if (getActivity().getIntent() != null) {
+                            Todo todo = (Todo) getActivity().getIntent().getSerializableExtra("todo");
+                            todo.setCompletion(false);
+                            todo.setFailureTrigger("undone");
+                            new TodoRepository(getContext()).updateTodo(todo);
+                            Plan plan = new PlanRepository(getContext()).getSpecificPlan(todo.getUserId(), todo.getPlanDate());
+                            Intent intent = new Intent();
+                            intent.putExtra("userId", getActivity().getIntent().getStringExtra("userId"));
+                            intent.putExtra("plan", plan);
+                            intent.setClass(getContext(), PlanActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        //Nothing
+                    }
+                });
+                confirm.setTextColor(Color.parseColor("#DAA520"));
+                confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                promptDialog.showWarnAlert("若退出此页面，则默认此任务未完成\n是否仍要选择退出？" ,cancel, confirm);
 
 
 
