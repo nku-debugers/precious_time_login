@@ -18,7 +18,7 @@ public class PlanRepository {
 
     public PlanRepository(Context context) {
         AppDatabase appDatabase = AppDatabase.getDatabase(context.getApplicationContext());
-        planDao=appDatabase.planDao();
+        planDao = appDatabase.planDao();
     }
 
     static class InsertPlanAsyncTask extends AsyncTask<Plan, Void, Void> {
@@ -29,8 +29,8 @@ public class PlanRepository {
         }
 
         @Override
-        protected Void doInBackground(Plan ...plans) {
-           planDao.insertPlan(plans);
+        protected Void doInBackground(Plan... plans) {
+            planDao.insertPlan(plans);
             return null;
         }
     }
@@ -43,15 +43,14 @@ public class PlanRepository {
         }
 
         @Override
-        protected Void doInBackground(Plan ...plans) {
+        protected Void doInBackground(Plan... plans) {
             planDao.deletePlan(plans);
             return null;
         }
     }
 
 
-    static class getAllPlansAsyncTask extends  AsyncTask<String,Void, List<Plan>>
-    {
+    static class getAllPlansAsyncTask extends AsyncTask<String, Void, List<Plan>> {
         private PlanDao planDao;
 
         public getAllPlansAsyncTask(PlanDao planDao) {
@@ -59,32 +58,56 @@ public class PlanRepository {
         }
 
         @Override
-        protected List<Plan> doInBackground(String...strings) {
-            List<Plan> plans=new ArrayList<>();
-            plans=planDao.getAllPlans(strings[0]);
+        protected List<Plan> doInBackground(String... strings) {
+            List<Plan> plans;
+            plans = planDao.getAllPlans(strings[0]);
             return plans;
         }
     }
 
-    public void insertPlan(Plan...plans)
-    {
+    static class getSpecificPlanAsyncTask extends AsyncTask<String, Void, Plan> {
+        private PlanDao planDao;
+
+        public getSpecificPlanAsyncTask(PlanDao planDao) {
+            this.planDao = planDao;
+        }
+
+        @Override
+        protected Plan doInBackground(String... strings) {
+            Plan plan = planDao.getSpecificPlan(strings[0], strings[1]);
+            return plan;
+        }
+    }
+
+
+    public void insertPlan(Plan... plans) {
         new InsertPlanAsyncTask(planDao).execute(plans);
     }
-    public void deletePlan(Plan...plans)
-    {
+
+    public void deletePlan(Plan... plans) {
         new DeletePlanAsyncTask(planDao).execute(plans);
     }
 
-    public List<Plan> getAllPlans(String userId)
-    {
+    public List<Plan> getAllPlans(String userId) {
 
         try {
-            List<Plan> allPlans=new ArrayList<>();
-          allPlans=new getAllPlansAsyncTask(planDao).execute(userId).get();
-           return allPlans;
+            List<Plan> allPlans = new ArrayList<>();
+            allPlans = new getAllPlansAsyncTask(planDao).execute(userId).get();
+            return allPlans;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Plan getSpecificPlan(String userId, String startDate) {
+        try {
+            Plan plan = new getSpecificPlanAsyncTask(planDao).execute(userId, startDate).get();
+            return plan;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 }
+

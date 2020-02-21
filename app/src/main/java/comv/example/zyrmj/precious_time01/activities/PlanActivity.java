@@ -118,10 +118,6 @@ public class PlanActivity extends AppCompatActivity {
             }
 
         }
-//        System.out.println("final plan");
-//        System.out.println(chosenPlan.getPlanName());
-//        System.out.println(chosenPlan.getStartDate());
-//        System.out.println(chosenPlan.getEndDate());
         return chosenPlan;
     }
 

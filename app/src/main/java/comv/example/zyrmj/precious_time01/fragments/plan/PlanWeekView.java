@@ -103,35 +103,8 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         enableButtons();
         TextView Name = getView().findViewById(R.id.planName);
         Name.setText(showedPlan.getPlanName());
-//        List<Todo>temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
-//        alarmTodos = new ArrayList<>();
-//        for (int i = 0; i < temp.size(); i++) {
-//            if (getCurrentWeekDay(temp.get(i).getStartTime()) && temp.get(i).getCompletion()==0) {
-//                alarmTodos.add(temp.get(i));
-//            }
-//        }
-//        setAlarms();
     }
 
-    private void setAlarms() {
-        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
-        for (int i = 0; i < alarmTodos.size(); i++) {
-            if (alarmTodos.get(i).getReminder() > 0) {
-                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
-                //if (k >= 0) {
-                    Intent myIntent = new Intent(getContext(), LongRunningService.class);
-                    Log.d("mytag", "setAlarms: The k is " + k);
-                    myIntent.putExtra("Millis", k);
-                    myIntent.putExtra("userId", userId);
-                    myIntent.putExtra("todoName", alarmTodos.get(i).getName());
-                    myIntent.putExtra("todoStartTime", alarmTodos.get(i).getStartTime());
-                    myIntent.setAction("notice");
-                    Log.d("mytag", "setAlarms: this is the " + i + " time");
-                    getContext().startService(myIntent);
-                //}
-            }
-        }
-    }
 
     private void assignViews() {
         plan_name = getView().findViewById(R.id.planName);
@@ -276,11 +249,9 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             NavController controller = Navigation.findNavController(getView());
             controller.navigate(R.id.action_planWeekView_to_choseTemplate, bundle);
         } else {
-            if (getArguments() != null && getArguments().getSerializable("plan") != null) {
+            if ((getArguments() != null && getArguments().getSerializable("plan") != null)) {
                 Plan plan = (Plan) getArguments().getSerializable("plan");
                 modify=getArguments().getInt("modify");
-
-
                 if (getArguments().getInt("fromModify", 0) == 1) {
                     List<Todo> temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId, plan.getStartDate());
                     alarmTodos = new ArrayList<>();
@@ -314,9 +285,19 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                     }
                 }
 
+
                 return plan;
-            } else {
-                System.out.println("plans result");
+            }
+            else if(getActivity().getIntent()!=null&&getActivity().getIntent()
+                    .getSerializableExtra("plan")!=null)
+            {
+                Plan plan=(Plan)getActivity().getIntent().getSerializableExtra("plan");
+                modify=0;
+                return plan;
+
+            }
+
+            else {
                 Date currDate = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String currDateString = sdf.format(currDate);
@@ -343,7 +324,25 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         return new Plan();
     }
 
-
+    private void setAlarms() {
+        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
+        for (int i = 0; i < alarmTodos.size(); i++) {
+            if (alarmTodos.get(i).getReminder() > 0) {
+                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
+                //if (k >= 0) {
+                Intent myIntent = new Intent(getContext(), LongRunningService.class);
+                Log.d("mytag", "setAlarms: The k is " + k);
+                myIntent.putExtra("Millis", k);
+                myIntent.putExtra("userId", userId);
+                myIntent.putExtra("todoName", alarmTodos.get(i).getName());
+                myIntent.putExtra("todoStartTime", alarmTodos.get(i).getStartTime());
+                myIntent.setAction("notice");
+                Log.d("mytag", "setAlarms: this is the " + i + " time");
+                getContext().startService(myIntent);
+                //}
+            }
+        }
+    }
     private void setupDateTimeInterpreter(/*final boolean shortDate*/) {
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
