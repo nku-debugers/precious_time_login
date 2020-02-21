@@ -77,7 +77,7 @@ public class ChoseClock extends Fragment {
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
                     NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
+                    controller.navigate(R.id.action_choseClock_to_whiteShow,bundle);
                 }
             } );
             boringButton.setOnClickListener ( new View.OnClickListener () {
@@ -88,7 +88,7 @@ public class ChoseClock extends Fragment {
                     bundle.putString ( "hour",getActivity().getIntent().getStringExtra("hour") );
                     bundle.putString ( "minute",getActivity().getIntent().getStringExtra("minute") );
                     NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_choseClock_to_clockMain,bundle);
+                    controller.navigate(R.id.action_choseClock_to_whiteShow,bundle);
                 }
             } );
 
