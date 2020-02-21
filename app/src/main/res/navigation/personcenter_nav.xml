@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/personCenterFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.PersonCenterFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.PersonCenterFragment"
         android:label="fragment_person_center"
         tools:layout="@layout/fragment_person_center" >
         <action
@@ -25,10 +25,13 @@
         <action
             android:id="@+id/action_personCenterFragment_to_habitShow"
             app:destination="@id/habitShow" />
+        <action
+            android:id="@+id/action_personCenterFragment_to_whiteShow2"
+            app:destination="@id/whiteShow2" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
-        android:name="comv.example.zyrmj.precious_time01.fragments.RegisterFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -37,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment3"
-        android:name="comv.example.zyrmj.precious_time01.fragments.LoginFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -49,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/templateShowFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.TemplateShowFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.TemplateShowFragment"
         android:label="fragment_template_show"
         tools:layout="@layout/fragment_template_show" >
         <action
@@ -67,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/testWeekView"
-        android:name="comv.example.zyrmj.precious_time01.fragments.WeekViewFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.WeekViewFragment"
         android:label="fragment_test_week_view"
         tools:layout="@layout/fragment_test_week_view" >
         <action
@@ -93,7 +96,7 @@
         tools:layout="@layout/fragment_test" />
     <fragment
         android:id="@+id/addTemplateItem"
-        android:name="comv.example.zyrmj.precious_time01.fragments.AddTemplateItemFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.AddTemplateItemFragment"
         android:label="add_template_item"
         tools:layout="@layout/add_template_item" >
         <action
@@ -105,7 +108,7 @@
     </fragment>
     <fragment
         android:id="@+id/tmpItemListFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.TmpItemListFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.TmpItemListFragment"
         android:label="tmpitemlistview"
         tools:layout="@layout/tmpitemlistview" >
         <action
@@ -123,7 +126,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateTemplateItemFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.UpdateTemplateItemFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.UpdateTemplateItemFragment"
         android:label="fragment_update_template_item"
         tools:layout="@layout/fragment_update_template_item" >
         <action
@@ -135,7 +138,7 @@
     </fragment>
     <fragment
         android:id="@+id/quoteFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.QuoteShowFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.QuoteShowFragment"
         android:label="fragment_quote"
         tools:layout="@layout/fragment_quote" >
         <action
@@ -150,7 +153,7 @@
     </fragment>
     <fragment
         android:id="@+id/addQuoteFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.AddQuoteFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.AddQuoteFragment"
         android:label="fragment_add_quote"
         tools:layout="@layout/fragment_add_quote" >
         <action
@@ -159,7 +162,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateQuoteFragment"
-        android:name="comv.example.zyrmj.precious_time01.fragments.UpdateQuoteFragment"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.UpdateQuoteFragment"
         android:label="fragment_update_quote"
         tools:layout="@layout/fragment_update_quote" >
         <action
@@ -171,7 +174,7 @@
     </fragment>
     <fragment
         android:id="@+id/addHabit1"
-        android:name="comv.example.zyrmj.precious_time01.fragments.habits.AddHabit"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.habits.AddHabit"
         android:label="add_habit_item"
         tools:layout="@layout/add_habit_item" >
         <action
@@ -183,7 +186,7 @@
     </fragment>
     <fragment
         android:id="@+id/addHabit2"
-        android:name="comv.example.zyrmj.precious_time01.fragments.habits.AddHabit2"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.habits.AddHabit2"
         android:label="add_habit_item2"
         tools:layout="@layout/add_habit_item2" >
         <action
@@ -192,7 +195,7 @@
     </fragment>
     <fragment
         android:id="@+id/habitShow"
-        android:name="comv.example.zyrmj.precious_time01.fragments.habits.HabitShow"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.habits.HabitShow"
         android:label="fragment_habit_show"
         tools:layout="@layout/fragment_habit_show" >
         <action
@@ -200,6 +203,15 @@
             app:destination="@id/addHabit1" />
         <action
             android:id="@+id/action_habitShow_to_personCenterFragment"
+            app:destination="@id/personCenterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/whiteShow2"
+        android:name="comv.example.zyrmj.precious_time01.fragments.personCenter.WhiteShow"
+        android:label="fragment_white_show2"
+        tools:layout="@layout/fragment_white_show2" >
+        <action
+            android:id="@+id/action_whiteShow2_to_personCenterFragment"
             app:destination="@id/personCenterFragment" />
     </fragment>
 </navigation>

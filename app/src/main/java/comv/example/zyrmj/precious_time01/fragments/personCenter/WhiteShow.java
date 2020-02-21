@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01.fragments.clock;
+package comv.example.zyrmj.precious_time01.fragments.personCenter;
 
 
 import android.app.AppOpsManager;
@@ -13,8 +13,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.provider.Settings;
 import android.util.Log;
@@ -26,6 +24,8 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
@@ -36,6 +36,7 @@ import comv.example.zyrmj.precious_time01.WhiteApp;
  * A simple {@link Fragment} subclass.
  */
 public class WhiteShow extends Fragment {
+
 
     private Button button;
     RecyclerView recyclerView;
@@ -64,11 +65,6 @@ public class WhiteShow extends Fragment {
 
     public void init() {
 
-        if (needPermissionForBlocking(getActivity().getApplicationContext())) {
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
         recyclerView = getView().findViewById(R.id.white_recyclerView);
         button = getView().findViewById(R.id.white_confirm);
         initList();
@@ -103,16 +99,10 @@ public class WhiteShow extends Fragment {
             @Override
             public void onClick(View view) {
                 updateSharedPreference();
-                ArrayList<String> whitenames = whiteAppAdapter.getWhiteAppPkgNames();
                 Bundle bundle = new Bundle();
-                bundle.putString("hour", getArguments().getString("hour"));
-                bundle.putString("minute", getArguments().getString("minute"));
-                bundle.putString("kind", getArguments().getString("kind"));
-                bundle.putInt("single", getArguments().getInt("single"));
                 bundle.putString("userId", userId);
-                bundle.putSerializable("whitenames", whitenames);
                 NavController controller = Navigation.findNavController(getView());
-                controller.navigate(R.id.action_whiteShow_to_clockMain, bundle);
+                controller.navigate(R.id.action_whiteShow2_to_personCenterFragment, bundle);
             }
         });
 
@@ -127,9 +117,11 @@ public class WhiteShow extends Fragment {
 
             int flag = 0;
             String isWhite = sharedPreferences.getString(whiteApp.AppName, "");
+            System.out.println("judgewhite"+isWhite);
             for (WhiteApp selected : selectedWhiteApps) {
                 if (whiteApp.AppName.equals(selected.AppName)) {
                     if (isWhite.equals("")) {
+                        System.out.println("addwhite");
                         editor.putString(whiteApp.AppName, "true");
                     }
                     flag = 1;
@@ -138,6 +130,7 @@ public class WhiteShow extends Fragment {
             }
             if (isWhite.equals("true") && flag == 0) {
                 editor.remove(whiteApp.AppName);
+                System.out.println("removewhite");
 
             }
 
@@ -146,17 +139,6 @@ public class WhiteShow extends Fragment {
 
     }
 
-    public static boolean needPermissionForBlocking(Context context) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
-            AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
-            return (mode != AppOpsManager.MODE_ALLOWED);
-        } catch (PackageManager.NameNotFoundException e) {
-            return true;
-        }
-    }
 
     private List<WhiteApp> getAllAppNamesPackages() {
         // TODO Auto-generated method stub
