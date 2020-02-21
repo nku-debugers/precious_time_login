@@ -57,7 +57,6 @@ public class Habit implements Serializable {
     }
 
     private String length;
-    @ColumnInfo(name = "category_name")
     public double completion;
 
     public String location;     //执行地点

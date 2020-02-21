@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01.fragments;
+package comv.example.zyrmj.precious_time01.fragments.personCenter;
 
 
 import android.content.Intent;
@@ -101,21 +101,27 @@ public class PersonCenterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_personCenterFragment_to_templateShowFragment);
+                Bundle bundle=new Bundle();
+                bundle.putString("userId",userId);
+                controller.navigate(R.id.action_personCenterFragment_to_templateShowFragment,bundle);
             }
         });
         toQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_personCenterFragment_to_quoteFragment);
+                Bundle bundle=new Bundle();
+                bundle.putString("userId",userId);
+                controller.navigate(R.id.action_personCenterFragment_to_quoteFragment,bundle);
             }
         });
         toHabit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_personCenterFragment_to_habitShow);
+                Bundle bundle=new Bundle();
+                bundle.putString("userId",userId);
+                controller.navigate(R.id.action_personCenterFragment_to_habitShow,bundle);
             }
         });
         tologin.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +135,9 @@ public class PersonCenterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.变量 action_personCenterFragment_to_whiteShowActivity);
+                Bundle bundle=new Bundle();
+                bundle.putString("userId",userId);
+                controller.navigate(R.id.action_personCenterFragment_to_whiteShow2);
             }
         } );
         logout.setOnClickListener(new View.OnClickListener() {

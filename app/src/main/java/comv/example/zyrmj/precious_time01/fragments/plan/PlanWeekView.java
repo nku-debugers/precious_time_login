@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,11 +42,13 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
+import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.notification.LongRunningService;
+import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
@@ -100,35 +103,8 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         enableButtons();
         TextView Name = getView().findViewById(R.id.planName);
         Name.setText(showedPlan.getPlanName());
-//        List<Todo>temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId,showedPlan.getStartDate());
-//        alarmTodos = new ArrayList<>();
-//        for (int i = 0; i < temp.size(); i++) {
-//            if (getCurrentWeekDay(temp.get(i).getStartTime()) && temp.get(i).getCompletion()==0) {
-//                alarmTodos.add(temp.get(i));
-//            }
-//        }
-//        setAlarms();
     }
 
-    private void setAlarms() {
-        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
-        for (int i = 0; i < alarmTodos.size(); i++) {
-            if (alarmTodos.get(i).getReminder() > 0) {
-                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
-                //if (k >= 0) {
-                    Intent myIntent = new Intent(getContext(), LongRunningService.class);
-                    Log.d("mytag", "setAlarms: The k is " + k);
-                    myIntent.putExtra("Millis", k);
-                    myIntent.putExtra("userId", userId);
-                    myIntent.putExtra("todoName", alarmTodos.get(i).getName());
-                    myIntent.putExtra("todoStartTime", alarmTodos.get(i).getStartTime());
-                    myIntent.setAction("notice");
-                    Log.d("mytag", "setAlarms: this is the " + i + " time");
-                    getContext().startService(myIntent);
-                //}
-            }
-        }
-    }
 
     private void assignViews() {
         plan_name = getView().findViewById(R.id.planName);
@@ -273,11 +249,9 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             NavController controller = Navigation.findNavController(getView());
             controller.navigate(R.id.action_planWeekView_to_choseTemplate, bundle);
         } else {
-            if (getArguments() != null && getArguments().getSerializable("plan") != null) {
+            if ((getArguments() != null && getArguments().getSerializable("plan") != null)) {
                 Plan plan = (Plan) getArguments().getSerializable("plan");
                 modify=getArguments().getInt("modify");
-
-
                 if (getArguments().getInt("fromModify", 0) == 1) {
                     List<Todo> temp = new TodoRepository(getContext()).getListTodoByPlanDate(userId, plan.getStartDate());
                     alarmTodos = new ArrayList<>();
@@ -311,9 +285,19 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                     }
                 }
 
+
                 return plan;
-            } else {
-                System.out.println("plans result");
+            }
+            else if(getActivity().getIntent()!=null&&getActivity().getIntent()
+                    .getSerializableExtra("plan")!=null)
+            {
+                Plan plan=(Plan)getActivity().getIntent().getSerializableExtra("plan");
+                modify=0;
+                return plan;
+
+            }
+
+            else {
                 Date currDate = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String currDateString = sdf.format(currDate);
@@ -340,7 +324,25 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
         return new Plan();
     }
 
-
+    private void setAlarms() {
+        Log.d("mytag", "setAlarms: The size is " + alarmTodos.size());
+        for (int i = 0; i < alarmTodos.size(); i++) {
+            if (alarmTodos.get(i).getReminder() > 0) {
+                long k = getAlarmMillis(alarmTodos.get(i).getStartTime(), alarmTodos.get(i).getReminder());
+                //if (k >= 0) {
+                Intent myIntent = new Intent(getContext(), LongRunningService.class);
+                Log.d("mytag", "setAlarms: The k is " + k);
+                myIntent.putExtra("Millis", k);
+                myIntent.putExtra("userId", userId);
+                myIntent.putExtra("todoName", alarmTodos.get(i).getName());
+                myIntent.putExtra("todoStartTime", alarmTodos.get(i).getStartTime());
+                myIntent.setAction("notice");
+                Log.d("mytag", "setAlarms: this is the " + i + " time");
+                getContext().startService(myIntent);
+                //}
+            }
+        }
+    }
     private void setupDateTimeInterpreter(/*final boolean shortDate*/) {
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
@@ -389,51 +391,99 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
 
         if(modify==0&&todo.getType()!=0)
         {
+            if(todo.getCompletion()==null)
             //统一计算时长
-            String length=TimeDiff.dateDiff(todo.getStartTime().split("-")[1],todo.getEndTime().split("-")[1],"HH:mm");
-            todo.setLength(length);
+            {
+                String length = TimeDiff.dateDiff(todo.getStartTime().split("-")[1], todo.getEndTime().split("-")[1], "HH:mm");
+                todo.setLength(length);
 
-            new MaterialDialog.Builder(getContext())
-                    .title(todo.getName())
-                    .content("总时长："+todo.getLength() )
-                    .positiveText("任务成功")
-                    .negativeText("任务失败")
-                    .neutralText("开始使用管控模块完成")
-                    .onAny(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(MaterialDialog dialog, DialogAction which) {
-                            Toast.makeText(getActivity(), which.toString(), Toast.LENGTH_LONG).show();
-                            if(which.toString().equals("NEUTRAL"))
-                            {
-                                Intent intent = new Intent();
-                                intent.putExtra("userId", userId);
-                                intent.putExtra("todoName",todo.getName());
-                                intent.putExtra ( "hour",length.split(":")[0] );
-                                intent.putExtra ( "minute",length.split(":")[1]);
-                                intent.setClass(getContext(), ClockActivity.class);
-                                startActivity(intent);
-                            }
-                            else if(which.toString().equals("NEGATIVE"))
-                            {
-                                //跳转到填写失败原因的界面
+                new MaterialDialog.Builder(getContext())
+                        .title(todo.getName())
+                        .content("总时长：" + todo.getLength())
+                        .positiveText("任务成功")
+                        .negativeText("任务失败")
+                        .neutralText("开始使用管控模块完成")
+                        .onAny(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                if (which.toString().equals("NEUTRAL")) {
+                                    List<String> quotes=new TodoRepository(getContext())
+                                            .getQuotes(todo.getUserId(),todo.getPlanDate(),todo.getStartTime());
+                                    Intent intent = new Intent();
+                                    if(quotes!=null&&quotes.size()>0)
+                                    {
+                                        String quote=quotes.get(0);
+                                        intent.putExtra("quote",quote);
+                                        System.out.println("add quote1");
+                                    }
+                                    intent.putExtra("userId", userId);
+                                    intent.putExtra("todoName", todo.getName());
+                                    intent.putExtra("hour", length.split(":")[0]);
+                                    intent.putExtra("minute", length.split(":")[1]);
+                                    intent.putExtra("todo",todo);
+                                    intent.setClass(getContext(), ClockActivity.class);
+                                    startActivity(intent);
+                                } else if (which.toString().equals("NEGATIVE")) {
+                                    //弹出填写失败原因的提示框
                                     todo.setCompletion(false);
+                                    new MaterialDialog.Builder(getContext())
+                                            .title(todo.getName() )
+                                            .content("失败原因")
+                                            .inputType(InputType.TYPE_CLASS_TEXT)
+                                            .input("", null, new MaterialDialog.InputCallback() {
+                                                @Override
+                                                public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                    todo.setFailureTrigger(input.toString());
+                                                    new TodoRepository(getContext()).updateTodo(todo);
+                                                }
+                                            })
+                                            .positiveText("确定")
+                                            .show();
+
+
+
+                                } else {
+                                    todo.setCompletion(true);
+                                    new TodoRepository(getContext()).updateTodo(todo);
+                                    //如果是habit的话，要根据todo时长更新完成度
+                                    if(todo.getType()==1) {
+                                        Habit habit = new HabitRepository(getContext()).getSpecificHabit(todo.getUserId(), todo.getName());
+                                        //计算完成度
+                                        double perCompletion=TimeDiff.calCompletion(todo.getLength(), habit.getLength());
+                                        double newCompletion=perCompletion+habit.getCompletion();
+                                        habit.setCompletion(newCompletion);
+                                        new HabitRepository(getContext()).updateHabit(habit);
+                                    }
+
+                                }
 
                             }
-                            else
-                            {
-                                todo.setCompletion(true);
 
-                            }
-                            new TodoRepository(getContext()).updateTodo(todo);
-                        }
+                        })
+                        .show();
+            }
+            else if(todo.getCompletion()==true)
+            {
+                new MaterialDialog.Builder(getContext())
+                        .title(todo.getName())
+                        .content("任务成功完成！")
+                        .positiveText("确认")
+                        .show();
+            }
 
-                    })
-                    .show();
+            else
+            {
+                new MaterialDialog.Builder(getContext())
+                        .title(todo.getName())
+                        .content("任务完成失败\n失败原因："+todo.getFailureTrigger())
+                        .positiveText("确认")
+                        .show();
 
+            }
 
         }
         //更新todo，向更新页面传递plan,userId,需更新的todo
-        if(modify==1&&todo.getType()!=0)
+        if(modify==1&&todo.getType()!=0&&todo.getCompletion()==null)
         {
             Bundle bundle=new Bundle();
             bundle.putSerializable("mytodo",todo);
@@ -504,6 +554,10 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
             if(todo.getType()==0 )
             {
                 event.setColor(getResources().getColor(R.color.event_color_05));
+            }
+            else if(todo.getCompletion()!=null&&todo.getCompletion()==false)
+            {
+                event.setColor(getResources().getColor(R.color.event_color_06));
             }
 
             else

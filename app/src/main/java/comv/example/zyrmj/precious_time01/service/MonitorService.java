@@ -33,6 +33,7 @@ public class MonitorService extends Service {
 	private ActivityManager activityManager;
 	private Timer timer;
 	private List<String> whiteAppList;
+	private String quote;
 	private TimerTask task = new TimerTask() {
 
 		@Override
@@ -63,6 +64,10 @@ public class MonitorService extends Service {
 				L.i("MonitorService", "Yes--recentTaskName=" + recentTaskName);
 				Intent intentNewActivity = new Intent(MonitorService.this,
 						MonitorActivity.class);
+				if(quote!=null)
+				{intentNewActivity.putExtra("quote",quote);
+					System.out.println("add quote4");
+				}
 				intentNewActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intentNewActivity);
 
@@ -80,14 +85,23 @@ public class MonitorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		whiteAppList = intent.getStringArrayListExtra ( "whitenames" );
-		if (whiteAppList==null)
-			whiteAppList=new ArrayList<>();
+		if (whiteAppList==null) {
+			whiteAppList = new ArrayList<>();
+		}
 		whiteAppList.add ( "comv.example.zyrmj.precious_time01" );
 		whiteAppList.add ( "" );
 		if (flag == true) {
 			timer = new Timer();
 			timer.schedule(task, 0, 100);
 			flag = false;
+		}
+		if(intent.getStringExtra("quote")==null)
+			System.out.println("quote null");
+
+		if(intent.getStringExtra("quote")!=null)
+		{
+			quote=intent.getStringExtra("quote");
+			System.out.println("add quote3");
 		}
 
 		return super.onStartCommand(intent, flags, startId);

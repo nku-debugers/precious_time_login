@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01.fragments.habits;
+package comv.example.zyrmj.precious_time01.fragments.personCenter.habits;
 
 
 import android.graphics.Color;
@@ -22,10 +22,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.donkingliang.labels.LabelsView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -33,12 +31,10 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.entity.Category;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
-import comv.example.zyrmj.precious_time01.entity.Template;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitCategory;
 import comv.example.zyrmj.precious_time01.entity.relations.HabitQuote;
 import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
-import comv.example.zyrmj.precious_time01.repository.TemplateRepository;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;

@@ -18,4 +18,7 @@ public interface PlanDao {
 
     @Query("select * from `Plan` where user_id=:userId order by start_date" )
     List<Plan> getAllPlans(String userId);
+
+    @Query("select * from `Plan` where user_id=:userId and start_date=:startDate")
+    Plan getSpecificPlan(String userId,String startDate);
 }

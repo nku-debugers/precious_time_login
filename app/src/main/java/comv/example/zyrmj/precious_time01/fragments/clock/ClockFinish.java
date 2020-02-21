@@ -1,6 +1,8 @@
 package comv.example.zyrmj.precious_time01.fragments.clock;
 
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -20,8 +23,22 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.ChipGroup;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import comv.example.zyrmj.precious_time01.PlanFinishLayout;
 import comv.example.zyrmj.precious_time01.R;
+import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
+import comv.example.zyrmj.precious_time01.activities.ClockActivity;
+import comv.example.zyrmj.precious_time01.activities.PlanActivity;
+import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.entity.Plan;
+import comv.example.zyrmj.precious_time01.entity.Todo;
+import comv.example.zyrmj.precious_time01.repository.HabitRepository;
+import comv.example.zyrmj.precious_time01.repository.PlanRepository;
+import comv.example.zyrmj.precious_time01.repository.TodoRepository;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +50,8 @@ public class ClockFinish extends Fragment {
     private EditText fail;
     private Switch isFinish;
     private Button confirm;
+    private ImageView back;
+
 
     public ClockFinish() {
         // Required empty public constructor
@@ -61,6 +80,7 @@ public class ClockFinish extends Fragment {
         fail = getView ().findViewById ( R.id.fail_input );
         isFinish = getView ().findViewById ( R.id.isFinish );
         confirm = getView ().findViewById ( R.id.plan_finish_button );
+        back=getView().findViewById(R.id.back);
         name.setText ( getArguments ().getString ( "todoName" ) );
         if(getArguments ().getString ( "hour" ).equals ( "0" )){
             time.setText ( getArguments ().getString ( "minute" ) +"分钟");
@@ -68,6 +88,7 @@ public class ClockFinish extends Fragment {
         else{
             time.setText ( getArguments ().getString ( "hour" )+"小时"+getArguments ().getString ( "minute" ) +"分钟");
         }
+        isFinish.setChecked(true);
         isFinish.setText ( "未完成" );
     }
 
@@ -76,6 +97,38 @@ public class ClockFinish extends Fragment {
             @Override
             public void onClick(View view) {
                 //添加跳转逻辑
+                if(getActivity().getIntent()!=null) {
+                    Todo todo = (Todo) getActivity().getIntent().getSerializableExtra("todo");
+
+                    if(!isFinish.isChecked())
+                    {
+                        todo.setCompletion(true);
+                        if(todo.getType()==1) //更改对应习惯完成度
+                        {
+                            Habit habit = new HabitRepository(getContext()).getSpecificHabit(todo.getUserId(), todo.getName());
+                            //计算完成度
+                            double perCompletion= TimeDiff.calCompletion(todo.getLength(), habit.getLength());
+                            double newCompletion=perCompletion+habit.getCompletion();
+                            habit.setCompletion(newCompletion);
+                            new HabitRepository(getContext()).updateHabit(habit);
+                        }
+                    }
+                    else
+                    {
+                        todo.setFailureTrigger(fail.getText().toString());
+                        todo.setCompletion(false);
+                    }
+
+                    new TodoRepository(getContext()).updateTodo(todo);
+                    Plan plan=new PlanRepository(getContext()).getSpecificPlan(todo.getUserId(),todo.getPlanDate());
+                    Intent intent = new Intent();
+                    intent.putExtra("userId",getActivity().getIntent().getStringExtra("userId") );
+                    intent.putExtra("plan",plan);
+                    intent.setClass(getContext(), PlanActivity.class);
+                    startActivity(intent);
+
+                }
+
 
             }
         } );
@@ -92,6 +145,45 @@ public class ClockFinish extends Fragment {
                 }
             }
         } );
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PromptDialog promptDialog = new PromptDialog(getActivity());
+                PromptButton confirm = new PromptButton("确定", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+
+                        //添加跳转逻辑
+                        if (getActivity().getIntent() != null) {
+                            Todo todo = (Todo) getActivity().getIntent().getSerializableExtra("todo");
+                            todo.setCompletion(false);
+                            todo.setFailureTrigger("undone");
+                            new TodoRepository(getContext()).updateTodo(todo);
+                            Plan plan = new PlanRepository(getContext()).getSpecificPlan(todo.getUserId(), todo.getPlanDate());
+                            Intent intent = new Intent();
+                            intent.putExtra("userId", getActivity().getIntent().getStringExtra("userId"));
+                            intent.putExtra("plan", plan);
+                            intent.setClass(getContext(), PlanActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+                PromptButton cancel = new PromptButton("取消", new PromptButtonListener() {
+                    @Override
+                    public void onClick(PromptButton button) {
+                        //Nothing
+                    }
+                });
+                confirm.setTextColor(Color.parseColor("#DAA520"));
+                confirm.setFocusBacColor(Color.parseColor("#FAFAD2"));
+                promptDialog.showWarnAlert("若退出此页面，则默认此任务未完成\n是否仍要选择退出？" ,cancel, confirm);
+
+
+
+            }
+        });
     }
+
 
 }

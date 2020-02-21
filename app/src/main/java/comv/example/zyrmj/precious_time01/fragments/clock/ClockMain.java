@@ -286,6 +286,11 @@ public class ClockMain extends Fragment {
     private void stratService() {
         Intent intent = new Intent(getContext (), MonitorService.class);
         intent.putStringArrayListExtra("whitenames", (ArrayList<String>) getArguments().getSerializable("whitenames"));
+        if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("quote")!=null)
+        {
+            intent.putExtra("quote",getActivity().getIntent().getStringExtra("quote"));
+            System.out.println("add quote2");
+        }
         getActivity ().startService(intent);
 
     }

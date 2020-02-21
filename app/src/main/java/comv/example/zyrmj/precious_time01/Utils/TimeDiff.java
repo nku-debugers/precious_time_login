@@ -2,6 +2,8 @@ package comv.example.zyrmj.precious_time01.Utils;
 
 import android.util.Log;
 
+import com.mobsandgeeks.saripaar.annotation.Length;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -169,12 +171,20 @@ public class TimeDiff {
 
     }
 
-    public static void main(String[]args) {
-        String x = "2017-09-07";
-        String y = "2017-09-08";
-        if (x.compareTo(y) < 0) {
 
-        }
+    public static double calCompletion(String perLength,String totalLength)
+    {
+        double total,per;//总分钟数
+        total=Double.valueOf(totalLength)*60;
+        String perHour=perLength.split(":")[0];
+        String perMinute=perLength.split(":")[1];
+        per=Double.valueOf(perHour)*60+Double.valueOf(perMinute);
+        System.out.println("completion: " +per/total);
+        return per/total;
+
+
+
 
     }
+
 }

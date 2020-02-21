@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01.fragments.habits;
+package comv.example.zyrmj.precious_time01.fragments.personCenter.habits;
 
 
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +39,6 @@ import comv.example.zyrmj.precious_time01.datepicker.CustomDatePicker;
 import comv.example.zyrmj.precious_time01.datepicker.DateFormatUtils;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Quote;
-import comv.example.zyrmj.precious_time01.entity.relations.HabitQuote;
 import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
 

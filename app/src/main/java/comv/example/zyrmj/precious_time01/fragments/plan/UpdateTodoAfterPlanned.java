@@ -401,6 +401,18 @@ public class UpdateTodoAfterPlanned extends Fragment implements View.OnClickList
             // TODO: 2020/2/14
             @Override
             public void onClick(View view) {
+            NavController controller = Navigation.findNavController(getView());
+            Bundle bundle = new Bundle();
+                            bundle.putSerializable("plan",getArguments().getSerializable("plan"));
+                            bundle.putString("userId",getArguments().getString("userId"));
+                            bundle.putInt("modify",getArguments().getInt("modify"));
+                            if(getArguments().getString("weekView")!=null)
+                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planWeekView,bundle);
+                            else
+                                    controller.navigate(R.id.action_updateTodoAfterPlanned_to_planTodosListView, bundle);
+
+
+
 
             }
         });

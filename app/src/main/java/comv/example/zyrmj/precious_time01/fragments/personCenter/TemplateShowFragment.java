@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01.fragments;
+package comv.example.zyrmj.precious_time01.fragments.personCenter;
 
 
 import android.graphics.Canvas;
@@ -70,6 +70,8 @@ public class TemplateShowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if(getArguments()!=null&&getArguments().getString("userId")!=null)
+            userId=getArguments().getString("userId");
         enableBackButton();
         templateRepository = new TemplateRepository(getContext());
         recyclerView = getView().findViewById(R.id.template_recycleView);

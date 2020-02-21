@@ -1,4 +1,4 @@
-package comv.example.zyrmj.precious_time01.fragments.habits;
+package comv.example.zyrmj.precious_time01.fragments.personCenter;
 
 
 import android.graphics.Canvas;
@@ -32,13 +32,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
-import comv.example.zyrmj.precious_time01.RecycleViewAdapter.HabitAdapter;
-import comv.example.zyrmj.precious_time01.ViewModel.HabitViewModel;
-import comv.example.zyrmj.precious_time01.entity.Habit;
+import comv.example.zyrmj.precious_time01.RecycleViewAdapter.QuoteAdapter;
+import comv.example.zyrmj.precious_time01.ViewModel.QuoteViewModel;
 import comv.example.zyrmj.precious_time01.entity.Quote;
-import comv.example.zyrmj.precious_time01.repository.CategoryRepository;
-import comv.example.zyrmj.precious_time01.repository.HabitRepository;
+import comv.example.zyrmj.precious_time01.entity.Template;
+import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.repository.QuoteRepository;
+import comv.example.zyrmj.precious_time01.repository.TemplateItemRepository;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
@@ -46,17 +46,19 @@ import me.leefeng.promptlibrary.PromptDialog;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HabitShow extends Fragment {
-    private String userId="offline";
-    private List<Habit> allHabits;
-    private HabitRepository habitRepository;
+public class QuoteShowFragment extends Fragment {
+
+    private List<Quote> allQuotes;
+    private QuoteRepository quoteRepository;
     private RecyclerView recyclerView;
     private ImageView back;
-    private FloatingActionButton addHabit;
-    private HabitViewModel habitViewModel;
+    private FloatingActionButton addQuote;
+    private QuoteViewModel quoteViewModel;
+    //需从个人中心fragment传递userId参数,这里为了测试，默认使用offline
+    private String userId = "offline";
 
 
-    public HabitShow() {
+    public QuoteShowFragment() {
         // Required empty public constructor
     }
 
@@ -65,42 +67,34 @@ public class HabitShow extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_habit_show, container, false);
+        return inflater.inflate(R.layout.fragment_quote_show, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        habitRepository=new HabitRepository(getContext());
-        recyclerView=getView().findViewById(R.id.habit_recycleView);
-        final HabitAdapter habitAdapter=new HabitAdapter();
-        habitAdapter.setAllRepository(new CategoryRepository(getContext()),new QuoteRepository(getContext()),habitRepository);
+        if(getArguments()!=null&&getArguments().getString("userId")!=null)
+            userId=getArguments().getString("userId");
+        quoteRepository = new QuoteRepository(getContext());
+        recyclerView = getView().findViewById(R.id.quote_recycleView);
+        final QuoteAdapter quoteAdapter = new QuoteAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(habitAdapter);
-        habitViewModel= ViewModelProviders.of(getActivity()).get(HabitViewModel.class);
-        habitViewModel.getAllHabits(userId).observe(getActivity(), new Observer<List<Habit>>() {
+        recyclerView.setAdapter(quoteAdapter);
+        quoteViewModel = ViewModelProviders.of(getActivity()).get(QuoteViewModel.class);
+        quoteViewModel.getAllQuotes(userId).observe(getActivity(), new Observer<List<Quote>>() {
             @Override
-            public void onChanged(List<Habit> habits) {
-                habitAdapter.setAllHabits(habits);
-                habitAdapter.notifyDataSetChanged();
-                allHabits=habits;
+            public void onChanged(List<Quote> quotes) {
+                quoteAdapter.setAllQutoes(quotes);
+                quoteAdapter.notifyDataSetChanged();
+                allQuotes = quotes;
             }
         });
-
-        addHabit = getView().findViewById(R.id.add);
-        addHabit.setOnClickListener(new View.OnClickListener() {
+        addQuote = getView().findViewById(R.id.add);
+        addQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitShow_to_addHabit1);
-            }
-        });
-        back = getView().findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitShow_to_personCenterFragment);
+                controller.navigate(R.id.action_quoteFragment_to_addQuoteFragment);
             }
         });
 
@@ -111,12 +105,22 @@ public class HabitShow extends Fragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() != KeyEvent.ACTION_UP) {
                     NavController controller = Navigation.findNavController(getView());
-                    controller.navigate(R.id.action_habitShow_to_personCenterFragment);
+                    controller.navigate(R.id.action_quoteFragment_to_personCenterFragment);
                     return true;
                 }
                 return false;
             }
         });
+
+        back = getView().findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_quoteFragment_to_personCenterFragment);
+            }
+        });
+
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
 
@@ -128,13 +132,13 @@ public class HabitShow extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                final Habit habitToDelete = allHabits.get(viewHolder.getAdapterPosition());
-                habitRepository.deleteHabit(habitToDelete);
+                final Quote quoteToDelete = allQuotes.get(viewHolder.getAdapterPosition());
+                quoteRepository.DeleteQuote(quoteToDelete);
                 Snackbar.make(getView(), "删除了一条箴言", Snackbar.LENGTH_SHORT).
                         setAction("撤销", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        habitRepository.insertHabit(habitToDelete);
+                                        quoteRepository.insertQuote(quoteToDelete);
                                     }
                                 }
                         ).show();
@@ -180,6 +184,7 @@ public class HabitShow extends Fragment {
 
             }
         }).attachToRecyclerView(recyclerView);
+
     }
 
 

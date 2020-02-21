@@ -1,5 +1,7 @@
 package comv.example.zyrmj.precious_time01.RecycleViewAdapter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.WhiteApp;
+import comv.example.zyrmj.precious_time01.entity.Quote;
 
 public class WhiteAppAdapter extends RecyclerView.Adapter<WhiteAppAdapter.MyViewHolder> {
     public List<WhiteApp> getAllWhiteApps() {
@@ -27,6 +30,8 @@ public class WhiteAppAdapter extends RecyclerView.Adapter<WhiteAppAdapter.MyView
     }
 
     public List<WhiteApp> getSelectedWhiteApps() {
+
+        System.out.println("white size "+selectedWhiteApps.size());
         return selectedWhiteApps;
     }
 
@@ -66,16 +71,19 @@ public class WhiteAppAdapter extends RecyclerView.Adapter<WhiteAppAdapter.MyView
                if(b==true)
                {
                    int flag=0;//是否已存在
-                   for(String name: whiteAppPkgNames)
+                   for(WhiteApp whiteApp1:selectedWhiteApps)
                    {
-                       if(name.equals(whiteApp.AppPkgName))
+                       if(whiteApp1.AppName.equals(whiteApp.AppName))
                        {
                            flag=1;
                            break;
                        }
                    }
                    if(flag==0)
-                       whiteAppPkgNames.add(whiteApp.AppPkgName);
+                   {  whiteAppPkgNames.add(whiteApp.AppPkgName);
+                    selectedWhiteApps.add(whiteApp);
+                   }
+
 
                }
                else
@@ -88,11 +96,32 @@ public class WhiteAppAdapter extends RecyclerView.Adapter<WhiteAppAdapter.MyView
                            break;
                        }
                    }
+                   for(WhiteApp wa:selectedWhiteApps)
+                   {
+                       if(wa.AppName.equals(whiteApp.AppName))
+                       {
+                           System.out.println("delete white");
+                           selectedWhiteApps.remove(wa);
+                           System.out.println("white size"+selectedWhiteApps.size());
+                           break;
+
+                       }
+
+                   }
 
                }
 
             }
         });
+
+        for (WhiteApp wa:selectedWhiteApps)
+        {
+            if (holder.appName.getText().toString().equals(wa.AppName))
+            {
+                holder.allowed.setChecked(true);
+                break;
+            }
+        }
     }
 
     @Override
