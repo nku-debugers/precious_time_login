@@ -4,14 +4,28 @@ import comv.example.zyrmj.precious_time01.R;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class MonitorActivity extends BaseActivity {
+	TextView showed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_monitor);
+		init();
+
+	}
+
+	private void init()
+	{
+		showed=findViewById(R.id.quote_show);
+		if(getIntent()!=null&&getIntent().getStringExtra("quote")!=null)
+		{
+			showed.setText(getIntent().getStringExtra("quote"));
+		}
+
 	}
 
 	@Override

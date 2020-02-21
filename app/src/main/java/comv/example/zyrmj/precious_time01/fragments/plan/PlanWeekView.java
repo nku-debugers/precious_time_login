@@ -407,7 +407,14 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                             @Override
                             public void onClick(MaterialDialog dialog, DialogAction which) {
                                 if (which.toString().equals("NEUTRAL")) {
+                                    List<String> quotes=new TodoRepository(getContext())
+                                            .getQuotes(todo.getUserId(),todo.getPlanDate(),todo.getStartTime());
                                     Intent intent = new Intent();
+                                    if(quotes!=null&&quotes.size()>0)
+                                    {
+                                        String quote=quotes.get(0);
+                                        intent.putExtra("quote",quote);
+                                    }
                                     intent.putExtra("userId", userId);
                                     intent.putExtra("todoName", todo.getName());
                                     intent.putExtra("hour", length.split(":")[0]);
