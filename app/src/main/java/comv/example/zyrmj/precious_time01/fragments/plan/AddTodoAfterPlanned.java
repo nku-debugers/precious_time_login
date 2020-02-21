@@ -285,6 +285,18 @@ public class AddTodoAfterPlanned extends Fragment implements View.OnClickListene
             public void onClick(View view) {
 
                 saveLabels();
+                if (todoName.getText().length() != 0) {
+                    myTodo.setName(todoName.getText().toString());
+                } else {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+
+                        }
+                    }));
+                    return;
+                }
                 if (saveTime()) { // TODO: 2020/1/14 如果不成功需要 给出 “还有选项没有填写”的提示
                     myTodo.setType(2);
                     if (timeReminder.isChecked() && reminder.getText().toString().length() != 0) {

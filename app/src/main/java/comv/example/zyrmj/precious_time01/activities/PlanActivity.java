@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getAlarmMillis;
 import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.getCurrentWeekDay;
+import static comv.example.zyrmj.precious_time01.Utils.TimeDiff.isOutDated;
 
 public class PlanActivity extends AppCompatActivity {
     private List<Todo> alarmTodos;
@@ -47,12 +48,22 @@ public class PlanActivity extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
         }
         showedPlan = choosePlan();
+        TodoRepository todoRepository = new TodoRepository(this);
+
         if (showedPlan != null) {
             List<Todo> temp = new TodoRepository(this).getListTodoByPlanDate(userId, showedPlan.getStartDate());
             alarmTodos = new ArrayList<>();
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
             String today = simpleDateFormat.format(date);
+
+            for (int i = 0; i < temp.size(); i++) {
+                if (isOutDated(temp.get(i)) && temp.get(i).getCompletion() == null) {
+                    temp.get(i).setCompletion(false);
+                    temp.get(i).setFailureTrigger("outdated");
+                    todoRepository.updateTodo(temp.get(i));
+                }
+            }
             if (temp.size() > 0) {
                 String todoPlanDate = temp.get(0).getPlanDate();
 
@@ -67,31 +78,15 @@ public class PlanActivity extends AppCompatActivity {
                 Date end = cal.getTime();
                 //将增加后的日期转为字符串
                 String  todoToday = simpleDateFormat.format(end);
-                Log.d("mytag", "onCreate: todoToday is " + todoToday);
-                Log.d("mytag", "onCreate: today is " + today);
-                TodoRepository tr = new TodoRepository(this);
-                if (todoToday.compareTo(today) < 0) {
-                    for (int i = 0; i < temp.size(); i++) {
-                        if (temp.get(i).getCompletion() == null) {
-                            temp.get(i).setCompletion(false);
-                            temp.get(i).setFailureTrigger("outdated");
-                            tr.updateTodo(temp.get(i));
-                        }
-                    }
-                }
                 SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm", Locale.CHINA);
                 String nowTime = simpleDateFormat1.format(date);
-
+                Log.d("mytag", "onCreate: The temp size is:" + temp.size());
                 if (todoToday.equals(today)) {
+
                     for (int i = 0; i < temp.size(); i++) {
-                        if (temp.get(i).getCompletion()== null || !temp.get(i).getCompletion())
-                            if(TimeDiff.compare(nowTime,temp.get(i).getStartTime().split("-")[1])>0)
-                            {
-                                temp.get(i).setCompletion(false);
-                                temp.get(i).setFailureTrigger("outdated");
-                                tr.updateTodo(temp.get(i));
-                            }
+                        if (temp.get(i).getCompletion()== null) {
                             alarmTodos.add(temp.get(i));
+                        }
 
                     }
                     setAlarms();

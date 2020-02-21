@@ -285,23 +285,24 @@ public class AddToDo extends Fragment implements View.OnClickListener{
             public void onClick(View view) {
 
                 saveLabels();
-                if (saveTime()) {
+                if (todoName.getText().length() != 0) {
+                    myTodo.setName(todoName.getText().toString());
+                } else {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+
+                        }
+                    }));
+                    return;
+                }
+                if (saveTime() ) {
                     myTodo.setType(2);
                     if (timeReminder.isChecked() && reminder.getText().toString().length() != 0) {
                         myTodo.setReminder(Integer.valueOf(reminder.getText().toString()));
                     } else {
                         myTodo.setReminder(0);
-                    }
-                    if (todoName.getText().length() != 0) {
-                        myTodo.setName(todoName.getText().toString());
-                    } else {
-                        PromptDialog promptDialog = new PromptDialog(getActivity());
-                        promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
-                            @Override
-                            public void onClick(PromptButton button) {
-
-                            }
-                        }));
                     }
                     NavController controller = Navigation.findNavController(getView());
                     Bundle bundle = new Bundle();
