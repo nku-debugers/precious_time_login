@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import comv.example.zyrmj.precious_time01.entity.Todo;
+
 public class TimeDiff {
 
     public static String dateDiff(String startTime, String endTime,
@@ -117,6 +119,30 @@ public class TimeDiff {
         return dateTime.substring(0, 1).equals(dayOfWeek + "");
     }
 
+    public static boolean isOutDated(Todo todo) {
+        Calendar cal = Calendar.getInstance();
+        String splieTimes[] = todo.getPlanDate().split("-");
+        Date start = new Date((Integer.valueOf(splieTimes[0]) - 1900),
+                (Integer.valueOf(splieTimes[1]) - 1), (Integer.valueOf(splieTimes[2])));
+        cal.setTime(start);
+        //增加6天
+        cal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(todo.getStartTime().substring(0, 1)));
+        //Calendar转为Date类型
+        Date end = cal.getTime();
+        Date now = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+        //将增加后的日期转为字符串
+        String  todoToday = simpleDateFormat.format(end);
+        String today = simpleDateFormat.format(now);
+        if (todoToday.compareTo(today) < 0) {
+            return true;
+        }
+
+        SimpleDateFormat sp = new SimpleDateFormat("HH:mm");
+        return sp.format(now).compareTo(todo.getStartTime().substring(2)) > 0;
+
+    }
+
     public static long getAlarmMillis(String dateTime, int reminder) {
         Log.d("mytag", "getAlarmMillis: The dateTime is :" + dateTime + "the reminder is " + reminder);
 
@@ -141,9 +167,9 @@ public class TimeDiff {
     }
 
     public static void main(String[]args) {
-        String x = "2017-09-09";
+        String x = "2017-09-07";
         String y = "2017-09-08";
-        if (x.compareTo(y) >= 0) {
+        if (x.compareTo(y) < 0) {
 
         }
 

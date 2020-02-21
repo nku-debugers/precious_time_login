@@ -322,6 +322,17 @@ public class UpdateTodo extends Fragment implements View.OnClickListener {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (todoName.getText().length() != 0) {
+                    myTodo.setName(todoName.getText().toString());
+                } else {
+                    PromptDialog promptDialog = new PromptDialog(getActivity());
+                    promptDialog.showWarnAlert("请填写名字！", new PromptButton("确定", new PromptButtonListener() {
+                        @Override
+                        public void onClick(PromptButton button) {
+
+                        }
+                    }));
+                }
                 if(getArguments().getString("card")!=null)
                 {
                     //更改labels
