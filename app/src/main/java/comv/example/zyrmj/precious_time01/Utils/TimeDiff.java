@@ -139,6 +139,9 @@ public class TimeDiff {
         if (todoToday.compareTo(today) < 0) {
             return true;
         }
+        else if (todoToday.compareTo(today) > 0) {
+            return false;
+        }
 
         SimpleDateFormat sp = new SimpleDateFormat("HH:mm");
         return sp.format(now).compareTo(todo.getStartTime().substring(2)) > 0;
