@@ -69,9 +69,9 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EmptyViewClickListener,
         WeekView.EmptyViewLongPressListener, WeekView.ScrollListener {
-    private ArrayList<EditPlan.ToDoExtend> satisfiedTodos=new ArrayList<>();
-    private ArrayList<EditPlan.ToDoExtend> unsatisfiedTodos=new ArrayList<>();
-    private String userId="offline";
+    private ArrayList<EditPlan.ToDoExtend> satisfiedTodos = new ArrayList<>();
+    private ArrayList<EditPlan.ToDoExtend> unsatisfiedTodos = new ArrayList<>();
+    private String userId = "offline";
     private Button confirm;
     private ImageView back;
     private Switch showList;
@@ -99,16 +99,14 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(getArguments()!=null)
-        {
-            userId=getArguments().getString("userId");
-            if(getArguments().getSerializable("toDoExtends")!=null)
-            {ArrayList<EditPlan.ToDoExtend> toDoExtends= (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("toDoExtends");
-            divideTodos(toDoExtends);}
-            else
-            {
-                satisfiedTodos= (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("satisfiedTodos");
-                unsatisfiedTodos= (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("unsatisfiedTodos");
+        if (getArguments() != null) {
+            userId = getArguments().getString("userId");
+            if (getArguments().getSerializable("toDoExtends") != null) {
+                ArrayList<EditPlan.ToDoExtend> toDoExtends = (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("toDoExtends");
+                divideTodos(toDoExtends);
+            } else {
+                satisfiedTodos = (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("satisfiedTodos");
+                unsatisfiedTodos = (ArrayList<EditPlan.ToDoExtend>) getArguments().getSerializable("unsatisfiedTodos");
             }
         }
         assignViews();
@@ -117,11 +115,9 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     }
 
     //将接受的todo分类，显示在周视图上的与显示在RecycleView中的
-    public void divideTodos(ArrayList<EditPlan.ToDoExtend> toDoExtends)
-    {
-        for(EditPlan.ToDoExtend toDoExtend:toDoExtends)
-        {
-            if(toDoExtend.getTodo().getStartTime().contains(":"))
+    public void divideTodos(ArrayList<EditPlan.ToDoExtend> toDoExtends) {
+        for (EditPlan.ToDoExtend toDoExtend : toDoExtends) {
+            if (toDoExtend.getTodo().getStartTime().contains(":"))
                 satisfiedTodos.add(toDoExtend);
             else
                 unsatisfiedTodos.add(toDoExtend);
@@ -133,8 +129,7 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
     }
 
 
-    private void assignViews()
-    {
+    private void assignViews() {
         initList();
         back = getView().findViewById(R.id.week_modify_back);
 
@@ -194,8 +189,8 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
             }
         });
 
-        showList=getView().findViewById(R.id.week_modify_switch);
-        confirm=getView().findViewById(R.id.week_modify_confirm);
+        showList = getView().findViewById(R.id.week_modify_switch);
+        confirm = getView().findViewById(R.id.week_modify_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,12 +199,9 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
 
             }
         });
-        if(unsatisfiedTodos.size()==0)
-        {
-           hideList();
-        }
-        else
-        {
+        if (unsatisfiedTodos.size() == 0) {
+            hideList();
+        } else {
             showList();
         }
         mWeekView = getView().findViewById(R.id.weekview);
@@ -228,13 +220,12 @@ public class ModifyPlan extends Fragment implements WeekView.MonthChangeListener
 
     }
 
-    private void initList()
-    {
+    private void initList() {
         todoRepository = new TodoRepository(getContext());
         categoryRepository = new CategoryRepository(getContext());
         planRepository = new PlanRepository(getContext());
-        bottomList=getView().findViewById(R.id.plan_modify);
-        final TodoAdapter todoAdapter=new TodoAdapter(getActivity());
+        bottomList = getView().findViewById(R.id.plan_modify);
+        final TodoAdapter todoAdapter = new TodoAdapter(getActivity());
         todoAdapter.setUserId(userId);
         todoAdapter.setUnsatisfiedTodos(unsatisfiedTodos);
         todoAdapter.setSatisfiedTodos(satisfiedTodos);
@@ -263,14 +254,14 @@ nameEvent.observe(this, new Observer<String>() {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final EditPlan.ToDoExtend toDoExtendToDelete = unsatisfiedTodos.get(viewHolder.getAdapterPosition());
-               unsatisfiedTodos.remove(toDoExtendToDelete);
-               initList();
+                unsatisfiedTodos.remove(toDoExtendToDelete);
+                initList();
                 Snackbar.make(getView(), "删除了一个待办事项", Snackbar.LENGTH_SHORT).
                         setAction("撤销", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                       unsatisfiedTodos.add(toDoExtendToDelete);
-                                       initList();
+                                        unsatisfiedTodos.add(toDoExtendToDelete);
+                                        initList();
                                     }
                                 }
                         ).show();
@@ -318,27 +309,23 @@ nameEvent.observe(this, new Observer<String>() {
 
     }
 
-    private void enableButtons()
-    {
+    private void enableButtons() {
         showList.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if(b==true)
-                {
+                if (b == true) {
                     showList();
-                }
-                else
-                {
+                } else {
                     hideList();
                 }
             }
         });
 
     }
-//隐藏下方列表
-    private void hideList()
-    {
+
+    //隐藏下方列表
+    private void hideList() {
         getView().findViewById(R.id.modify_number).setVisibility(View.GONE);
         getView().findViewById(R.id.modify_name).setVisibility(View.GONE);
         getView().findViewById(R.id.modify_week).setVisibility(View.GONE);
@@ -352,8 +339,8 @@ nameEvent.observe(this, new Observer<String>() {
         showList.setChecked(false);
         confirm.setVisibility(View.VISIBLE);
     }
-    private void showList()
-    {
+
+    private void showList() {
         getView().findViewById(R.id.listTitle).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.modify_number).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.modify_name).setVisibility(View.VISIBLE);
@@ -369,13 +356,12 @@ nameEvent.observe(this, new Observer<String>() {
 
     }
 
-    private List<WeekViewEvent> Todo2WeekViewEvent(int newYear,int newMonth)
-    {
-      weekViewEvents=new ArrayList<>();
+    private List<WeekViewEvent> Todo2WeekViewEvent(int newYear, int newMonth) {
+        weekViewEvents = new ArrayList<>();
         int i = 1;
         int index = 0;
         for (EditPlan.ToDoExtend ti : satisfiedTodos) {
-            Todo todo=ti.getTodo();
+            Todo todo = ti.getTodo();
             String weekday = todo.getStartTime().split("-")[0];
             int diff = Integer.valueOf(weekday);//与周一的距离
             String starttime = todo.getStartTime().split("-")[1];
@@ -397,10 +383,9 @@ nameEvent.observe(this, new Observer<String>() {
             endTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(endhour));
             endTime.set(Calendar.MINUTE, Integer.valueOf(endminute));
             WeekViewEvent event = new WeekViewEvent(i, todo.getName(), startTime, endTime, index);
-            if(todo.getType()==0)
-            event.setColor(getResources().getColor(R.color.event_color_05)); //template中事项统一颜色
-            else
-            {
+            if (todo.getType() == 0)
+                event.setColor(getResources().getColor(R.color.event_color_05)); //template中事项统一颜色
+            else {
                 if (i % 4 == 0)
                     event.setColor(getResources().getColor(R.color.event_color_01));
                 else if (i % 4 == 1)
@@ -443,8 +428,8 @@ nameEvent.observe(this, new Observer<String>() {
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         int index = event.getIndex();
-        EditPlan.ToDoExtend toDoExtend=satisfiedTodos.get(index);
-        if(!(toDoExtend.getTodo().getType()==0)) {
+        EditPlan.ToDoExtend toDoExtend = satisfiedTodos.get(index);
+        if (!(toDoExtend.getTodo().getType() == 0)) {
             satisfiedTodos.remove(toDoExtend);
             unsatisfiedTodos.add(toDoExtend);
             System.out.println("sort results");
@@ -454,7 +439,7 @@ nameEvent.observe(this, new Observer<String>() {
             bundle.putSerializable("satisfiedTodos", satisfiedTodos);
             bundle.putSerializable("unsatisfiedTodos", unsatisfiedTodos);
             NavController controller = Navigation.findNavController(getView());
-          controller.navigate(R.id.action_modifyPlan_self, bundle);
+            controller.navigate(R.id.action_modifyPlan_self, bundle);
         }
 
     }
@@ -498,12 +483,12 @@ nameEvent.observe(this, new Observer<String>() {
                 .content(info)
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 //前2个一个是hint一个是预输入的文字
-                .input("开始日期", "", new MaterialDialog.InputCallback() {
+                .input("开始日期，请按如下格式填写：2020/1/1", "", new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 //判断计划名是否为空
                                 if (input.toString().equals("")) {
-                                    dialog.setContent("开始日期不能为空，请重新输入！");
+                                    dialog.setContent(info +"\n开始日期不能为空，请重新输入！");
                                 } else {
                                     Plan plan = new Plan();
                                     plan.setStartDate(input.toString());
@@ -511,97 +496,106 @@ nameEvent.observe(this, new Observer<String>() {
                                     plan.setPlanName(info);
                                     //计算endDate
                                     Calendar cal = Calendar.getInstance();
-                                    String splieTimes[] = plan.getStartDate().split("/");
-                                    // TODO: 2020/2/14 计划时长要加 背景提示，写成 2020/09/02 格式 
-                                    Date start = new Date((Integer.valueOf(splieTimes[0]) - 1900),
-                                            (Integer.valueOf(splieTimes[1]) - 1), (Integer.valueOf(splieTimes[2])));
-                                    cal.setTime(start);
-                                    //增加6天
-                                    cal.add(Calendar.DAY_OF_MONTH, 6);
-                                    //Calendar转为Date类型
-                                    Date end = cal.getTime();
-                                    //将增加后的日期转为字符串
-                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                                    plan.setStartDate( formatter.format(start));
-                                    plan.setEndDate(formatter.format(end));
-                                    plan.setUserId(userId);
-                                    int flag = 0;
-                                    List<Plan> plans = planRepository.getAllPlans(userId);
-                                    for (Plan p : plans) {
-                                        if (p.getStartDate().equals(plan.getStartDate())) {
-                                            flag = 1;
-                                            break;
-                                        }
-
+                                    String splitTimes[] = plan.getStartDate().split("/");
+                                    if (splitTimes == null || splitTimes.length != 3) {
+                                        dialog.setContent(info+"\n请按正确日期格式填写！");
                                     }
-                                    if (flag == 0) {
-                                        plandate=plan.getStartDate();
-                                        planRepository.insertPlan(plan);
-                                        dialog.dismiss();
-                                        List<Category> oldCategories = categoryRepository.getAllCateories(userId);
+                                    // TODO: 2020/2/14 计划时长要加 背景提示，写成 2020/09/02 格式
+                                    else {
+                                        Date start = new Date((Integer.valueOf(splitTimes[0]) - 1900),
+                                                (Integer.valueOf(splitTimes[1]) - 1), (Integer.valueOf(splitTimes[2])));
+                                        cal.setTime(start);
+                                        if (!(cal.get(Calendar.DAY_OF_WEEK) == 2)) //不是星期一
+                                        {
+                                            dialog.setContent(info+"\n对不起，起始日期需为周一！");
+                                        } else {
+                                            // TODO: 2020/2/14 计划时长要加 背景提示，写成 2020/09/02 格式
 
-                                        List<String> alllabels = new ArrayList<>();
-                                        for(EditPlan.ToDoExtend toDoExtend: satisfiedTodos) {
-                                            for(String s: toDoExtend.getLabels()) {
-                                                int flag2 = 0;
-                                                for(String label: alllabels){
-                                                    if (label.equals(s))
-                                                        flag2 = 1;
+                                            //增加6天
+                                            cal.add(Calendar.DAY_OF_MONTH, 6);
+                                            //Calendar转为Date类型
+                                            Date end = cal.getTime();
+                                            //将增加后的日期转为字符串
+                                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                            plan.setStartDate(formatter.format(start));
+                                            plan.setEndDate(formatter.format(end));
+                                            plan.setUserId(userId);
+                                            int flag = 0;
+                                            List<Plan> plans = planRepository.getAllPlans(userId);
+                                            for (Plan p : plans) {
+                                                if (p.getStartDate().equals(plan.getStartDate())) {
+                                                    flag = 1;
+                                                    break;
                                                 }
-                                                if (flag2 == 0) {
-                                                    alllabels.add(s);
+
+                                            }
+                                            if (flag == 0) {
+                                                plandate = plan.getStartDate();
+                                                planRepository.insertPlan(plan);
+                                                dialog.dismiss();
+                                                List<Category> oldCategories = categoryRepository.getAllCateories(userId);
+
+                                                List<String> alllabels = new ArrayList<>();
+                                                for (EditPlan.ToDoExtend toDoExtend : satisfiedTodos) {
+                                                    for (String s : toDoExtend.getLabels()) {
+                                                        int flag2 = 0;
+                                                        for (String label : alllabels) {
+                                                            if (label.equals(s))
+                                                                flag2 = 1;
+                                                        }
+                                                        if (flag2 == 0) {
+                                                            alllabels.add(s);
+                                                        }
+                                                    }
                                                 }
+
+                                                for (String s : alllabels) {
+                                                    Category category = new Category(userId, s);
+                                                    int flagLabel = 0;
+                                                    for (Category c : oldCategories) {
+                                                        if (c.getName().equals(category.getName()) && c.getUserId().equals(category.getUserId()))
+                                                            flagLabel = 1;
+                                                    }
+                                                    if (flagLabel == 0) {
+                                                        categoryRepository.insertCategory(category);
+                                                    }
+                                                }
+
+                                                for (EditPlan.ToDoExtend toDoExtend : satisfiedTodos) {
+                                                    if (plandate != null) {
+                                                        toDoExtend.getTodo().setPlanDate(plandate);
+                                                        toDoExtend.getTodo().setUserId(userId);
+                                                    }
+
+                                                    todoRepository.insertTodo(toDoExtend.getTodo());
+
+                                                    for (String s : toDoExtend.getLabels()) {
+                                                        TodoCategory todoCategory = new TodoCategory(userId, s, toDoExtend.getTodo().getStartTime(), toDoExtend.getTodo().getPlanDate());
+                                                        todoRepository.insertTodoCategory(todoCategory);
+                                                    }
+
+                                                    for (Quote s : toDoExtend.getQuotes()) {
+                                                        TodoQuote todoQuote = new TodoQuote(s, toDoExtend.getTodo());
+                                                        todoRepository.insertTodoQuote(todoQuote);
+                                                    }
+                                                }
+                                                //将todos插入数据库
+
+                                                Bundle bundle = new Bundle();
+                                                bundle.putSerializable("plan", plan);
+                                                bundle.putString("userId", userId);
+                                                bundle.putInt("fromModify", 1);
+                                                NavController controller = Navigation.findNavController(getView());
+                                                controller.navigate(R.id.action_modifyPlan_to_planWeekView, bundle);
+
+                                            } else {
+                                                dialog.setContent(info+"\n存在相同开始时间的计划，请重新输入！");
                                             }
                                         }
-
-                                        for(String s : alllabels) {
-                                            Category category = new Category(userId, s);
-                                            int flagLabel = 0;
-                                            for(Category c:oldCategories) {
-                                                if (c.getName().equals(category.getName())&& c.getUserId().equals(category.getUserId()))
-                                                   flagLabel = 1;
-                                            }
-                                            if (flagLabel == 0){
-                                                categoryRepository.insertCategory(category);
-                                            }
-                                        }
-
-                                        for(EditPlan.ToDoExtend toDoExtend: satisfiedTodos) {
-                                            if(plandate != null) {
-                                                toDoExtend.getTodo().setPlanDate(plandate);
-                                                toDoExtend.getTodo().setUserId(userId);
-                                            }
-
-                                            todoRepository.insertTodo(toDoExtend.getTodo());
-
-                                            for(String s : toDoExtend.getLabels() ) {
-                                                TodoCategory todoCategory = new TodoCategory(userId, s, toDoExtend.getTodo().getStartTime(), toDoExtend.getTodo().getPlanDate());
-                                                todoRepository.insertTodoCategory(todoCategory);
-                                            }
-
-                                            for(Quote s : toDoExtend.getQuotes()) {
-                                                TodoQuote todoQuote = new TodoQuote(s, toDoExtend.getTodo());
-                                                todoRepository.insertTodoQuote(todoQuote);
-                                            }
-                                        }
-                                        //将todos插入数据库
-
-                                        Bundle bundle=new Bundle();
-                                        bundle.putSerializable("plan",plan);
-                                        bundle.putString("userId",userId);
-                                        bundle.putInt("fromModify", 1);
-                                        NavController controller = Navigation.findNavController(getView());
-                                        controller.navigate(R.id.action_modifyPlan_to_planWeekView, bundle);
-
-                                    } else {
-
-                                        Log.i("dialog", "存在相同开始时间的计划");
-                                        dialog.setContent("存在相同开始时间的计划，请重新输入！");
                                     }
                                 }
                             }
                         }
-
                 )
 
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -617,7 +611,7 @@ nameEvent.observe(this, new Observer<String>() {
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
 
-     return Todo2WeekViewEvent(newYear,newMonth);
+        return Todo2WeekViewEvent(newYear, newMonth);
     }
 
     @Override
