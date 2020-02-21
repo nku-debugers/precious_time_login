@@ -9,6 +9,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 
 import androidx.room.Query;
+import androidx.room.Update;
 import comv.example.zyrmj.precious_time01.entity.Habit;
 
 
@@ -16,6 +17,9 @@ import comv.example.zyrmj.precious_time01.entity.Habit;
 public interface HabitDao {
     @Insert
     void insert(Habit... habits);
+
+    @Update
+    void update(Habit... habits);
 
     @Query("SELECT * FROM Habit WHERE user_id=:userId")
     LiveData<List<Habit>> getAllHabits(String userId);

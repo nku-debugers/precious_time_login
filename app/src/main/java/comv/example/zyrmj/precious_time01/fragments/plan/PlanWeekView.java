@@ -42,11 +42,13 @@ import comv.example.zyrmj.precious_time01.R;
 import comv.example.zyrmj.precious_time01.Utils.TimeDiff;
 import comv.example.zyrmj.precious_time01.activities.ClockActivity;
 import comv.example.zyrmj.precious_time01.activities.PersonCenterActivity;
+import comv.example.zyrmj.precious_time01.entity.Habit;
 import comv.example.zyrmj.precious_time01.entity.Plan;
 import comv.example.zyrmj.precious_time01.entity.Quote;
 import comv.example.zyrmj.precious_time01.entity.TemplateItem;
 import comv.example.zyrmj.precious_time01.entity.Todo;
 import comv.example.zyrmj.precious_time01.notification.LongRunningService;
+import comv.example.zyrmj.precious_time01.repository.HabitRepository;
 import comv.example.zyrmj.precious_time01.repository.PlanRepository;
 import comv.example.zyrmj.precious_time01.repository.TodoRepository;
 import comv.example.zyrmj.weekviewlibrary.DateTimeInterpreter;
@@ -437,6 +439,14 @@ public class PlanWeekView extends Fragment implements WeekView.MonthChangeListen
                                     todo.setCompletion(true);
                                     new TodoRepository(getContext()).updateTodo(todo);
                                     //如果是habit的话，要根据todo时长更新完成度
+                                    if(todo.getType()==1) {
+                                        Habit habit = new HabitRepository(getContext()).getSpecificHabit(todo.getUserId(), todo.getName());
+                                        //计算完成度
+                                        double perCompletion=TimeDiff.calCompletion(todo.getLength(), habit.getLength());
+                                        double newCompletion=perCompletion+habit.getCompletion();
+                                        habit.setCompletion(newCompletion);
+                                        new HabitRepository(getContext()).updateHabit(habit);
+                                    }
 
                                 }
 

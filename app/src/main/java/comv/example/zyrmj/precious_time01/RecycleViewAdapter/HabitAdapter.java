@@ -61,9 +61,8 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 final Habit habit=allHabits.get(position);
-holder.number.setText(String.valueOf(position+1));
 holder.habitName.setText(habit.getName());
-holder.completion.setProgress((int) habit.getCompletion());
+holder.completion.setProgress((int) (habit.getCompletion()*100));
 
 if(option.equals("0")) {
 //        定义itemView点击监听器等触发事件
@@ -170,14 +169,13 @@ else
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
-        TextView number,habitName;
+        TextView habitName;
         ProgressBar completion;
         ImageView next;
         CheckBox checked;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView=itemView.findViewById(R.id.cardview);
-            number=itemView.findViewById(R.id.habit_number);
             habitName=itemView.findViewById(R.id.habit_name);
             completion=itemView.findViewById(R.id.completion);
             next=itemView.findViewById(R.id.next);

@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.54" />
+                app:layout_constraintGuide_percent="0.28" />
 
             <ImageView
                 android:id="@+id/next"
@@ -67,23 +67,12 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline42"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/habit_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/card_number"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline42"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline42"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.2" />
+                app:layout_constraintGuide_percent="0.0" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline43"
@@ -95,8 +84,8 @@
             <ProgressBar
                 android:id="@+id/completion"
                 style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="69dp"
-                android:layout_height="32dp"
+                android:layout_width="194dp"
+                android:layout_height="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline43"
                 app:layout_constraintStart_toStartOf="@+id/guideline80"
