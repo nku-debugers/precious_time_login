@@ -34,12 +34,13 @@
         app:layout_constraintTop_toTopOf="@+id/view16" />
 
     <ImageView
-        android:id="@+id/white_to_person"
+        android:id="@+id/white_show_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:contentDescription="@string/desc"
         app:layout_constraintBottom_toTopOf="@+id/guideline141"
-        app:layout_constraintStart_toStartOf="@+id/view6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
 

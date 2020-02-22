@@ -84,6 +84,24 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.85" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline164"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <ImageView
+            android:id="@+id/clock_main_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:contentDescription="@string/desc"
+            app:layout_constraintBottom_toTopOf="@+id/guideline164"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </comv.example.zyrmj.precious_time01.ripplelibrary.RippleBackground>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,7 @@ import comv.example.zyrmj.precious_time01.WhiteApp;
 
 public class AddTime extends Fragment {
     private Button confirm;
+    private ImageView back;
     private EditText hour, minute;
     private String userId="offline";
     @Override
@@ -40,6 +42,7 @@ public class AddTime extends Fragment {
 
     public void init(){
         confirm = getView ().findViewById ( R.id.button_clock_begin );
+        back = getView ().findViewById ( R.id.clock_time_back );
         hour = getView ().findViewById ( R.id.clock_hour_input );
         minute = getView ().findViewById ( R.id.clock_minute_input );
     }
@@ -71,6 +74,15 @@ public class AddTime extends Fragment {
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_addTime_to_whiteShow, bundle);
                 }
+            }
+        } );
+
+        back.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle (  );
+                NavController controller = Navigation.findNavController(getView());
+                controller.navigate(R.id.action_addTime_to_choseClock, bundle);
             }
         } );
     }

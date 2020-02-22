@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class ClockMain extends Fragment {
 
     private TextView tv_start, tv_notes, tv_count;
     private Button give_up;
+    private ImageView back;
     private RippleBackground rippleBackground;
     private DonutProgress donutProgress;
     private boolean isStart;
@@ -89,6 +91,7 @@ public class ClockMain extends Fragment {
         tv_notes = getView ().findViewById(R.id.tv_notes);
         tv_count = getView ().findViewById(R.id.tv_count);
         give_up = getView ().findViewById(R.id.give_up );
+        back = getView ().findViewById(R.id.clock_main_back );
         rippleBackground = getView ().findViewById(R.id.content);
         donutProgress = getView ().findViewById(R.id.donut_progress);
 
@@ -176,6 +179,40 @@ public class ClockMain extends Fragment {
                     bundle.putString ( "minute",getArguments ().getString("minute") );
                     NavController controller = Navigation.findNavController(getView());
                     controller.navigate(R.id.action_clockMain_to_clockFinish, bundle);
+                }
+            }
+        } );
+
+        back.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle (  );
+                if(getArguments ().getInt ( "single" )==1){
+                    bundle.putString ( "kind", getArguments ().getString ( "kind" ) );
+                    bundle.putInt ( "single", getArguments ().getInt ( "single" ) );
+                    if(getArguments ().getString ( "kind" ).equals ( "1" )){
+                        NavController controller = Navigation.findNavController(getView());
+                        controller.navigate(R.id.action_clockMain_to_addTime, bundle);
+                    }
+                    else{
+                        bundle.putString ( "hour",getArguments ().getString("hour") );
+                        bundle.putString ( "minute",getArguments ().getString("minute") );
+                        NavController controller = Navigation.findNavController(getView());
+                        controller.navigate(R.id.action_clockMain_to_whiteShow, bundle);
+                    }
+                }
+                else{
+                    bundle.putInt ( "single", getArguments ().getInt ( "single" ) );
+                    bundle.putString ( "toName", getArguments ().getString ( "toName" ) );
+                    bundle.putString ( "hour",getArguments ().getString("hour") );
+                    bundle.putString ( "minute",getArguments ().getString("minute") );
+                    NavController controller = Navigation.findNavController(getView());
+                    if(getArguments ().getString ( "kind" ).equals ( "1" )){
+                        controller.navigate(R.id.action_clockMain_to_choseClock, bundle);
+                    }
+                    else{
+                        controller.navigate(R.id.action_clockMain_to_whiteShow, bundle);
+                    }
                 }
             }
         } );
