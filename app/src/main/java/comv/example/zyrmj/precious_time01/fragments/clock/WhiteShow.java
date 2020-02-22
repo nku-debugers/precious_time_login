@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ import comv.example.zyrmj.precious_time01.WhiteApp;
 public class WhiteShow extends Fragment {
 
     private Button button;
+    private ImageView back;
     RecyclerView recyclerView;
     private String userId = "offline";
     private List<WhiteApp> whiteApps;
@@ -71,6 +73,7 @@ public class WhiteShow extends Fragment {
         }
         recyclerView = getView().findViewById(R.id.white_recyclerView);
         button = getView().findViewById(R.id.white_confirm);
+        back = getView().findViewById(R.id.white_show_back);
         initList();
 
 
@@ -115,6 +118,27 @@ public class WhiteShow extends Fragment {
                 controller.navigate(R.id.action_whiteShow_to_clockMain, bundle);
             }
         });
+
+        back.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle (  );
+                bundle.putInt("single", getArguments().getInt("single"));
+                bundle.putString("userId", userId);
+                if(getArguments ().getInt ( "single" ) == 1){
+                    bundle.putString("kind", getArguments().getString("kind"));
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_whiteShow_to_addTime, bundle);
+                }
+                else{
+                    bundle.putString("hour", getArguments().getString("hour"));
+                    bundle.putString("minute", getArguments().getString("minute"));
+                    bundle.putString ( "todoName",getArguments().getString("todoName") );
+                    NavController controller = Navigation.findNavController(getView());
+                    controller.navigate(R.id.action_whiteShow_to_choseClock, bundle);
+                }
+            }
+        } );
 
     }
 

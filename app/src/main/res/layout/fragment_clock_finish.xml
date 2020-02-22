@@ -38,16 +38,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/desc"
-        app:layout_constraintBottom_toTopOf="@+id/guideline157"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_keyboard_arrow_left_black_24dp" />
-
     <TextView
         android:id="@+id/plan_finish_title"
         android:layout_width="wrap_content"
@@ -120,13 +110,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline162" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline161"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.1" />
 
     <Switch
         android:id="@+id/isFinish"
