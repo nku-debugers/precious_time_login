@@ -101,9 +101,9 @@ public class LoginFragment extends Fragment implements Validator.ValidationListe
         emailInput = getView().findViewById(R.id.email);
         phoneInput = getView().findViewById(R.id.phone);
         usernameInput = getView().findViewById(R.id.username);
-        option = getView().findViewById(R.id.spinner);
-        password = getView().findViewById(R.id.password);
-        toRegister = getView().findViewById(R.id.next);
+        option = getView().findViewById(R.id.login_spinner);
+        password = getView().findViewById(R.id.login_password);
+        toRegister = getView().findViewById(R.id.login_to_register);
         login = getView().findViewById(R.id.login);
         validator = new Validator(this);
         validator.setValidationListener(this);
