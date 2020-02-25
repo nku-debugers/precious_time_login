@@ -321,6 +321,12 @@ public class ClockMain extends Fragment {
     }
 
     private void stratService() {
+        back.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                //empty
+            }
+        } );
         Intent intent = new Intent(getContext (), MonitorService.class);
         intent.putStringArrayListExtra("whitenames", (ArrayList<String>) getArguments().getSerializable("whitenames"));
         if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("quote")!=null)
