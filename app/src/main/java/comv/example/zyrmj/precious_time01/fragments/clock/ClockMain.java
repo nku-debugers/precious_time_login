@@ -48,10 +48,10 @@ public class ClockMain extends Fragment {
     private AlphaAnimation mShowAnimation = null;
     private int animationTime;
     private String mDTime;
-    private int Clickcount = 5;
+    private int Clickcount = count;
     private int useTime = 0;
     private String kind;
-    private static final int count = 2000;
+    private static final int count = 500;
     private static boolean suspend = false;
 
     public ClockMain() {
@@ -321,6 +321,12 @@ public class ClockMain extends Fragment {
     }
 
     private void stratService() {
+        back.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                //empty
+            }
+        } );
         Intent intent = new Intent(getContext (), MonitorService.class);
         intent.putStringArrayListExtra("whitenames", (ArrayList<String>) getArguments().getSerializable("whitenames"));
         if(getActivity().getIntent()!=null&&getActivity().getIntent().getStringExtra("quote")!=null)
